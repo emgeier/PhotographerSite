@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const steps = [
+  { n:'01', t:'YOUR INQUIRY', p:'Send a few details about yourself and what brought you here.' },
+  { n:'02', t:'THE CONVERSATION', p:'We\u2019ll meet for a private 15\u201320 minute Zoom consultation and talk about your vision, your questions, and the experience.' },
+  { n:'03', t:'YOUR DECISION', p:'If The Glam Muse Series feels right for you, we\u2019ll begin planning your portrait experience together.' },
+];
+---
+<Base title="Contact — The Glam Muse Series" description="Tell me a little about yourself and what brought you here. This is simply the beginning of the conversation.">
+  <main>
+    <section class="ct-hero">
+      <Header/>
+      <div class="wrap ct-hero-copy">
+        <p class="eyebrow">CONTACT</p>
+        <h1 class="display ct-hero-title">Start the<br/>Conversation.</h1>
+        <span class="rule ct-hero-rule"></span>
+        <p class="ct-hero-lede">You don’t need to have everything figured out. Tell me a little about yourself, what brought you here, and what you would love to experience.</p>
+        <p class="eyebrow ct-hero-sub">THIS IS SIMPLY THE BEGINNING<br/>OF THE CONVERSATION.</p>
+      </div>
+      <img class="ct-hero-photo" src="/images/ct-hero.svg" alt="Placeholder for contact hero portrait" />
+    </section>
+
+    <section class="ct-about">
+      <div class="wrap ct-about-row">
+        <figure class="ct-about-photo">
+          <img src="/images/ct-about.svg" alt="Placeholder black-and-white portrait" />
+          <figcaption class="eyebrow ct-about-caption">EVERY WOMAN.<br/>A STORY WORTH SEEING.</figcaption>
+        </figure>
+
+        <div class="ct-about-copy">
+          <p class="eyebrow ct-about-eyebrow">BEGIN HERE</p>
+          <h2 class="display ct-about-title">Tell Me<br/>About You.</h2>
+          <span class="rule ct-about-rule"></span>
+          <p class="ct-about-para">Every woman arrives here for a different reason.</p>
+          <p class="ct-about-para">Maybe you’re celebrating something. Maybe you’re rediscovering yourself. Maybe you’re stepping into a new chapter.</p>
+          <p class="ct-about-para">There is no perfect answer. I’d just love to know what brought you here.</p>
+        </div>
+
+        <form class="ct-form">
+          <div class="ct-form-row">
+            <div>
+              <label for="ct-first">FIRST NAME *</label>
+              <input id="ct-first" name="first" type="text" placeholder="First name" required />
+            </div>
+            <div>
+              <label for="ct-last">LAST NAME *</label>
+              <input id="ct-last" name="last" type="text" placeholder="Last name" required />
+            </div>
+          </div>
+          <div class="ct-form-row">
+            <div>
+              <label for="ct-email">EMAIL ADDRESS *</label>
+              <input id="ct-email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="ct-phone">PHONE NUMBER *</label>
+              <input id="ct-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+            </div>
+          </div>
+          <div>
+            <label for="ct-reason">WHAT BROUGHT YOU TO THE GLAM MUSE SERIES AT THIS MOMENT? *</label>
+            <select id="ct-reason" name="reason" required>
+              <option value="" disabled selected>Select an option</option>
+              <option>Celebrating a milestone</option>
+              <option>Rediscovering myself</option>
+              <option>A new chapter</option>
+              <option>Just curious</option>
+            </select>
+          </div>
+          <div>
+            <label for="ct-more">TELL ME A LITTLE MORE ABOUT WHAT BROUGHT YOU HERE.</label>
+            <textarea id="ct-more" name="more" placeholder="A celebration, a transition, a new chapter, curiosity — whatever feels true to you."></textarea>
+          </div>
+          <div>
+            <label for="ct-feel">WHAT WOULD YOU LOVE TO SEE OR FEEL WHEN YOU LOOK AT YOUR PORTRAITS? *</label>
+            <textarea id="ct-feel" name="feel" placeholder="Tell me about how you want to feel and what you hope to see." required></textarea>
+          </div>
+          <div>
+            <label for="ct-hear">HOW DID YOU HEAR ABOUT THE GLAM MUSE SERIES?</label>
+            <select id="ct-hear" name="hear">
+              <option value="" disabled selected>Select an option</option>
+              <option>Instagram</option>
+              <option>Facebook</option>
+              <option>Pinterest</option>
+              <option>A friend</option>
+              <option>Google search</option>
+            </select>
+          </div>
+          <button class="button ct-form-submit" type="submit">START THE CONVERSATION</button>
+          <p class="ct-form-note">No pressure. No obligation. Just a conversation about what this experience could look like for you.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="ct-steps">
+      <img class="ct-steps-photo" src="/images/ct-steps-band.svg" alt="" />
+      <div class="wrap ct-steps-inner">
+        <div class="ct-steps-head">
+          <div>
+            <p class="eyebrow ct-steps-eyebrow">WHAT HAPPENS NEXT</p>
+            <h2 class="display ct-steps-title">A Simple<br/>Beginning.</h2>
+          </div>
+          <p class="ct-steps-intro">From your inquiry to your portraits, the process is simple, personal, and designed entirely around you.</p>
+        </div>
+        <div class="ct-steps-row">
+          {steps.map(s => (
+            <article>
+              <b>{s.n}</b>
+              <span class="ct-step-rule"></span>
+              <h3>{s.t}</h3>
+              <p>{s.p}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="ct-close">
+      <div class="wrap ct-close-copy">
+        <h2 class="display ct-close-title">You,<br/>In Full.</h2>
+        <span class="rule ct-close-rule"></span>
+        <p class="eyebrow ct-close-sub">NOT TRANSFORMED.<br/>REVEALED.</p>
+      </div>
+      <img class="ct-close-photo" src="/images/ct-close.svg" alt="Placeholder for closing portrait" />
+    </section>
+  </main>
+  <Footer/>
+</Base>
