@@ -1,0 +1,352 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  The Glam Muse Series — static Astro site (private S3 + CloudFront via OAC),
+  an S3 media bucket, and the ActiveCampaign lead-capture proxy (API Gateway
+  HTTP API + Lambda) with the AC API key held in Secrets Manager. Static output
+  only; no SSR, no runtime database. See aws/README.md for the deploy runbook.
+
+# ---------------------------------------------------------------------------
+# Parameters — every env-specific value. AcApiKey is deliberately NOT here: the
+# key must never transit CloudFormation. It is set out-of-band on the secret.
+# ---------------------------------------------------------------------------
+Parameters:
+  AcApiUrl:
+    Type: String
+    Description: ActiveCampaign account API base URL, e.g. https://acct.api-us1.com
+  AcListId:
+    Type: String
+    Description: ActiveCampaign list id the contact is subscribed to (status 1).
+  AcTags:
+    Type: String
+    Default: ''
+    Description: Optional comma-separated AC tag ids applied best-effort.
+  AcFieldReason:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id mapped from the form 'reason' field.
+  AcFieldMore:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id mapped from the form 'more' field.
+  AcFieldFeel:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id mapped from the form 'feel' field.
+  AcFieldHear:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id mapped from the form 'hear' field.
+  AllowedOrigin:
+    Type: String
+    Default: '*'
+    Description: >-
+      CORS allowed origin for the AC proxy. TODO: restrict AllowedOrigin to the
+      CloudFront distribution domain (https://dXXXX.cloudfront.net or the custom
+      domain) before production; '*' is for bring-up only.
+  ContactSuccessUrl:
+    Type: String
+    Default: ''
+    Description: >-
+      Redirect target for the no-JS native form fallback. Leave empty on first
+      bring-up (the Lambda returns minimal inline HTML); set to
+      https://<CloudFrontDomainName>/contact on the hardening redeploy.
+  AcmCertificateArn:
+    Type: String
+    Description: >-
+      ACM certificate ARN for the CloudFront viewer certificate. MUST be in
+      us-east-1 regardless of the stack region.
+  CmsRepo:
+    Type: String
+    Description: GitHub repo (owner/name) for the CMS backend (documentation/output only).
+  CmsBranch:
+    Type: String
+    Description: GitHub branch for the CMS backend (documentation/output only).
+  DomainName:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional custom domain (alias) for CloudFront. When empty, the default
+      *.cloudfront.net domain is used and no Aliases are set.
+
+Conditions:
+  HasDomainName: !Not [!Equals [!Ref DomainName, '']]
+
+Resources:
+  # -------------------------------------------------------------------------
+  # S3 buckets — both private; reached only through CloudFront via OAC.
+  # -------------------------------------------------------------------------
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  MediaBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  # -------------------------------------------------------------------------
+  # CloudFront — OAC to both buckets, ACM HTTPS, clean-URL function.
+  # -------------------------------------------------------------------------
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${AWS::StackName}-oac'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  CleanUrlFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-clean-urls'
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Rewrites clean URLs to Astro static index.html files.
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+          // Pass through any URI that already has a file extension (incl. .html,
+          // .css, images), so real assets and /404.html are served untouched.
+          var lastSegment = uri.split('/').pop();
+          if (lastSegment.indexOf('.') !== -1) {
+            return request;
+          }
+          // Trailing slash -> append index.html; otherwise -> append /index.html.
+          if (uri.endsWith('/')) {
+            request.uri = uri + 'index.html';
+          } else {
+            request.uri = uri + '/index.html';
+          }
+          return request;
+        }
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub '${AWS::StackName} static site'
+        DefaultRootObject: index.html
+        Aliases: !If
+          - HasDomainName
+          - [!Ref DomainName]
+          - !Ref AWS::NoValue
+        Origins:
+          - Id: site-origin
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+          - Id: media-origin
+            DomainName: !GetAtt MediaBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccessControl.Id
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        DefaultCacheBehavior:
+          TargetOriginId: site-origin
+          ViewerProtocolPolicy: redirect-to-https
+          # AWS managed cache policy "CachingOptimized".
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt CleanUrlFunction.FunctionMetadata.FunctionARN
+        CacheBehaviors:
+          # Exactly one ordered behavior: /media/* -> media origin. /images/*
+          # intentionally stays on the default (site) origin — do NOT add an
+          # /images/* behavior here (it would 403/404 every site image).
+          - PathPattern: /media/*
+            TargetOriginId: media-origin
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${SiteBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution.Id}'
+
+  MediaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MediaBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudFrontServicePrincipalReadOnly
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: s3:GetObject
+            Resource: !Sub '${MediaBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution.Id}'
+
+  # -------------------------------------------------------------------------
+  # Secrets Manager — AC API key. Bare-string placeholder; set real value
+  # out-of-band via `aws secretsmanager put-secret-value` (see runbook).
+  # -------------------------------------------------------------------------
+  AcSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: !Sub '${AWS::StackName}-ac-api-key'
+      Description: ActiveCampaign API key for the lead-capture proxy (set out-of-band).
+      SecretString: REPLACE_ME
+
+  # -------------------------------------------------------------------------
+  # Lambda — the AC proxy. No AC_API_KEY env; only AC_SECRET_ARN.
+  # -------------------------------------------------------------------------
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: read-ac-secret
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref AcSecret
+
+  AcFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Timeout: 10
+      MemorySize: 256
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code: ../lambda/activecampaign/
+      Environment:
+        Variables:
+          AC_API_URL: !Ref AcApiUrl
+          AC_LIST_ID: !Ref AcListId
+          AC_TAGS: !Ref AcTags
+          AC_FIELD_REASON: !Ref AcFieldReason
+          AC_FIELD_MORE: !Ref AcFieldMore
+          AC_FIELD_FEEL: !Ref AcFieldFeel
+          AC_FIELD_HEAR: !Ref AcFieldHear
+          CORS_ALLOW_ORIGIN: !Ref AllowedOrigin
+          CONTACT_SUCCESS_URL: !Ref ContactSuccessUrl
+          AC_SECRET_ARN: !Ref AcSecret
+
+  AcLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AcFunction}'
+      RetentionInDays: 7
+
+  # -------------------------------------------------------------------------
+  # API Gateway HTTP API — POST + OPTIONS /ac/subscribe -> Lambda.
+  # CORS is handled in the Lambda, so API-level CORS is left unset.
+  # -------------------------------------------------------------------------
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${AWS::StackName}-ac-api'
+      ProtocolType: HTTP
+
+  AcIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt AcFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  AcRoutePost:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'POST /ac/subscribe'
+      Target: !Sub 'integrations/${AcIntegration}'
+
+  AcRouteOptions:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'OPTIONS /ac/subscribe'
+      Target: !Sub 'integrations/${AcIntegration}'
+
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: $default
+      AutoDeploy: true
+
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AcFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/ac/subscribe'
+
+# ---------------------------------------------------------------------------
+Outputs:
+  CloudFrontDomainName:
+    Description: CloudFront distribution domain (serves the static site).
+    Value: !GetAtt Distribution.DomainName
+  ApiEndpoint:
+    Description: The /ac/subscribe URL to paste into PUBLIC_AC_FORM_ENDPOINT.
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/ac/subscribe'
+  SiteBucketName:
+    Description: Name of the private site bucket (aws s3 sync dist/ here).
+    Value: !Ref SiteBucket
+  MediaBucketName:
+    Description: Name of the private media bucket (upload under the media/ prefix).
+    Value: !Ref MediaBucket
+  AcSecretArn:
+    Description: ARN of the AC API key secret (set the real value out-of-band).
+    Value: !Ref AcSecret
+  CmsRepo:
+    Description: GitHub repo configured for the CMS backend (fill in public/admin/config.yml).
+    Value: !Ref CmsRepo
+  CmsBranch:
+    Description: GitHub branch configured for the CMS backend (fill in public/admin/config.yml).
+    Value: !Ref CmsBranch

@@ -2,15 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
 
-const muses = [
-  { src:'/images/ms-muse-1.svg', slug:'heather', n:'MUSE 001', name:'HEATHER', tag:'Seeing Herself Differently.' },
-  { src:'/images/ms-muse-2.svg', slug:'lauren',  n:'MUSE 002', name:'LAUREN',  tag:'A Softer Strength.' },
-  { src:'/images/ms-muse-3.svg', slug:'kaylee',  n:'MUSE 003', name:'KAYLEE',  tag:'More Than a Portrait.' },
-  { src:'/images/ms-muse-4.svg', slug:'renee',   n:'MUSE 004', name:'RENEE',   tag:'Confidence Looks Good on You.' },
-  { src:'/images/ms-muse-5.svg', slug:'jasmine', n:'MUSE 005', name:'JASMINE', tag:'A New Chapter.' },
-  { src:'/images/ms-muse-6.svg', slug:'elise',   n:'MUSE 006', name:'ELISE',   tag:'Finding Her Voice.' },
-];
+const entries = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order);
+const muses = entries.map(e => ({
+  src: e.data.cardImage, slug: e.id, n: e.data.number, name: e.data.name, tag: e.data.tagline,
+}));
+const featured = entries.find(e => e.data.featured) ?? entries[0];
+const featuredPara = featured.data.featuredPara
+  ?? 'Heather came to this experience at a moment of change — ready to see herself with fresh eyes.';
 ---
 <Base title="Muse Stories — The Glam Muse Series" description="Portraits are only part of the story. Meet the women behind them.">
   <main>
@@ -30,11 +30,11 @@ const muses = [
       <div class="wrap ms-featured-row">
         <img class="ms-featured-photo" src="/images/ms-featured.svg" alt="Placeholder portrait of Heather" />
         <div class="ms-featured-copy">
-          <p class="eyebrow ms-featured-label">MUSE 001</p>
-          <h2 class="display ms-featured-name">HEATHER</h2>
-          <p class="ms-featured-tag">Seeing Herself Differently.</p>
-          <p class="ms-featured-para">Heather came to this experience at a moment of change — ready to see herself with fresh eyes.</p>
-          <a class="ms-button" href="/stories/heather">READ HER STORY <span aria-hidden="true">&rarr;</span></a>
+          <p class="eyebrow ms-featured-label">{featured.data.number}</p>
+          <h2 class="display ms-featured-name">{featured.data.name}</h2>
+          <p class="ms-featured-tag">{featured.data.tagline}</p>
+          <p class="ms-featured-para">{featuredPara}</p>
+          <a class="ms-button" href={`/stories/${featured.id}`}>READ HER STORY <span aria-hidden="true">&rarr;</span></a>
         </div>
         <div class="ms-featured-nav">
           <span class="ms-featured-count">01<br/>/<br/>06</span>

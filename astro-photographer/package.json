@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "visual:capture": "node visual/capture.mjs",
     "visual:report": "node visual/report.mjs",
+    "test:lambda": "node --test \"aws/lambda/activecampaign/**/*.test.mjs\"",
     "visual": "astro build && (astro preview --port 4321 & echo $! > .preview.pid; sleep 3; PREVIEW_URL=http://localhost:4321 node visual/capture.mjs && node visual/report.mjs; kill $(cat .preview.pid); rm -f .preview.pid)"
   },
   "dependencies": {

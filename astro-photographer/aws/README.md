@@ -1,0 +1,179 @@
+# AWS deploy runbook — The Glam Muse Series
+
+This deploys the static Astro site and the ActiveCampaign lead-capture proxy with
+a single CloudFormation template, `aws/cloudformation/site.yaml`:
+
+- a **private** S3 site bucket + a private S3 media bucket, both served only through
+  CloudFront via Origin Access Control (OAC);
+- a CloudFront distribution (ACM HTTPS, `index.html` root object, a clean-URL
+  CloudFront Function) whose default behavior serves the site origin and whose single
+  `/media/*` behavior serves the media origin;
+- an API Gateway HTTP API + Lambda (the AC proxy), with the AC API key held in
+  Secrets Manager and read server-side at runtime;
+- least-privilege IAM (the Lambda role may read only the one secret, plus logging).
+
+The site stays `output: 'static'` — there is no SSR runtime and no database.
+
+## 0. Prerequisites
+
+- An **ACM certificate in `us-east-1`** (CloudFront requires us-east-1 regardless of
+  the stack region) — have its ARN ready for `AcmCertificateArn`.
+- The GitHub **repo (`owner/name`) and branch** for the CMS backend.
+- ActiveCampaign account **API base URL** (e.g. `https://acct.api-us1.com`), **list id**,
+  and optionally the **custom-field ids** (reason/more/feel/hear) and **tag ids**.
+- AWS CLI configured with credentials for the target account/region.
+- `node`/`npm` for the site build.
+
+## 1. Validate the template
+
+```bash
+aws cloudformation validate-template --template-body file://aws/cloudformation/site.yaml
+```
+
+If you lack credentials for `validate-template`, lint instead:
+
+```bash
+pip install cfn-lint && cfn-lint aws/cloudformation/site.yaml
+```
+
+> Validator used during implementation: **cfn-lint 1.57.2** (no AWS credentials were
+> available in the build environment, so `validate-template` could not be run there).
+> cfn-lint reported no errors. The only warnings are advisory: the `nodejs20.x` runtime
+> deprecation notice (the handler deliberately targets Node 20 for its global `fetch`;
+> revisit when AWS forces an upgrade) and W3002 (the Lambda `Code` points at a local
+> path, which `aws cloudformation deploy` / `package` resolves at deploy time).
+
+## 2. Deploy the stack
+
+`aws cloudformation deploy` packages the local Lambda code (`aws/lambda/activecampaign/`)
+and creates/updates the stack. Leave `ContactSuccessUrl` empty on first bring-up — the
+no-JS form fallback returns a minimal inline HTML page until the CloudFront domain is known.
+
+```bash
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides \
+    AcApiUrl='https://acct.api-us1.com' \
+    AcListId='7' \
+    AcTags='' \
+    AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
+    AllowedOrigin='*' \
+    ContactSuccessUrl='' \
+    AcmCertificateArn='arn:aws:acm:us-east-1:<acct>:certificate/<id>' \
+    CmsRepo='TODO-owner/TODO-repo' \
+    CmsBranch='main' \
+    DomainName=''
+```
+
+> `AllowedOrigin='*'` is a bring-up default only. **TODO: restrict `AllowedOrigin` to the
+> CloudFront distribution domain (`https://dXXXX.cloudfront.net` or the custom domain)
+> before production.** See step 9.
+
+Read the Outputs after deploy:
+
+```bash
+aws cloudformation describe-stacks --stack-name glam-muse \
+  --query 'Stacks[0].Outputs' --output table
+```
+
+Outputs: `CloudFrontDomainName`, `ApiEndpoint`, `SiteBucketName`, `MediaBucketName`,
+`AcSecretArn`, `CmsRepo`, `CmsBranch`.
+
+## 3. Set the real AC key out-of-band
+
+The template ships the secret with a bare-string placeholder (`REPLACE_ME`). The key never
+transits CloudFormation. Set the real value directly on the secret:
+
+```bash
+aws secretsmanager put-secret-value \
+  --secret-id '<AcSecretArn from Outputs>' \
+  --secret-string '<the real ActiveCampaign API key>'
+```
+
+The Lambda reads `SecretString` verbatim as the API token (bare string, no JSON). Until a
+real value is set, the Lambda returns `500 server_misconfigured`.
+
+## 4. Point the site at the endpoint
+
+Copy the `ApiEndpoint` Output into the site build env:
+
+```bash
+# in astro-photographer/.env (and the host/CI build env)
+PUBLIC_AC_FORM_ENDPOINT=https://<apiId>.execute-api.<region>.amazonaws.com/ac/subscribe
+```
+
+This is the only client-visible AC value (a URL, not a secret).
+
+## 5. Build and verify no secret leaked
+
+```bash
+npm run build
+
+# The endpoint URL should appear in dist/, and no non-PUBLIC AC value should:
+grep -r 'execute-api' dist/            # expect: the endpoint URL (contact page)
+grep -rE 'REPLACE_ME|Api-Token|AC_API_KEY|AC_LIST_ID|AC_FIELD_|api-us1\.com' dist/  # expect: nothing
+```
+
+## 6. Upload the site and media
+
+```bash
+# Site: all built pages + /images/* art go to the SITE bucket.
+aws s3 sync dist/ s3://<SiteBucketName> --delete
+
+# Media: large/externally-managed files (muse films, future photo drops) go to the
+# MEDIA bucket under the media/ key prefix. Reachable at
+# https://<CloudFrontDomainName>/media/<path>.mp4 (the videoUrl shape).
+aws s3 cp heather-film.mp4 s3://<MediaBucketName>/media/heather-film.mp4
+```
+
+> Routing invariant: `/images/*` stays on the **site** origin. Do **not** place site art
+> under `/media` or add an `/images/*` CloudFront behavior pointing at the media bucket —
+> that would 403/404 every site image.
+
+## 7. Invalidate the CloudFront cache
+
+```bash
+aws cloudfront create-invalidation \
+  --distribution-id <distribution id> \
+  --paths '/*'
+```
+
+(The distribution id is in the CloudFront console or
+`aws cloudfront list-distributions`.)
+
+## 8. Smoke test
+
+- Load `https://<CloudFrontDomainName>/` and a clean URL like `/stories/heather`.
+- Submit the contact form (JS on and off) and confirm a lead appears in ActiveCampaign.
+- `OPTIONS` the endpoint and confirm the CORS headers.
+
+## 9. Harden CORS + the no-JS redirect (redeploy)
+
+Once the CloudFront (or custom) domain is known, redeploy to resolve both TODOs:
+
+```bash
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides \
+    AllowedOrigin='https://<cloudfront-or-custom-domain>' \
+    ContactSuccessUrl='https://<cloudfront-or-custom-domain>/contact' \
+    # ...plus the same AcApiUrl/AcListId/AcmCertificateArn/CmsRepo/CmsBranch as before
+```
+
+`ContactSuccessUrl` makes the no-JS fallback land on `/contact?sent=1` (success) or
+`/contact?sent=0&error=<code>` (failure) instead of inline HTML.
+
+## 10. CMS backend + OAuth
+
+- Fill `public/admin/config.yml` `backend.repo` and `backend.branch` (replace the
+  `TODO-owner/TODO-repo` / `TODO-branch` placeholders), then rebuild/upload.
+- Provision a GitHub OAuth gateway (recommended: the external gateway path in the project
+  `README.md`); nothing OAuth-related ships in this template.
+- Confirm `/admin` loads and can commit.
+- **Editor invariant:** exactly one muse must have `Featured` on, and that muse must fill
+  `Featured paragraph` — otherwise the featured block falls back to Heather's default
+  sentence. Each muse Markdown filename is its route slug.

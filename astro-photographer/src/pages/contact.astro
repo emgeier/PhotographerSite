@@ -39,7 +39,7 @@ const steps = [
           <p class="ct-about-para">There is no perfect answer. I’d just love to know what brought you here.</p>
         </div>
 
-        <form class="ct-form">
+        <form class="ct-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
           <div class="ct-form-row">
             <div>
               <label for="ct-first">FIRST NAME *</label>
@@ -91,6 +91,7 @@ const steps = [
           </div>
           <button class="button ct-form-submit" type="submit">START THE CONVERSATION</button>
           <p class="ct-form-note">No pressure. No obligation. Just a conversation about what this experience could look like for you.</p>
+          <p class="ct-form-status" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
     </section>
@@ -129,3 +130,85 @@ const steps = [
   </main>
   <Footer/>
 </Base>
+
+<script is:inline>
+  (function () {
+    var form = document.querySelector('.ct-form');
+    if (!form) return;
+    var status = form.querySelector('.ct-form-status');
+
+    function show(state, message) {
+      if (!status) return;
+      status.hidden = false;
+      status.setAttribute('data-state', state);
+      status.textContent = message;
+    }
+
+    // Progressive-enhancement banner for the no-JS native fallback return
+    // (?sent=1 / ?sent=0). Reads the query string only; adds no markup/classes
+    // beyond the pre-rendered .ct-form-status element.
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('sent') === '1') {
+        show('success', 'Thank you — your message is on its way.');
+      } else if (params.get('sent') === '0') {
+        show('error', 'Something went wrong sending your message. Please try again.');
+      }
+    } catch (e) {}
+
+    var endpoint = form.getAttribute('action');
+    // Without a configured endpoint there is nothing to enhance; the native
+    // POST fallback (form action/method) still works once the endpoint is set.
+    if (!endpoint) return;
+
+    form.addEventListener('submit', function (ev) {
+      // Let the browser run its native HTML validation first; if the form is
+      // invalid, don't intercept so built-in prompts show.
+      if (typeof form.reportValidity === 'function' && !form.reportValidity()) return;
+
+      ev.preventDefault();
+
+      var button = form.querySelector('.ct-form-submit');
+      var originalLabel = button ? button.textContent : null;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'SENDING…';
+      }
+      show('sending', 'Sending your message…');
+
+      // Serialize every present field as-is — the Lambda is the single
+      // validation authority, so a blank phone is treated no differently here
+      // than on the native fallback.
+      var payload = {};
+      new FormData(form).forEach(function (value, key) {
+        payload[key] = value;
+      });
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: res.ok }; });
+        })
+        .then(function (data) {
+          if (data && data.ok) {
+            show('success', 'Thank you — your message is on its way.');
+            form.reset();
+          } else {
+            show('error', 'Something went wrong sending your message. Please try again.');
+          }
+        })
+        .catch(function () {
+          show('error', 'Something went wrong sending your message. Please try again.');
+        })
+        .then(function () {
+          if (button) {
+            button.disabled = false;
+            button.textContent = originalLabel;
+          }
+        });
+    });
+  })();
+</script>
