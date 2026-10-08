@@ -1,0 +1,127 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+export function getStaticPaths() {
+  const list = [
+    { slug:'heather', n:'MUSE 001', name:'HEATHER', tag:'Seeing Herself Differently.' },
+    { slug:'lauren',  n:'MUSE 002', name:'LAUREN',  tag:'A Softer Strength.' },
+    { slug:'kaylee',  n:'MUSE 003', name:'KAYLEE',  tag:'More Than a Portrait.' },
+    { slug:'renee',   n:'MUSE 004', name:'RENEE',   tag:'Confidence Looks Good on You.' },
+    { slug:'jasmine', n:'MUSE 005', name:'JASMINE', tag:'A New Chapter.' },
+    { slug:'elise',   n:'MUSE 006', name:'ELISE',   tag:'Finding Her Voice.' },
+  ];
+  return list.map(m => ({ params: { slug: m.slug }, props: { muse: m } }));
+}
+
+const { muse } = Astro.props;
+const first = muse.name.charAt(0) + muse.name.slice(1).toLowerCase();
+const tagUpper = muse.tag.toUpperCase();
+
+const gallery = [
+  '/images/st-gallery-1.svg','/images/st-gallery-2.svg','/images/st-gallery-3.svg',
+  '/images/st-gallery-4.svg','/images/st-gallery-5.svg','/images/st-gallery-6.svg',
+  '/images/st-gallery-7.svg','/images/st-gallery-8.svg','/images/st-gallery-9.svg',
+  '/images/st-gallery-10.svg',
+];
+---
+<Base title={`${first} — Muse Stories — The Glam Muse Series`} description={`${muse.n}: ${muse.tag} ${first}'s story in The Glam Muse Series.`}>
+  <main>
+    <section class="st-hero">
+      <Header/>
+      <div class="st-hero-row">
+        <div class="st-hero-copy">
+          <p class="eyebrow st-hero-eyebrow">{muse.n}</p>
+          <h1 class="display st-hero-name">{muse.name}</h1>
+          <p class="st-hero-tag">{tagUpper}</p>
+          <span class="st-rule"></span>
+          <p class="st-hero-para">{first} came to this experience at a moment of change — ready to see herself with fresh eyes. What she found was more than beautiful photographs. It was a reminder of who she is: strong, joyful, and unapologetically her. This is her story.</p>
+          <a class="st-hero-link" href="#st-story">HER STORY <span aria-hidden="true">&darr;</span></a>
+        </div>
+        <img class="st-hero-photo" src="/images/st-hero.svg" alt={`${first} hero portrait placeholder`} />
+      </div>
+    </section>
+
+    <section class="st-intro" id="st-story">
+      <div class="wrap st-intro-row">
+        <div class="st-intro-head">
+          <h2 class="display st-intro-title">BEFORE THE CAMERA,<br/>THERE WAS HER STORY.</h2>
+          <span class="st-rule st-rule-wide"></span>
+        </div>
+        <p class="st-intro-para">She wanted to feel like herself again — confident, present, and free. More than beautiful photos, she wanted a new perspective. And what she found was a reminder that the woman she was searching for had been there all along.</p>
+      </div>
+    </section>
+
+    <section class="st-mosaic">
+      <div class="wrap st-mosaic-grid">
+        {gallery.map((src, i) => (
+          <figure class={`st-tile st-tile-${i+1}`}><img src={src} alt={`${first} gallery portrait ${i+1}`} /></figure>
+        ))}
+        <div class="st-caption st-caption-a">
+          <p class="display st-caption-text">A DIFFERENT<br/>PERSPECTIVE.</p>
+          <span class="st-rule"></span>
+        </div>
+        <div class="st-caption st-caption-b">
+          <p class="display st-caption-text">QUIET<br/>MOMENTS. REAL<br/>EMOTIONS. ALWAYS HER.</p>
+          <span class="st-rule"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="st-transform">
+      <div class="wrap st-transform-row">
+        <div class="st-transform-copy">
+          <p class="eyebrow st-transform-eyebrow">THE TRANSFORMATION</p>
+          <h2 class="display st-transform-title">SHE WAS<br/>ALWAYS THERE.</h2>
+          <span class="st-rule"></span>
+          <p class="st-transform-para">The transformation isn't about changing who she is. It's about giving her the space to see herself differently.</p>
+          <p class="st-transform-caps">NOT TRANSFORMED. REVEALED.</p>
+        </div>
+        <div class="st-transform-pair">
+          <figure><img src="/images/st-before.svg" alt={`${first} before portrait placeholder`} /><figcaption>BEFORE</figcaption></figure>
+          <figure><img src="/images/st-after.svg" alt={`${first} after portrait placeholder`} /><figcaption>AFTER</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="st-motion">
+      <img class="st-motion-photo" src="/images/st-motion.svg" alt={`${first} short film still placeholder`} />
+      <div class="wrap st-motion-row">
+        <div class="st-motion-copy">
+          <h2 class="display st-motion-title">{muse.name},<br/>IN MOTION.</h2>
+          <p class="eyebrow st-motion-sub">A SHORT FILM</p>
+          <span class="st-rule st-rule-light"></span>
+        </div>
+        <a class="st-video" href="#" aria-label="Press play">
+          <span class="st-play"></span>
+          <span class="st-video-caption">PRESS PLAY</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="st-seen">
+      <div class="wrap st-seen-copy">
+        <h2 class="display st-seen-title">You&rsquo;ve Seen Her Story.</h2>
+        <p class="st-seen-italic">Now imagine yours.</p>
+        <span class="st-rule st-rule-center"></span>
+      </div>
+    </section>
+
+    <section class="st-cta">
+      <div class="wrap st-cta-row">
+        <div class="st-cta-copy">
+          <p class="eyebrow st-cta-eyebrow">THE GLAM MUSE SERIES</p>
+          <h2 class="display st-cta-title">WHAT COULD<br/>YOUR STORY LOOK LIKE?</h2>
+          <span class="st-rule"></span>
+          <p class="st-cta-sub">Every Muse begins with a conversation.</p>
+        </div>
+        <div class="st-cta-action">
+          <p class="st-cta-ask">ARE YOU THE NEXT MUSE?</p>
+          <a class="st-cta-button" href="/contact">BOOK YOUR CONSULTATION <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer/>
+</Base>

@@ -1,0 +1,17 @@
+---
+import '@fontsource-variable/manrope';
+import '../styles/global.css';
+const { title = 'The Glam Muse Series', description = 'A portrait experience for women worth seeing.' } = Astro.props;
+const adobeProject = import.meta.env.PUBLIC_ADOBE_FONTS_PROJECT;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  {adobeProject && <link rel="stylesheet" href={`https://use.typekit.net/${adobeProject}.css`} />}
+</head>
+<body><slot /></body>
+</html>

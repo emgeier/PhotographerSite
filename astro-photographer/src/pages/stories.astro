@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const muses = [
+  { src:'/images/ms-muse-1.svg', slug:'heather', n:'MUSE 001', name:'HEATHER', tag:'Seeing Herself Differently.' },
+  { src:'/images/ms-muse-2.svg', slug:'lauren',  n:'MUSE 002', name:'LAUREN',  tag:'A Softer Strength.' },
+  { src:'/images/ms-muse-3.svg', slug:'kaylee',  n:'MUSE 003', name:'KAYLEE',  tag:'More Than a Portrait.' },
+  { src:'/images/ms-muse-4.svg', slug:'renee',   n:'MUSE 004', name:'RENEE',   tag:'Confidence Looks Good on You.' },
+  { src:'/images/ms-muse-5.svg', slug:'jasmine', n:'MUSE 005', name:'JASMINE', tag:'A New Chapter.' },
+  { src:'/images/ms-muse-6.svg', slug:'elise',   n:'MUSE 006', name:'ELISE',   tag:'Finding Her Voice.' },
+];
+---
+<Base title="Muse Stories — The Glam Muse Series" description="Portraits are only part of the story. Meet the women behind them.">
+  <main>
+    <section class="ms-hero">
+      <Header/>
+      <div class="wrap ms-hero-copy">
+        <p class="eyebrow ms-hero-eyebrow">THE GLAM MUSE SERIES</p>
+        <h1 class="display ms-hero-title">MUSE<br/>STORIES</h1>
+        <p class="eyebrow ms-hero-sub">EVERY WOMAN.<br/>A STORY WORTH SEEING.</p>
+        <span class="ms-rule"></span>
+        <p class="ms-hero-lede">Portraits are only part of the story.<br/>Meet the women behind them.</p>
+      </div>
+      <img class="ms-hero-photo" src="/images/ms-hero.svg" alt="Placeholder for muse stories hero portrait" />
+    </section>
+
+    <section class="ms-featured">
+      <div class="wrap ms-featured-row">
+        <img class="ms-featured-photo" src="/images/ms-featured.svg" alt="Placeholder portrait of Heather" />
+        <div class="ms-featured-copy">
+          <p class="eyebrow ms-featured-label">MUSE 001</p>
+          <h2 class="display ms-featured-name">HEATHER</h2>
+          <p class="ms-featured-tag">Seeing Herself Differently.</p>
+          <p class="ms-featured-para">Heather came to this experience at a moment of change — ready to see herself with fresh eyes.</p>
+          <a class="ms-button" href="/stories/heather">READ HER STORY <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="ms-featured-nav">
+          <span class="ms-featured-count">01<br/>/<br/>06</span>
+        </div>
+      </div>
+      <div class="wrap ms-featured-controls">
+        <a class="ms-arrow" href="#" aria-label="Previous muse">&larr;</a>
+        <a class="ms-arrow" href="#" aria-label="Next muse">&rarr;</a>
+      </div>
+    </section>
+
+    <section class="ms-meet">
+      <div class="wrap">
+        <div class="ms-meet-head">
+          <p class="eyebrow ms-meet-eyebrow">THE WOMEN</p>
+          <h2 class="display ms-meet-title"><span class="ms-meet-dash"></span>MEET THE MUSES<span class="ms-meet-dash"></span></h2>
+          <a class="ms-meet-all" href="#">VIEW ALL STORIES <span aria-hidden="true">&rarr;</span></a>
+          <p class="eyebrow ms-meet-sub">EVERY WOMAN. A DIFFERENT STORY.</p>
+        </div>
+        <div class="ms-grid">
+          {muses.map(m => (
+            <article class="ms-card">
+              <img src={m.src} alt={`${m.name} placeholder portrait`} />
+              <p class="eyebrow ms-card-label">{m.n}</p>
+              <h3 class="display ms-card-name">{m.name}</h3>
+              <p class="ms-card-tag">{m.tag}</p>
+              <span class="ms-card-rule"></span>
+              <a class="ms-card-link" href={`/stories/${m.slug}`}>READ HER STORY <span aria-hidden="true">&rarr;</span></a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="ms-look">
+      <div class="wrap ms-look-row">
+        <div class="ms-look-copy">
+          <h2 class="display ms-look-title">LOOK AGAIN.</h2>
+          <p class="eyebrow ms-look-sub">A FRESH PERSPECTIVE.</p>
+          <span class="ms-rule ms-rule-light"></span>
+        </div>
+        <img class="ms-look-photo" src="/images/ms-look-again.svg" alt="Placeholder portrait" />
+        <p class="ms-look-para">Every woman carries a story — shaped by where she's been, who she is now, and what she's still becoming.</p>
+      </div>
+    </section>
+
+    <section class="ms-motion">
+      <div class="wrap ms-motion-row">
+        <a class="ms-video" href="#" aria-label="Press play">
+          <img src="/images/ms-motion.svg" alt="Video thumbnail placeholder" />
+          <span class="ms-play"></span>
+          <span class="ms-video-caption">PRESS PLAY</span>
+        </a>
+        <div class="ms-motion-copy">
+          <p class="eyebrow ms-motion-eyebrow">THE MUSES</p>
+          <h2 class="display ms-motion-title">IN MOTION.</h2>
+          <span class="ms-rule ms-rule-light ms-rule-start"></span>
+          <p class="ms-motion-para">Movement. Laughter. Quiet moments.<br/>The pieces photographs cannot always hold.</p>
+          <a class="ms-motion-link" href="#">WATCH THE STORIES <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="ms-cta">
+      <img class="ms-cta-photo" src="/images/ms-cta.svg" alt="Placeholder portrait" />
+      <div class="wrap ms-cta-copy">
+        <p class="eyebrow ms-cta-eyebrow">THE GLAM MUSE SERIES</p>
+        <h2 class="display ms-cta-title">YOU'VE SEEN<br/>THEIR STORIES.</h2>
+        <p class="ms-cta-italic">Now imagine yours.</p>
+        <span class="ms-rule"></span>
+        <p class="ms-cta-sub">What could your story look like?</p>
+        <a class="ms-button" href="/contact">BOOK YOUR CONSULTATION <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </section>
+  </main>
+  <Footer/>
+</Base>

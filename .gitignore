@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output / framework caches
+dist/
+.astro/
+
+# Visual harness output (generated screenshots/report)
+visual/out/
+
+# Agent task artifacts
+.agents/
+.worktrees/
+
+# Local design/source assets kept out of VCS
+# (large mockup exports read by the visual harness via absolute path)
+Website/
+crops/
+export/
+*.zip
+
+# Env & OS
+.env
+.DS_Store

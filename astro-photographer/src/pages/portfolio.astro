@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const grid = [
+  '/images/pf-grid-1.svg','/images/pf-grid-2.svg','/images/pf-grid-3.svg',
+  '/images/pf-grid-4.svg','/images/pf-grid-5.svg','/images/pf-grid-6.svg',
+  '/images/pf-grid-7.svg','/images/pf-grid-8.svg','/images/pf-grid-9.svg',
+];
+const steps = [
+  { n:'01', t:'CONSULTATION', p:'A 15–20 minute Zoom call to understand your vision, preferences, and what makes you, uniquely you.' },
+  { n:'02', t:'SESSION', p:'A relaxed, guided portrait experience with professional hair and makeup, up to 5 looks.' },
+  { n:'03', t:'REVEAL', p:'A private, same-day unveiling of your portraits — a celebration of you, with options for artwork and collections.' },
+];
+---
+<Base title="Portfolio — The Glam Muse Series" description="A collection of women, real stories, and portraits that celebrate who they are and who they've become.">
+  <main>
+    <section class="pf-hero">
+      <Header/>
+      <div class="wrap pf-hero-copy">
+        <p class="eyebrow">THE PORTFOLIO</p>
+        <h1 class="display pf-hero-title">YOU,<br/>IN FULL.</h1>
+        <p class="pf-hero-lede">A collection of women, real stories, and portraits that celebrate who they are and who they've become.</p>
+      </div>
+      <img class="pf-hero-photo" src="/images/pf-hero.svg" alt="Placeholder for portfolio hero portrait" />
+    </section>
+
+    <section class="pf-grid-section">
+      <div class="pf-grid">
+        {grid.map((src, i) => <figure><img src={src} alt={`Portfolio placeholder ${i+1}`} /></figure>)}
+      </div>
+    </section>
+
+    <section class="pf-band">
+      <img class="pf-band-photo" src="/images/pf-band.svg" alt="Placeholder landscape portrait" />
+      <div class="pf-band-copy">
+        <p class="eyebrow">THE GLAM MUSE SERIES</p>
+        <h2 class="display">Not transformed,<br/>revealed.</h2>
+        <span class="rule left"></span>
+      </div>
+    </section>
+
+    <section class="pf-experience wrap" id="experience">
+      <div class="pf-experience-copy">
+        <p class="eyebrow">THE EXPERIENCE</p>
+        <h2 class="display">More than<br/>a portrait.</h2>
+        <p class="pf-experience-lede">Professional hair and makeup. A guided session with movement, laughter, and real connection. And a private, same-day reveal of portraits you'll love.</p>
+        <a class="button" href="#">Watch the experience</a>
+      </div>
+      <a class="pf-video" href="#" aria-label="Play the experience video">
+        <img src="/images/pf-video.svg" alt="Video thumbnail placeholder" />
+        <span class="pf-play" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <section class="pf-process">
+      <div class="wrap">
+        <p class="eyebrow pf-process-eyebrow">WHAT'S NEXT</p>
+        <h2 class="display pf-process-head">A simple, meaningful process.</h2>
+        <div class="pf-steps">
+          {steps.map(s => (
+            <article>
+              <b>{s.n}</b>
+              <span class="pf-step-rule"></span>
+              <h3>{s.t}</h3>
+              <p>{s.p}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pf-cta">
+      <div class="wrap pf-cta-copy">
+        <p class="eyebrow">YOUR TURN.</p>
+        <h2 class="display">Ready to see<br/>yourself<br/>differently?</h2>
+        <p class="pf-cta-lede">This isn't about becoming someone else. It's about seeing the woman who is already there.</p>
+        <a class="button" href="/contact">Book your consultation</a>
+      </div>
+      <img class="pf-cta-photo" src="/images/pf-cta.svg" alt="Placeholder portrait" />
+    </section>
+  </main>
+  <Footer/>
+</Base>
