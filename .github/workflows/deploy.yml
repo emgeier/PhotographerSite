@@ -46,7 +46,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          # Astro requires Node >=22.12.0; pin to 22 LTS.
+          node-version: 22
           cache: npm
           cache-dependency-path: astro-photographer/package-lock.json
 
