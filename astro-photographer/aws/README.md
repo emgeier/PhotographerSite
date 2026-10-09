@@ -120,7 +120,7 @@ grep -rE 'REPLACE_ME|Api-Token|AC_API_KEY|AC_LIST_ID|AC_FIELD_|api-us1\.com' dis
 
 ```bash
 # Site: all built pages + /images/* art go to the SITE bucket.
-aws s3 sync dist/ s3://<SiteBucketName> --delete
+aws s3 sync dist/ s3://photographer-site-sitebucket-ablzoszzaysf --delete
 
 # Media: large/externally-managed files (muse films, future photo drops) go to the
 # MEDIA bucket under the media/ key prefix. Reachable at
@@ -177,3 +177,166 @@ aws cloudformation deploy \
 - **Editor invariant:** exactly one muse must have `Featured` on, and that muse must fill
   `Featured paragraph` — otherwise the featured block falls back to Heather's default
   sentence. Each muse Markdown filename is its route slug.
+
+## 11. CI/CD — GitHub Actions deploy via OIDC
+
+`.github/workflows/deploy.yml` (at the **git repo root**, which is the parent of
+`astro-photographer/`) builds the site and deploys it on every push to `main` that
+touches `astro-photographer/**`. It authenticates with **GitHub OIDC** assuming an IAM
+role — no AWS access keys are stored in GitHub.
+
+This replaces the manual steps 5–7 (build, `s3 sync`, invalidate) once set up. It does
+**not** manage the CloudFormation stack itself; infra changes still go through
+`aws cloudformation deploy` (or the console).
+
+### 11a. Create the deploy role (one time, in the stack)
+
+Redeploy the stack with the `GitHubRepo` parameter set. This creates the OIDC provider
+and a least-privilege role that may only write the site bucket and invalidate this
+distribution.
+
+```bash
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse \
+  --capabilities CAPABILITY_IAM \
+  --region us-east-2 \
+  --parameter-overrides \
+    GitHubRepo='emgeier/PhotographerSite' \
+    GitHubBranch='main' \
+    CreateGitHubOidcProvider='true' \
+    # ...plus the same Ac*/Cms*/cert params as the prior deploy
+```
+
+> **One OIDC provider per account.** An AWS account can have only one provider for
+> `token.actions.githubusercontent.com`. If this account already has one (from another
+> repo/stack), pass `CreateGitHubOidcProvider='false'` — the role then references the
+> existing provider instead of trying to create a duplicate (which would fail the stack).
+
+Read the new Outputs:
+
+```bash
+aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+  --query 'Stacks[0].Outputs' --output table
+```
+
+You now also get `DistributionId` and `GitHubDeployRoleArn`.
+
+### 11b. Configure GitHub Actions variables
+
+In the repo: **Settings → Secrets and variables → Actions → Variables** (these are
+plain *variables*, not secrets — none is sensitive; the role ARN is not a credential and
+the endpoint is a public URL):
+
+| Variable | Value (from stack Outputs) |
+|---|---|
+| `AWS_DEPLOY_ROLE_ARN` | `GitHubDeployRoleArn` |
+| `AWS_REGION` | `us-east-2` |
+| `SITE_BUCKET` | `SiteBucketName` |
+| `DISTRIBUTION_ID` | `DistributionId` |
+| `PUBLIC_AC_FORM_ENDPOINT` | `ApiEndpoint` (leave unset until the stack exists; the form stays inert until it is set and a build runs) |
+
+### 11c. How it runs
+
+- **Trigger:** push to `main` under `astro-photographer/**`, or run it manually from the
+  Actions tab (`workflow_dispatch`).
+- **Steps:** `npm ci` → `npm run build` (bakes in `PUBLIC_AC_FORM_ENDPOINT`) → assume the
+  OIDC role → `aws s3 sync dist/ s3://$SITE_BUCKET --delete` → CloudFront invalidation of
+  `/*`.
+- **Media is untouched:** the sync targets only the site bucket; `/media/*` lives in the
+  separate media bucket and is never pruned by this workflow.
+
+### 11d. Trust scope / security notes
+
+- The role trusts exactly `repo:emgeier/PhotographerSite:ref:refs/heads/main`. Pushes from
+  other branches or forks cannot assume it. Widen deliberately (e.g. tags or a second
+  branch) by changing `GitHubBranch` / the trust `sub` and redeploying.
+- The role's permissions are limited to `s3:PutObject`/`DeleteObject`/`ListBucket` on the
+  site bucket and `cloudfront:CreateInvalidation`/`GetInvalidation` on this one
+  distribution. It cannot touch the media bucket, the Lambda, or the secret.
+- To rotate/revoke access, delete or re-scope the role via a stack redeploy; there are no
+  long-lived keys to leak or rotate.
+
+## 12. CMS admin login — AWS-hosted GitHub OAuth relay
+
+Sveltia/Decap's GitHub backend needs a server-side relay to exchange the OAuth
+code for a token (the client secret can't live in the static site). This project
+hosts that relay **on AWS** — a small Lambda (`aws/lambda/oauth/index.mjs`) on two
+routes of the existing HTTP API — so no Cloudflare or third-party service is needed.
+
+It is created only when `OAuthClientId` is set, so it stays dormant otherwise.
+
+### 12a. Create the GitHub OAuth App
+
+GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App:
+
+- **Homepage URL:** `https://<your-cloudfront-domain>` (include `https://`).
+- **Authorization callback URL / Redirect URI:** the `OAuthCallbackUrl` stack output,
+  i.e. `https://<api-id>.execute-api.us-east-2.amazonaws.com/callback`.
+  (The callback is the **API**, not `auth.sveltia.app` — if you set it to the Sveltia
+  host earlier, change it to this.)
+- Leave Device Flow / wildcard / token expiry **unchecked**.
+
+Register, then copy the **Client ID** and generate a **Client secret**.
+
+> Chicken-and-egg: the callback URL contains the API id, which you only know after the
+> stack is deployed with OAuth on. Deploy once (step 12b) to get `OAuthCallbackUrl`, then
+> paste it into the OAuth App. The App can be edited after creation.
+
+### 12b. Deploy the relay
+
+Upload the OAuth Lambda zip to the same bucket as the AC zip, then redeploy with the
+client id set:
+
+```bash
+# zip (only index.mjs; SDK is bundled in nodejs18.x) and upload
+(cd aws/lambda/oauth && zip -j ../../oauth-lambda.zip index.mjs)
+aws s3 cp aws/oauth-lambda.zip s3://muse-photographer-site/oauth-lambda.zip --profile muse
+
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse --region us-east-2 \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides \
+    OAuthClientId='<GitHub OAuth App client id>' \
+    # ...plus the same Ac*/Cms*/GitHub* params as the prior deploy
+```
+
+Console path: upload `oauth-lambda.zip` to the bucket via the S3 console, then upload the
+edited `site.yaml` and set `OAuthClientId` in the Parameters step.
+
+Read the new Outputs: `OAuthBaseUrl`, `OAuthCallbackUrl`, `OAuthSecretArn`.
+
+### 12c. Set the client secret out-of-band
+
+Like the AC key, the OAuth **client secret** ships as a `REPLACE_ME` placeholder and is
+set directly on the secret (never through CloudFormation):
+
+```bash
+aws secretsmanager put-secret-value \
+  --secret-id '<OAuthSecretArn>' \
+  --secret-string '<the GitHub OAuth App client secret>' \
+  --profile muse
+```
+
+Until a real value is set, `/callback` returns `server_misconfigured`.
+
+### 12d. Point the CMS at the relay and rebuild
+
+In `public/admin/config.yml`, set `base_url` to the `OAuthBaseUrl` output (replace the
+`REPLACE-API-ID` placeholder). `auth_endpoint: /auth` is already set. Then rebuild and
+redeploy the site so `/admin/config.yml` on CloudFront carries the real URL:
+
+```bash
+npm run build
+aws s3 sync dist/ s3://<SiteBucketName> --delete --profile muse
+aws cloudfront create-invalidation --distribution-id <DistributionId> --paths '/admin/*' --profile muse
+```
+
+### 12e. Test
+
+Open `https://<your-cloudfront-domain>/admin/`, click **Login with GitHub**. A popup goes
+to `/auth` → GitHub → `/callback`, which posts the token back and closes. The CMS then
+loads the muses collection. If login fails, check the OAuth Lambda's CloudWatch logs
+(`/aws/lambda/<stack>-OAuthFunction-*`): `server_misconfigured` = secret not set (12c);
+`exchange_failed` = client id/secret or callback URL mismatch with the OAuth App.

@@ -52,9 +52,26 @@ Parameters:
       https://<CloudFrontDomainName>/contact on the hardening redeploy.
   AcmCertificateArn:
     Type: String
+    Default: ''
     Description: >-
       ACM certificate ARN for the CloudFront viewer certificate. MUST be in
-      us-east-1 regardless of the stack region.
+      us-east-1 regardless of the stack region. Leave empty for a provisional
+      bring-up: CloudFront then serves on its default *.cloudfront.net domain
+      using the free CloudFront default certificate (no ACM/DNS required).
+      Supply the ARN (together with DomainName) on the hardening redeploy.
+  OAuthClientId:
+    Type: String
+    Default: ''
+    Description: >-
+      GitHub OAuth App client id for the CMS admin login relay. Leave empty to
+      skip the OAuth relay entirely (the /admin login will not work until set).
+      The paired client secret is set out-of-band on the OAuth secret, never here.
+  OAuthLambdaS3Key:
+    Type: String
+    Default: 'oauth-lambda.zip'
+    Description: >-
+      S3 key of the OAuth relay Lambda zip in the same bucket as the AC Lambda
+      zip (muse-photographer-site). Only used when OAuthClientId is set.
   CmsRepo:
     Type: String
     Description: GitHub repo (owner/name) for the CMS backend (documentation/output only).
@@ -67,9 +84,46 @@ Parameters:
     Description: >-
       Optional custom domain (alias) for CloudFront. When empty, the default
       *.cloudfront.net domain is used and no Aliases are set.
+  GitHubRepo:
+    Type: String
+    Default: ''
+    Description: >-
+      GitHub repo (owner/name) allowed to assume the CI/CD deploy role via OIDC,
+      e.g. emgeier/PhotographerSite. Leave empty to skip the CI/CD role entirely.
+  GitHubBranch:
+    Type: String
+    Default: 'main'
+    Description: >-
+      Branch whose workflow runs may assume the deploy role (sub claim is scoped
+      to refs/heads/<branch>). Only used when GitHubRepo is set.
+  CreateGitHubOidcProvider:
+    Type: String
+    Default: 'true'
+    AllowedValues: ['true', 'false']
+    Description: >-
+      Whether to create the account's GitHub OIDC provider. An AWS account may
+      have only ONE provider for token.actions.githubusercontent.com; set this
+      to 'false' if the account already has one (the role then references the
+      existing provider ARN). Only used when GitHubRepo is set.
 
 Conditions:
-  HasDomainName: !Not [!Equals [!Ref DomainName, '']]
+  # When no ACM cert is supplied we are in provisional bring-up: CloudFront
+  # uses its own default certificate on the *.cloudfront.net domain.
+  HasAcmCertificate: !Not [!Equals [!Ref AcmCertificateArn, '']]
+  # A custom-domain alias is only valid alongside a matching ACM cert.
+  # CloudFront rejects Aliases when using the default certificate, so require
+  # BOTH a domain name and a cert before setting Aliases.
+  HasDomainName: !And
+    - !Not [!Equals [!Ref DomainName, '']]
+    - !Not [!Equals [!Ref AcmCertificateArn, '']]
+  # CI/CD: create the deploy role only when a GitHub repo is supplied.
+  HasGitHubRepo: !Not [!Equals [!Ref GitHubRepo, '']]
+  # CMS login: create the OAuth relay only when a client id is supplied.
+  HasOAuth: !Not [!Equals [!Ref OAuthClientId, '']]
+  # Create the OIDC provider only when both: a repo is set AND the toggle is on.
+  CreateOidcProvider: !And
+    - !Not [!Equals [!Ref GitHubRepo, '']]
+    - !Equals [!Ref CreateGitHubOidcProvider, 'true']
 
 Resources:
   # -------------------------------------------------------------------------
@@ -178,10 +232,13 @@ Resources:
             TargetOriginId: media-origin
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-        ViewerCertificate:
-          AcmCertificateArn: !Ref AcmCertificateArn
-          SslSupportMethod: sni-only
-          MinimumProtocolVersion: TLSv1.2_2021
+        ViewerCertificate: !If
+          - HasAcmCertificate
+          - AcmCertificateArn: !Ref AcmCertificateArn
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          # Provisional bring-up: free CloudFront default cert on *.cloudfront.net.
+          - CloudFrontDefaultCertificate: true
 
   SiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -255,12 +312,17 @@ Resources:
   AcFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: nodejs20.x
+      # nodejs18.x bundles @aws-sdk/client-secrets-manager in the runtime image,
+      # which the handler imports at request time. nodejs20.x dropped the bundled
+      # SDK, so with a source-only zip the AC proxy would 500 on form submit.
+      Runtime: nodejs18.x
       Handler: index.handler
       Timeout: 10
       MemorySize: 256
       Role: !GetAtt LambdaExecutionRole.Arn
-      Code: ../lambda/activecampaign/
+      Code:
+        S3Bucket: muse-photographer-site
+        S3Key: ac-lambda.zip
       Environment:
         Variables:
           AC_API_URL: !Ref AcApiUrl
@@ -327,14 +389,196 @@ Resources:
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/ac/subscribe'
 
+  # -------------------------------------------------------------------------
+  # CMS admin login — GitHub OAuth relay (Lambda + /auth and /callback routes
+  # on the existing HTTP API). Created only when OAuthClientId is set. The
+  # GitHub OAuth App client SECRET is held in Secrets Manager (set out-of-band),
+  # never in the template or an env var — same pattern as the AC key.
+  # -------------------------------------------------------------------------
+  OAuthSecret:
+    Type: AWS::SecretsManager::Secret
+    Condition: HasOAuth
+    Properties:
+      Name: !Sub '${AWS::StackName}-oauth-client-secret'
+      Description: GitHub OAuth App client secret for the CMS login relay (set out-of-band).
+      SecretString: REPLACE_ME
+
+  OAuthLambdaRole:
+    Type: AWS::IAM::Role
+    Condition: HasOAuth
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: read-oauth-secret
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref OAuthSecret
+
+  OAuthFunction:
+    Type: AWS::Lambda::Function
+    Condition: HasOAuth
+    Properties:
+      Runtime: nodejs18.x
+      Handler: index.handler
+      Timeout: 10
+      MemorySize: 256
+      Role: !GetAtt OAuthLambdaRole.Arn
+      Code:
+        S3Bucket: muse-photographer-site
+        S3Key: !Ref OAuthLambdaS3Key
+      Environment:
+        Variables:
+          OAUTH_CLIENT_ID: !Ref OAuthClientId
+          OAUTH_SECRET_ARN: !Ref OAuthSecret
+
+  OAuthLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: HasOAuth
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${OAuthFunction}'
+      RetentionInDays: 7
+
+  OAuthIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Condition: HasOAuth
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt OAuthFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  OAuthRouteAuth:
+    Type: AWS::ApiGatewayV2::Route
+    Condition: HasOAuth
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /auth'
+      Target: !Sub 'integrations/${OAuthIntegration}'
+
+  OAuthRouteCallback:
+    Type: AWS::ApiGatewayV2::Route
+    Condition: HasOAuth
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /callback'
+      Target: !Sub 'integrations/${OAuthIntegration}'
+
+  OAuthInvokePermission:
+    Type: AWS::Lambda::Permission
+    Condition: HasOAuth
+    Properties:
+      FunctionName: !Ref OAuthFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*'
+
+  # -------------------------------------------------------------------------
+  # CI/CD — GitHub Actions deploys via OIDC (no long-lived keys). The role is
+  # assumable only by workflow runs from GitHubRepo on GitHubBranch, and may
+  # only write the site bucket + invalidate THIS distribution. Created only
+  # when GitHubRepo is set (see Conditions).
+  # -------------------------------------------------------------------------
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateOidcProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      # GitHub's OIDC thumbprint. IAM no longer enforces it for this well-known
+      # provider, but the property is still required by CloudFormation.
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+
+  GitHubDeployRole:
+    Type: AWS::IAM::Role
+    Condition: HasGitHubRepo
+    Properties:
+      Description: Assumed by GitHub Actions (OIDC) to deploy the static site.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - CreateOidcProvider
+                - !Ref GitHubOidcProvider
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub 'repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}'
+      Policies:
+        - PolicyName: deploy-site
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # Sync the built site into the site bucket (list + put/delete objects).
+              - Sid: SiteBucketWrite
+                Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt SiteBucket.Arn
+              - Sid: SiteObjectWrite
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub '${SiteBucket.Arn}/*'
+              # Invalidate the cache so new deploys are visible immediately.
+              - Sid: InvalidateDistribution
+                Effect: Allow
+                Action:
+                  - cloudfront:CreateInvalidation
+                  - cloudfront:GetInvalidation
+                Resource: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution.Id}'
+
 # ---------------------------------------------------------------------------
 Outputs:
   CloudFrontDomainName:
     Description: CloudFront distribution domain (serves the static site).
     Value: !GetAtt Distribution.DomainName
+  DistributionId:
+    Description: CloudFront distribution id (for cache invalidations).
+    Value: !Ref Distribution
+  GitHubDeployRoleArn:
+    Condition: HasGitHubRepo
+    Description: >-
+      ARN of the GitHub Actions OIDC deploy role. Set as the AWS_DEPLOY_ROLE_ARN
+      GitHub Actions variable (or repo secret).
+    Value: !GetAtt GitHubDeployRole.Arn
   ApiEndpoint:
     Description: The /ac/subscribe URL to paste into PUBLIC_AC_FORM_ENDPOINT.
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/ac/subscribe'
+  OAuthBaseUrl:
+    Condition: HasOAuth
+    Description: >-
+      Base URL of the CMS OAuth relay. Set as backend.base_url in
+      public/admin/config.yml. The /auth and /callback paths live under it.
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  OAuthCallbackUrl:
+    Condition: HasOAuth
+    Description: >-
+      The GitHub OAuth App "Authorization callback URL" / Redirect URI must be
+      set to EXACTLY this value.
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/callback'
+  OAuthSecretArn:
+    Condition: HasOAuth
+    Description: ARN of the GitHub OAuth client-secret (set the real value out-of-band).
+    Value: !Ref OAuthSecret
   SiteBucketName:
     Description: Name of the private site bucket (aws s3 sync dist/ here).
     Value: !Ref SiteBucket

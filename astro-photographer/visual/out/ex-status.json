@@ -1,0 +1,17 @@
+{
+  "match": true,
+  "changed": [
+    ".ex-hero-copy: margin-inline:auto (centered, left edge x=440) -> margin-left:max(48px,calc((100% - 1110px)/2));margin-right:auto (left-pinned to the page gutter under the logo); max-width:560px -> 510px; padding-top:70px -> 64px",
+    ".ex-hero-photo: width:50% -> 46% (dark hero panel now a touch wider than half, portrait a clean full-height rectangle bleeding to the top-right, matching the mockup split)"
+  ],
+  "audit": {
+    "Hero title (.ex-hero-title) desktop": "73.6px / line-height 72.1px, width 510, left gutter",
+    "Hero lede (.ex-hero-lede) desktop": "17.6px / line-height 26.4px, width 360",
+    "Process heading (.ex-process-head) desktop": "46.4px / line-height 47.3px",
+    "Inside heading (.ex-inside-head) desktop": "51.2px / line-height 51.2px",
+    "Final CTA heading (.ex-cta-head) desktop": "64px / line-height 66.6px, centered",
+    "Content wrapper (.wrap) desktop": "width 1110, margin 165 each side"
+  },
+  "harnessClean": true,
+  "remaining": []
+}

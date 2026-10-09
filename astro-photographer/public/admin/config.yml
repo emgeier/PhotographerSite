@@ -1,8 +1,13 @@
 backend:
   name: github
-  repo: TODO-owner/TODO-repo      # TODO: set to the client's GitHub repo (owner/name)
-  branch: TODO-branch             # TODO: set to the CMS content branch (e.g. main)
-  # base_url + auth_endpoint point at the external OAuth gateway; see README.md.
+  repo: emgeier/PhotographerSite
+  branch: main
+  # OAuth relay = the AWS HTTP API (OAuthBaseUrl stack output). The CMS opens
+  # <base_url>/auth to start login and the relay returns the token from
+  # <base_url>/callback. REPLACE <api-id> with the real HttpApi id once the
+  # stack is deployed with OAuthClientId set (it equals the ApiEndpoint host).
+  base_url: https://tbrubqn47k.execute-api.us-east-2.amazonaws.com
+  auth_endpoint: /auth
 
 media_folder: public/images   # CMS-uploaded images commit here -> dist/images -> site bucket
 public_folder: /images        # referenced as /images/... (site origin, NOT the /media/* media prefix)
