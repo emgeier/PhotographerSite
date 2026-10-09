@@ -1,0 +1,78 @@
+name: Deploy site
+
+# Build the Astro site and deploy it to S3 + CloudFront.
+# Auth is via GitHub OIDC assuming an AWS IAM role (no long-lived keys stored
+# in GitHub). The role, bucket, distribution id and region come from the
+# CloudFormation stack outputs (site.yaml) and are configured as repo-level
+# Actions *variables* (Settings > Secrets and variables > Actions > Variables):
+#
+#   AWS_DEPLOY_ROLE_ARN   GitHubDeployRoleArn output   (e.g. arn:aws:iam::814369094182:role/...)
+#   AWS_REGION            us-east-2
+#   SITE_BUCKET           SiteBucketName output
+#   DISTRIBUTION_ID       DistributionId output
+#   PUBLIC_AC_FORM_ENDPOINT  ApiEndpoint output (baked into the build; it is a URL, not a secret)
+#
+# Nothing here is a secret: the endpoint is public, and OIDC means no AWS keys.
+
+on:
+  push:
+    branches: [main]
+    # Only redeploy when something that affects the built site changes.
+    paths:
+      - 'astro-photographer/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch: {}
+
+# Required for the OIDC token exchange (id-token) + checkout (contents).
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: astro-photographer
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: astro-photographer/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        env:
+          # Baked into the static output at build time. Empty is tolerated (the
+          # contact form stays inert) but a real value wires up submissions.
+          PUBLIC_AC_FORM_ENDPOINT: ${{ vars.PUBLIC_AC_FORM_ENDPOINT }}
+        run: npm run build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Sync site to S3
+        # --delete removes stale objects. /media/* lives in a separate bucket and
+        # is never touched here, so this only prunes site content.
+        run: aws s3 sync dist/ "s3://${{ vars.SITE_BUCKET }}" --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.DISTRIBUTION_ID }}" \
+            --paths '/*'
