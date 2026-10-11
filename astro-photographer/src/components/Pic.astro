@@ -1,0 +1,59 @@
+---
+/**
+ * Pic — one wrapper for every static site image.
+ *
+ * - Imported raster asset (jpg/png/webp/avif) from src/assets/ -> <Picture>
+ *   with AVIF+WebP and a responsive srcset: each device downloads the smallest
+ *   sufficient file, and dimensions are baked in so there's no layout shift.
+ * - Plain string src (a public/ path or a CMS/CloudFront URL) -> passthrough
+ *   <img>, so mixed usage stays safe.
+ *
+ * Placeholders live as PNG (not SVG) on purpose: in Astro 7 an imported .svg is
+ * an SVG *component*, not image metadata, so it can't feed <Picture>. PNG makes
+ * the placeholder phase behave exactly like production — drop a real .jpg in
+ * src/assets/images/ (update the import) and nothing else changes.
+ *
+ * LCP: pass `priority` for the one above-the-fold hero per page (eager +
+ * fetchpriority=high). Everything else is lazy + async by default.
+ */
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  class?: string;
+  sizes?: string;
+  widths?: number[];
+  priority?: boolean;
+  [key: string]: any;
+}
+
+const {
+  src,
+  alt,
+  class: className,
+  sizes = '(max-width: 700px) 100vw, (max-width: 1100px) 70vw, 1180px',
+  widths = [480, 768, 1024, 1440, 1920, 2560],
+  priority = false,
+  ...rest
+} = Astro.props;
+
+const meta = typeof src === 'object' && src !== null ? (src as ImageMetadata) : null;
+
+// Don't upscale: cap requested widths at the source width.
+const effectiveWidths = meta
+  ? Array.from(new Set(widths.filter((w) => w <= meta.width).concat(meta.width))).sort((a, b) => a - b)
+  : widths;
+
+const loading = priority ? 'eager' : 'lazy';
+const decoding = priority ? 'auto' : 'async';
+const fetchpriority = priority ? 'high' : undefined;
+const common = { alt, class: className, loading, decoding, fetchpriority, ...rest };
+---
+
+{meta ? (
+  <Picture src={meta} formats={['avif', 'webp']} widths={effectiveWidths} sizes={sizes} {...common} />
+) : (
+  <img src={src as string} {...common} />
+)}

@@ -520,7 +520,16 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
               StringLike:
-                token.actions.githubusercontent.com:sub: !Sub 'repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}'
+                # This account emits an ID-augmented OIDC subject, e.g.
+                #   repo:emgeier@115035002/PhotographerSite@1403470797:ref:refs/heads/main
+                # (the "include repository id in the subject" customization). A
+                # wildcard is needed after BOTH owner and name to absorb the
+                # @<owner-id> and @<repo-id> suffixes, so GitHubRepo (owner/name)
+                # is split and each half gets a trailing *.
+                token.actions.githubusercontent.com:sub: !Sub
+                  - 'repo:${Owner}*/${Name}*:ref:refs/heads/${GitHubBranch}'
+                  - Owner: !Select [0, !Split ['/', !Ref GitHubRepo]]
+                    Name: !Select [1, !Split ['/', !Ref GitHubRepo]]
       Policies:
         - PolicyName: deploy-site
           PolicyDocument:

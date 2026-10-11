@@ -2,22 +2,152 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-const stories = [
-  {src:'/images/story-1.svg', title:'Strength in softness'},
-  {src:'/images/story-2.svg', title:'A new perspective'},
-  {src:'/images/story-3.svg', title:'More than a portrait'}
-];
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import { getCollection } from 'astro:content';
+// Codex home styles (shared Codex primitives + home sections). global.css is
+// imported by Base.astro; this adds the Codex-aliased home look on top.
+import '../styles/codex-base.css';
+
+// Stories teaser: first 3 muses by `order`, each card links to /stories/{id}.
+const muses = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+
+// Fixed_Media home rasters routed through Pic (astro:assets -> AVIF/WebP).
+// Stable source filenames; no bare <img src=".webp">.
+import hero from '../assets/images/hero.webp';
+import portrait from '../assets/images/portrait.webp';
+import closing from '../assets/images/closing.webp';
 ---
 <Base>
-  <main>
-    <section class="hero"><Header/><div class="wrap hero-copy"><p class="display hero-title">A portrait<br/>experience for<br/>women worth<br/>seeing.</p><p class="eyebrow">YOUR BEAUTY. REDISCOVERED.</p><a class="button" href="/contact">Begin your transformation</a></div><img class="hero-photo" src="/images/hero.svg" alt="Placeholder for hero portrait" /></section>
+  <main id="main-content">
+    <!-- HERO: Codex markup with data-hero-* motion hooks; hero image via Pic (priority/LCP). -->
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <Header />
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic
+          src={hero}
+          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+          priority
+          sizes="100vw"
+        />
+      </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <h1 id="hero-title" class="hero__title">
+          <span class="line-mask"><span data-hero-line>A portrait</span></span>
+          <span class="line-mask"><span data-hero-line>experience for</span></span>
+          <span class="line-mask"><span data-hero-line>women worth</span></span>
+          <span class="line-mask"><span data-hero-line>seeing.</span></span>
+        </h1>
+        <p class="hero__subtitle" data-hero-item>Your beauty. Rediscovered.</p>
+        <a class="button" href="/contact" data-hero-item>Book your consultation</a>
+      </div>
+    </section>
 
-    <section class="intro wrap" id="portfolio"><img src="/images/look-again.svg" alt="Placeholder portrait"/><div><h1 class="display">Look Again.</h1><p class="eyebrow">A FRESH PERSPECTIVE.</p><span class="rule"></span><p class="eyebrow">YOU. IN FULL.</p><a class="button" href="/portfolio">Explore the portfolio</a></div></section>
+    <!-- PERSPECTIVE ("Look Again"): "Preview a portrait" links to /portfolio (default-to-Codex). -->
+    <section class="perspective section" id="portfolio" aria-labelledby="perspective-title">
+      <div class="container perspective__grid">
+        <a class="portrait-button" href="/portfolio" aria-label="Preview a portrait" data-reveal>
+          <span class="image-frame perspective__image" data-parallax>
+            <Pic
+              src={portrait}
+              alt="A black-and-white portrait of a woman turning gently toward the light."
+              sizes="(max-width: 700px) 90vw, 410px"
+            />
+          </span>
+          <span class="portrait-button__label">Preview a portrait <span aria-hidden="true">↗</span></span>
+        </a>
+        <div class="perspective__content" data-reveal>
+          <h2 id="perspective-title" class="display-title">Look Again.</h2>
+          <p class="eyebrow perspective__subtitle">A fresh perspective.</p>
+          <span class="short-rule" aria-hidden="true"></span>
+          <p class="eyebrow perspective__signature">You. In full.</p>
+          <a class="button" href="/portfolio">Explore the portfolio</a>
+        </div>
+      </div>
+    </section>
 
-    <section class="experience" id="experience"><img class="experience-photo" src="/images/exp-band.svg" alt="" aria-hidden="true" /><div class="wrap"><div class="experience-head"><div><p class="eyebrow">THE EXPERIENCE</p><h2 class="display">Not transformed,<br/>revealed.</h2></div><p>Every part of the experience is shaped around you—your personality, your style, your story, and how you want to be seen.</p></div><div class="steps"><article><b>01</b><span></span><h3>CONSULTATION</h3><p>A personal, in-depth conversation to understand your vision, preferences, and what makes you, uniquely you.</p></article><article><b>02</b><span></span><h3>SESSION</h3><p>A relaxed, guided portrait experience, designed to help you feel confident, empowered, and truly seen.</p></article><article><b>03</b><span></span><h3>REVEAL</h3><p>A private, cinematic unveiling of your portraits—a celebration of you, with options for artwork and collections you'll love.</p></article></div></div></section>
+    <!-- EXPERIENCE STEPS: pure CSS texture, no image (Codex .experience__texture gradient). -->
+    <section class="experience section" id="experience" aria-labelledby="experience-title">
+      <div class="experience__texture" aria-hidden="true"></div>
+      <div class="container experience__inner">
+        <div class="experience__intro">
+          <div data-reveal>
+            <p class="eyebrow">The experience</p>
+            <h2 id="experience-title">Not transformed.<br />revealed.</h2>
+          </div>
+          <p class="experience__description" data-reveal>Every part of the experience is shaped around you—your personality, your style, your story, and how you want to be seen.</p>
+        </div>
+        <ol class="experience__steps">
+          <li class="experience-step" data-reveal>
+            <span class="experience-step__number" aria-hidden="true">01</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Consultation</h3>
+            <p>A personal, in-depth conversation to understand your vision, preferences, and what makes you, uniquely you.</p>
+          </li>
+          <li class="experience-step" data-reveal>
+            <span class="experience-step__number" aria-hidden="true">02</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Session</h3>
+            <p>A relaxed, guided portrait experience, designed to help you feel confident, empowered, and truly seen.</p>
+          </li>
+          <li class="experience-step" data-reveal>
+            <span class="experience-step__number" aria-hidden="true">03</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Reveal</h3>
+            <p>A private, cinematic unveiling of your portraits—a celebration of you, with options for artwork and collections you'll love.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
 
-    <section class="stories wrap" id="stories"><h2>MUSE STORIES</h2><p class="eyebrow">EVERY WOMAN. A STORY WORTH SEEING.</p><div class="story-grid">{stories.map(s => <article><img src={s.src} alt="Photography placeholder"/><h3>{s.title}</h3><span></span></article>)}</div><a class="text-link" href="/stories">View all stories →</a></section>
+    <!-- STORIES TEASER: shell ready for task 9.2 (getCollection('muses'), 3 cards -> /stories/{id}). -->
+    <section class="stories section" id="stories" aria-labelledby="stories-title">
+      <div class="container stories__inner">
+        <div class="stories__heading" data-reveal>
+          <h2 id="stories-title">Muse stories</h2>
+          <span class="short-rule" aria-hidden="true"></span>
+          <p class="eyebrow">Every woman. A story worth seeing.</p>
+        </div>
+        <div class="stories__grid">
+          {muses.map((muse) => (
+            <a class="story-card" href={`/stories/${muse.id}`} data-reveal>
+              <span class="story-card__image image-frame">
+                <Pic
+                  src={muse.data.cardImage}
+                  alt={muse.data.name}
+                  sizes="(max-width:700px) 90vw, 33vw"
+                />
+              </span>
+              <span class="story-card__title">{muse.data.tagline ?? muse.data.name}</span>
+              <span class="short-rule" aria-hidden="true"></span>
+            </a>
+          ))}
+        </div>
+        <div class="stories__more" data-reveal>
+          <a class="text-link" href="/stories">View all stories <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
 
-    <section class="final-cta"><div class="wrap"><div><h2 class="display">Your Turn.</h2><span class="rule left"></span><p class="eyebrow">A PORTRAIT EXPERIENCE<br/>CREATED FOR YOU.</p><a class="button" href="/contact">Begin your consultation</a></div></div><img src="/images/your-turn.svg" alt="Placeholder portrait"/></section>
-  </main><Footer/>
+    <!-- CLOSING / BOOKING: CTA to /contact (no consultation dialog, no mailto). -->
+    <section class="closing" id="contact" aria-labelledby="closing-title">
+      <div class="closing__image" data-parallax>
+        <Pic
+          src={closing}
+          alt="A soft portrait from behind of a woman with an elegant updo, wearing an ivory blouse."
+          sizes="100vw"
+        />
+      </div>
+      <div class="closing__veil" aria-hidden="true"></div>
+      <div class="container closing__content" data-reveal>
+        <h2 id="closing-title" class="display-title">Your Turn.</h2>
+        <span class="short-rule" aria-hidden="true"></span>
+        <p class="eyebrow">A portrait experience<br />created for you.</p>
+        <a class="button" href="/contact">Book your consultation</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <SiteMotion />
 </Base>

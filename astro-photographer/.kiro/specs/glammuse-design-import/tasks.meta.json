@@ -1,0 +1,512 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Extend `src/styles/global.css` `:root` with the single Codex-aliased token set": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678290
+      },
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639687894
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654325318
+      }
+    ],
+    "1.2 Add the `gsap` npm dependency (vendor-free motion)": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678334
+      },
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639689287
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654326298
+      }
+    ],
+    "1.3 Port the Codex base and portfolio CSS into scoped stylesheets": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678369
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654332384
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655316107
+      }
+    ],
+    "2.1 Import Codex fixed-media rasters under stable, predictable filenames": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678392
+      },
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639690095
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791653890534
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791653905272
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654253142
+      }
+    ],
+    "2.2 Decide and document the stable-source-filename / hashed-output reconciliation strategy": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678417
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654333663
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655318539
+      }
+    ],
+    "3. Checkpoint - foundation ready": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678462
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656235377
+      }
+    ],
+    "4.1 Rewrite `src/components/Header.astro` to the Codex masthead": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678485
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654334634
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655313279
+      }
+    ],
+    "4.2 Rewrite `src/components/Footer.astro` to the Codex footer": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678598
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654336015
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655314895
+      }
+    ],
+    "5.1 Implement `motion.ts` with `MotionConfig`, `initMotion`, and `initNav`": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678620
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791654337124
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655317537
+      }
+    ],
+    "6.1 Implement `initPortfolioGrid` (row reveal + drift + pointer parallax)": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678652
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655328794
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655707253
+      }
+    ],
+    "6.2 Implement `initLightbox` native `<dialog>` gallery": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678687
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655712367
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655926054
+      }
+    ],
+    "6.4 Implement `initExperienceVideo` privacy lifecycle": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678710
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655930910
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656048067
+      }
+    ],
+    "7.1 Create `src/components/SiteMotion.astro`": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678735
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655713413
+      },
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655927114
+      }
+    ],
+    "8. Checkpoint - chrome and scripts ready": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678760
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656226638
+      }
+    ],
+    "9.1 Build Codex home sections with Pic imagery and CTAs to `/contact`": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678797
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656258417
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657321757
+      }
+    ],
+    "9.2 Wire the Home stories teaser to the muses collection": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678821
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657331761
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657410196
+      }
+    ],
+    "10.1 Build Codex portfolio sections with the page-local 9-card grid through Pic": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678850
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656259806
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657323301
+      }
+    ],
+    "11.1 Verify no mailto/consultation port and legacy pages unchanged": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678888
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657332766
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657411100
+      }
+    ],
+    "12.4 Verify platform artifacts byte-identical and build succeeds": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678912
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657421300
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657564855
+      }
+    ],
+    "13. Final checkpoint - ensure all tests pass": [
+      {
+        "executionId": "f2cc58ed-3f7e-426f-bd7e-b0550af017d8",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791639678940
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657568528
+      }
+    ],
+    "4. Build the shared chrome (Header/Footer) bridging Codex and legacy pages": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655314955
+      }
+    ],
+    "1. Establish the one-system token/font foundation and the gsap dependency": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655316148
+      }
+    ],
+    "5. Port the client motion system (`src/scripts/motion.ts`)": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655317578
+      }
+    ],
+    "2. Prepare Fixed_Media assets and the stable-filename strategy": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655318598
+      }
+    ],
+    "7. Add the motion loader component": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791655927159
+      }
+    ],
+    "6. Port the portfolio client script (`src/scripts/portfolio.ts`)": [
+      {
+        "executionId": "54cf36d3-3888-4e96-822b-0d1f9c2700bf",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656048116
+      }
+    ],
+    "5.2 Write unit tests for `motion.ts` reduced-motion and import-failure branches": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656236851
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656262164
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657324161
+      }
+    ],
+    "6.3 Write property test for `renderGallery` index-wrap math": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656237740
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656260780
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657325573
+      }
+    ],
+    "6.5 Write unit tests for experience video lifecycle": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656239194
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656263052
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657326565
+      }
+    ],
+    "12.1 Add image-pipeline build assertions": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656240236
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657422200
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657561513
+      }
+    ],
+    "12.2 Add grep guards for forbidden artifacts": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656241625
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657423601
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657562454
+      }
+    ],
+    "12.3 Add muses-collection snapshot assertion": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791656242411
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657424539
+      },
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657563932
+      }
+    ],
+    "10. Rewrite the Portfolio page (`src/pages/portfolio.astro`) to the Codex look": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657323334
+      }
+    ],
+    "9. Rewrite the Home page (`src/pages/index.astro`) to the Codex look": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657410232
+      }
+    ],
+    "11. Confirm the contact/platform guarantees in markup": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657411130
+      }
+    ],
+    "12. Verification and CI guards": [
+      {
+        "executionId": "e0c7922d-b084-4c9e-b3f1-7bbc3bd2e5f0",
+        "chatSessionId": "sess_d7e1c8b3-78c6-42cf-92d9-c3c843359880",
+        "timestamp": 1791657564886
+      }
+    ]
+  }
+}

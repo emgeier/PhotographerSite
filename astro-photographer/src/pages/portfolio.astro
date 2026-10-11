@@ -2,84 +2,332 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import '../styles/codex-base.css';
+import '../styles/codex-portfolio.css';
+import type { ImageMetadata } from 'astro';
 
-const grid = [
-  '/images/pf-grid-1.svg','/images/pf-grid-2.svg','/images/pf-grid-3.svg',
-  '/images/pf-grid-4.svg','/images/pf-grid-5.svg','/images/pf-grid-6.svg',
-  '/images/pf-grid-7.svg','/images/pf-grid-8.svg','/images/pf-grid-9.svg',
+// Fixed-media rasters (page-local, not CMS). Stable source filenames; astro:assets
+// emits content-hashed <picture> output via Pic.
+import hero from '../assets/images/hero.webp';
+import banner from '../assets/images/portfolio/banner.webp';
+import filmPortrait from '../assets/images/story-portrait.webp';
+import portrait01 from '../assets/images/portfolio/portrait-01.webp';
+import portrait02 from '../assets/images/portfolio/portrait-02.webp';
+import portrait03 from '../assets/images/portfolio/portrait-03.webp';
+import portrait04 from '../assets/images/portfolio/portrait-04.webp';
+import portrait05 from '../assets/images/portfolio/portrait-05.webp';
+import portrait06 from '../assets/images/portfolio/portrait-06.webp';
+import portrait07 from '../assets/images/portfolio/portrait-07.webp';
+import portrait08 from '../assets/images/portfolio/portrait-08.webp';
+import portrait09 from '../assets/images/portfolio/portrait-09.webp';
+
+// Page-local gallery data. DOM render order == lightbox navigation order; the
+// lightbox (initLightbox) derives its sequence from the DOM order of
+// [data-portfolio-index] cards and reads each card's inner <img>, data-title,
+// and data-caption. Do NOT reorder without reordering the grid intentionally.
+interface PortfolioCard {
+  src: ImageMetadata;
+  title: string;
+  caption: string;
+  alt: string;
+}
+
+const cards: PortfolioCard[] = [
+  {
+    src: portrait01,
+    title: 'Quiet confidence',
+    caption: 'A quiet gaze. An entirely personal kind of presence.',
+    alt: 'An editorial portrait of a blonde woman in an ivory blouse turning gently toward the camera.',
+  },
+  {
+    src: portrait02,
+    title: 'In your own light',
+    caption: 'The simple beauty of feeling entirely yourself.',
+    alt: 'A brunette woman in a black dress rests her chin on her hand in a warmly lit editorial portrait.',
+  },
+  {
+    src: portrait03,
+    title: 'A moment of joy',
+    caption: 'Room for laughter. Space to be seen.',
+    alt: 'A brunette woman smiles with her eyes lowered, wearing an ivory collared shirt.',
+  },
+  {
+    src: portrait04,
+    title: 'The beauty of stillness',
+    caption: 'A pause. A breath. A fresh perspective.',
+    alt: 'A black-and-white portrait of a brunette woman looking down, wearing a black blouse.',
+  },
+  {
+    src: portrait05,
+    title: 'Softly, entirely you',
+    caption: 'Softness has a strength all its own.',
+    alt: 'A honey blonde woman rests her cheek on her hand in an ivory long-sleeve blouse.',
+  },
+  {
+    src: portrait06,
+    title: 'Another perspective',
+    caption: 'The familiar, seen in a new way.',
+    alt: 'A brunette woman in a black jacket looks over her shoulder toward the camera.',
+  },
+  {
+    src: portrait07,
+    title: 'Unscripted warmth',
+    caption: 'The moments between the poses.',
+    alt: 'A smiling brunette woman rests her head on her hand in a cream knit jumper.',
+  },
+  {
+    src: portrait08,
+    title: 'A presence of your own',
+    caption: 'Every chapter has a beauty worth celebrating.',
+    alt: 'A mature woman sits confidently in a tailored black suit in a studio editorial portrait.',
+  },
+  {
+    src: portrait09,
+    title: 'Seen, in full',
+    caption: 'Your beauty. Your story. Your own way of being seen.',
+    alt: 'A blonde woman with loose wavy hair looks toward the camera in an ivory blouse.',
+  },
 ];
-const steps = [
-  { n:'01', t:'CONSULTATION', p:'A 15–20 minute Zoom call to understand your vision, preferences, and what makes you, uniquely you.' },
-  { n:'02', t:'SESSION', p:'A relaxed, guided portrait experience with professional hair and makeup, up to 5 looks.' },
-  { n:'03', t:'REVEAL', p:'A private, same-day unveiling of your portraits — a celebration of you, with options for artwork and collections.' },
-];
+
+const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
 ---
-<Base title="Portfolio — The Glam Muse Series" description="A collection of women, real stories, and portraits that celebrate who they are and who they've become.">
-  <main>
-    <section class="pf-hero">
-      <Header/>
-      <div class="wrap pf-hero-copy">
-        <p class="eyebrow">THE PORTFOLIO</p>
-        <h1 class="display pf-hero-title">YOU,<br/>IN FULL.</h1>
-        <p class="pf-hero-lede">A collection of women, real stories, and portraits that celebrate who they are and who they've become.</p>
+<Base
+  title="The Portfolio · The Glam Muse Series"
+  description="You, in full. Explore The Glam Muse Series portrait collection and a personal portrait experience by Luis Quintana Studio."
+>
+  <main id="main-content" class="portfolio-page">
+    <section class="portfolio-hero" id="portfolio" aria-labelledby="portfolio-title">
+      <Header />
+      <div class="portfolio-hero__image hero__image" data-hero-image data-parallax>
+        <Pic
+          src={hero}
+          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+          priority
+          sizes="100vw"
+        />
       </div>
-      <img class="pf-hero-photo" src="/images/pf-hero.svg" alt="Placeholder for portfolio hero portrait" />
+      <div class="portfolio-hero__veil" aria-hidden="true"></div>
+      <div class="container portfolio-hero__content">
+        <p class="eyebrow" data-hero-item>The portfolio</p>
+        <h1 id="portfolio-title">
+          <span class="line-mask"><span data-hero-line>You,</span></span>
+          <span class="line-mask"><span data-hero-line>in full.</span></span>
+        </h1>
+        <p class="portfolio-hero__intro" data-hero-item>
+          A collection of women, real stories,<br class="desktop-break" /> and portraits that celebrate who<br class="desktop-break" /> they are and who they’ve become.
+        </p>
+      </div>
     </section>
 
-    <section class="pf-grid-section">
-      <div class="pf-grid">
-        {grid.map((src, i) => <figure><img src={src} alt={`Portfolio placeholder ${i+1}`} /></figure>)}
+    <section class="portfolio-collection" aria-label="The portrait collection">
+      <div class="portfolio-container portfolio-grid">
+        {cards.map((c, i) => (
+          <button
+            class="portfolio-card"
+            type="button"
+            data-portfolio-index={i}
+            data-portfolio-card
+            data-portfolio-row={Math.floor(i / 3)}
+            data-title={c.title}
+            data-caption={c.caption}
+            aria-label={`View portrait ${String(i + 1).padStart(2, '0')}: ${c.title}`}
+          >
+            <span class="portfolio-card__frame" data-portrait-frame>
+              <Pic
+                src={c.src}
+                alt={c.alt}
+                priority={i < 3}
+                sizes={gridSizes}
+                data-portrait-image
+              />
+            </span>
+            <span class="portfolio-card__caption">
+              <span>{c.title}</span>
+              <span aria-hidden="true">↗</span>
+            </span>
+          </button>
+        ))}
       </div>
     </section>
 
-    <section class="pf-band">
-      <img class="pf-band-photo" src="/images/pf-band.svg" alt="Placeholder landscape portrait" />
-      <div class="pf-band-copy">
-        <p class="eyebrow">THE GLAM MUSE SERIES</p>
-        <h2 class="display">Not transformed,<br/>revealed.</h2>
-        <span class="rule left"></span>
+    <section class="portfolio-manifesto" aria-labelledby="manifesto-title">
+      <div class="portfolio-manifesto__image" data-parallax>
+        <Pic
+          src={banner}
+          alt="An editorial outdoor portrait of a brunette woman with her hair moving gently in the breeze."
+          sizes="100vw"
+        />
       </div>
-    </section>
-
-    <section class="pf-experience wrap" id="experience">
-      <div class="pf-experience-copy">
-        <p class="eyebrow">THE EXPERIENCE</p>
-        <h2 class="display">More than<br/>a portrait.</h2>
-        <p class="pf-experience-lede">Professional hair and makeup. A guided session with movement, laughter, and real connection. And a private, same-day reveal of portraits you'll love.</p>
-        <a class="button" href="#">Watch the experience</a>
-      </div>
-      <a class="pf-video" href="#" aria-label="Play the experience video">
-        <img src="/images/pf-video.svg" alt="Video thumbnail placeholder" />
-        <span class="pf-play" aria-hidden="true"></span>
-      </a>
-    </section>
-
-    <section class="pf-process">
-      <div class="wrap">
-        <p class="eyebrow pf-process-eyebrow">WHAT'S NEXT</p>
-        <h2 class="display pf-process-head">A simple, meaningful process.</h2>
-        <div class="pf-steps">
-          {steps.map(s => (
-            <article>
-              <b>{s.n}</b>
-              <span class="pf-step-rule"></span>
-              <h3>{s.t}</h3>
-              <p>{s.p}</p>
-            </article>
-          ))}
+      <div class="portfolio-manifesto__veil" aria-hidden="true"></div>
+      <div class="portfolio-container portfolio-manifesto__content">
+        <div data-reveal>
+          <p class="eyebrow">The Glam Muse Series</p>
+          <h2 id="manifesto-title">Not transformed,<br />revealed.</h2>
+          <span class="short-rule" aria-hidden="true"></span>
         </div>
       </div>
     </section>
 
-    <section class="pf-cta">
-      <div class="wrap pf-cta-copy">
-        <p class="eyebrow">YOUR TURN.</p>
-        <h2 class="display">Ready to see<br/>yourself<br/>differently?</h2>
-        <p class="pf-cta-lede">This isn't about becoming someone else. It's about seeing the woman who is already there.</p>
+    <section class="portfolio-experience" id="experience" aria-labelledby="portfolio-experience-title">
+      <div class="portfolio-container portfolio-experience__grid">
+        <div class="portfolio-experience__copy" data-reveal>
+          <p class="eyebrow">The experience</p>
+          <h2 id="portfolio-experience-title">More than<br />a portrait.</h2>
+          <p>Professional hair and makeup. A guided session with movement, laughter, and real connection. And a private, same-day reveal of portraits you’ll love.</p>
+          <button class="button" type="button" data-open-experience>Watch the experience</button>
+        </div>
+        <button
+          class="portfolio-film"
+          type="button"
+          data-open-experience
+          aria-label="Watch the portrait experience film"
+          data-reveal
+        >
+          <span class="portfolio-film__image" data-parallax>
+            <Pic
+              src={filmPortrait}
+              alt="A close, warmly lit editorial portrait of a brunette woman in black."
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </span>
+          <span class="portfolio-film__play" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="m12 8 12 8-12 8V8Z" fill="currentColor" /></svg>
+          </span>
+          <span class="portfolio-film__label">A glimpse of the experience</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="portfolio-process" aria-labelledby="process-title">
+      <div class="portfolio-container">
+        <div class="portfolio-process__heading" data-reveal>
+          <p class="eyebrow">What’s next</p>
+          <h2 id="process-title">A simple, meaningful process.</h2>
+        </div>
+        <ol class="portfolio-process__steps">
+          <li class="portfolio-process__step" data-reveal>
+            <span class="portfolio-process__number" aria-hidden="true">01</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Consultation</h3>
+            <p>A 15–20 minute Zoom call to understand your vision, preferences, and what makes you, uniquely you.</p>
+          </li>
+          <li class="portfolio-process__step" data-reveal>
+            <span class="portfolio-process__number" aria-hidden="true">02</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Session</h3>
+            <p>A relaxed, guided portrait experience with professional hair and makeup. Up to 5 looks.</p>
+          </li>
+          <li class="portfolio-process__step" data-reveal>
+            <span class="portfolio-process__number" aria-hidden="true">03</span>
+            <span class="short-rule" aria-hidden="true"></span>
+            <h3>Reveal</h3>
+            <p>A private, same-day unveiling of your portraits—a celebration of you, with options for artwork and collections.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="portfolio-closing" id="contact" aria-labelledby="portfolio-closing-title">
+      <div class="portfolio-closing__image" data-parallax>
+        <Pic
+          src={hero}
+          alt="A softly lit brunette woman in an ivory dress looks toward the camera."
+          sizes="100vw"
+        />
+      </div>
+      <div class="portfolio-closing__veil" aria-hidden="true"></div>
+      <div class="portfolio-container portfolio-closing__content" data-reveal>
+        <p class="eyebrow">Your turn.</p>
+        <h2 id="portfolio-closing-title">Ready to see<br />yourself<br />differently?</h2>
+        <p class="portfolio-closing__intro">
+          This isn’t about becoming someone else.<br />It’s about seeing the woman who is already there.
+        </p>
         <a class="button" href="/contact">Book your consultation</a>
       </div>
-      <img class="pf-cta-photo" src="/images/pf-cta.svg" alt="Placeholder portrait" />
     </section>
   </main>
-  <Footer/>
+
+  <Footer />
+
+  <!-- Lightbox gallery — exact DOM contract initLightbox() in portfolio.ts requires. -->
+  <dialog class="dialog gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-title">
+    <form method="dialog">
+      <button class="dialog-close dialog-close--light" type="submit" aria-label="Close portrait gallery">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+    <div class="gallery-dialog__heading">
+      <p class="eyebrow">The portrait collection</p>
+      <h2 id="gallery-title">Quiet confidence</h2>
+    </div>
+    <div class="gallery-stage">
+      <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous portrait">
+        <span aria-hidden="true">←</span>
+      </button>
+      <figure>
+        <img
+          id="gallery-image"
+          class="gallery-stage__image"
+          src="/images/pf-grid-1.svg"
+          alt="A portrait from The Glam Muse Series collection."
+          width="341"
+          height="512"
+        />
+        <figcaption id="gallery-caption">A quiet gaze. An entirely personal kind of presence.</figcaption>
+      </figure>
+      <button class="gallery-arrow" type="button" data-gallery-next aria-label="Next portrait">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+    <p id="gallery-count" class="gallery-count" aria-live="polite">01 / 09</p>
+  </dialog>
+
+  <!-- Experience film — exact DOM contract initExperienceVideo() in portfolio.ts requires.
+       The iframe starts at about:blank; no YouTube request until a trigger fires. -->
+  <dialog class="dialog experience-dialog" id="experience-dialog" aria-labelledby="experience-title">
+    <form method="dialog">
+      <button class="dialog-close dialog-close--light" type="submit" aria-label="Close experience video">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+    <div class="experience-dialog__heading">
+      <p class="eyebrow">The experience</p>
+      <h2 id="experience-title">More than a portrait.</h2>
+    </div>
+    <div class="experience-dialog__stage">
+      <iframe
+        id="experience-video"
+        src="about:blank"
+        title="The Glam Muse Series portrait experience video"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </div>
+    <div class="experience-dialog__content">
+      <p>Movement. Laughter. Real connection.</p>
+      <a
+        class="experience-video-link"
+        href="https://www.youtube.com/watch?v=yr74CtwKoEk"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Watch on YouTube <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </dialog>
+
+  <SiteMotion />
+  <script>
+    import {
+      initPortfolioGrid,
+      initLightbox,
+      initExperienceVideo,
+    } from '../scripts/portfolio.ts';
+    initPortfolioGrid();
+    initLightbox();
+    initExperienceVideo();
+  </script>
 </Base>

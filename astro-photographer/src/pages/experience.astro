@@ -2,14 +2,16 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import '../styles/codex-base.css';
 
 const steps = [
-  { src:'/images/ex-process-1.svg', n:'01', t:'CONSULTATION', p:'We\u2019ll connect to learn about you\u2014your vision, your style, and what you want this experience to feel like.' },
-  { src:'/images/ex-process-2.svg', n:'02', t:'SESSION', p:'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot tailored to you.' },
-  { src:'/images/ex-process-3.svg', n:'03', t:'REVEAL', p:'See your images the same day in a private reveal\u2014an unforgettable moment to celebrate you.' },
+  { src:'/images/ex-process-1.webp', n:'01', t:'CONSULTATION', p:'We\u2019ll connect to learn about you\u2014your vision, your style, and what you want this experience to feel like.' },
+  { src:'/images/ex-process-2.png', n:'02', t:'SESSION', p:'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot tailored to you.' },
+  { src:'/images/ex-process-3.webp', n:'03', t:'REVEAL', p:'See your images the same day in a private reveal\u2014an unforgettable moment to celebrate you.' },
 ];
 const inside = [
-  '/images/ex-inside-1.svg','/images/ex-inside-2.svg','/images/ex-inside-3.svg','/images/ex-inside-4.svg',
+  '/images/ex-inside-1.png','/images/ex-inside-2.png','/images/ex-inside-3.png','/images/ex-inside-4.png',
 ];
 ---
 <Base title="The Experience — The Glam Muse Series" description="A simple, intentional process designed to make you feel confident, comfortable, and fully yourself from start to finish.">
@@ -17,18 +19,18 @@ const inside = [
     <section class="ex-hero">
       <Header/>
       <div class="wrap ex-hero-copy">
-        <p class="eyebrow">MADE PERSONAL</p>
-        <h1 class="display ex-hero-title">AN EXPERIENCE<br/>THAT FEELS<br/>LIKE <em class="ex-accent">YOU.</em></h1>
-        <p class="ex-hero-lede">Your story, your personality, your style— brought together in portraits that reflect how you want to be seen.</p>
+        <p class="eyebrow"></p>
+        <h1 class="display ex-hero-title" data-hero-item>AN EXPERIENCE<br/>THAT FEELS<br/>LIKE <em class="ex-accent">YOU.</em></h1>
+        <p class="ex-hero-lede" data-hero-item>Your story, your personality, your style— brought together in portraits that reflect how you want to be seen.</p>
         <span class="ex-rule"></span>
         <a class="ex-step-inside" href="#ex-process">STEP INSIDE <span aria-hidden="true">&rarr;</span></a>
       </div>
-      <img class="ex-hero-photo" src="/images/ex-hero.svg" alt="Placeholder for experience hero portrait" />
+      <img class="ex-hero-photo" src="/images/ex-hero.png" alt="Placeholder for experience hero portrait" />
     </section>
 
     <section class="ex-process" id="ex-process">
       <div class="wrap">
-        <div class="ex-process-head-row">
+        <div class="ex-process-head-row" data-reveal>
           <div class="ex-process-head-copy">
             <p class="eyebrow ex-eyebrow-gold">THE PROCESS</p>
             <h2 class="display ex-process-head">CONSULTATION.<br/>SESSION.<br/>REVEAL.</h2>
@@ -37,7 +39,7 @@ const inside = [
         </div>
         <div class="ex-steps">
           {steps.map(s => (
-            <article>
+            <article data-reveal>
               <img src={s.src} alt={`${s.t} step placeholder`} />
               <b>{s.n}</b>
               <h3>{s.t}</h3>
@@ -50,7 +52,7 @@ const inside = [
 
     <section class="ex-inside">
       <div class="wrap">
-        <div class="ex-inside-head-row">
+        <div class="ex-inside-head-row" data-reveal>
           <div class="ex-inside-head-copy">
             <p class="eyebrow ex-eyebrow-gold">INSIDE THE EXPERIENCE</p>
             <h2 class="display ex-inside-head">THIS TIME IS YOURS.</h2>
@@ -58,13 +60,13 @@ const inside = [
           <p class="ex-inside-intro">From the moment you arrive to the final reveal, everything is considered so you can simply be present.</p>
         </div>
         <div class="ex-inside-grid">
-          {inside.map((src, i) => <figure><img src={src} alt={`Inside the experience placeholder ${i+1}`} /></figure>)}
+          {inside.map((src, i) => <figure data-reveal><img src={src} alt={`Inside the experience placeholder ${i+1}`} /></figure>)}
         </div>
       </div>
     </section>
 
     <section class="ex-cta">
-      <div class="wrap ex-cta-copy">
+      <div class="wrap ex-cta-copy" data-reveal>
         <p class="eyebrow ex-eyebrow-gold">THE GLAM MUSE SERIES</p>
         <h2 class="display ex-cta-head">LET THIS BE<br/><em class="ex-accent">YOUR MOMENT.</em></h2>
         <span class="ex-rule ex-rule-center"></span>
@@ -73,4 +75,5 @@ const inside = [
     </section>
   </main>
   <Footer/>
+  <SiteMotion/>
 </Base>

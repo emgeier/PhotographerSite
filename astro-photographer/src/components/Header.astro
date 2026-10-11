@@ -1,4 +1,47 @@
-<header class="site-header wrap">
-  <a class="brand" href="/" aria-label="The Glam Muse Series home"><span>THE</span><strong>GLAM MUSE</strong><span>SERIES</span></a>
-  <nav aria-label="Primary"><a href="/">Home</a><a href="/portfolio">Portfolio</a><a href="/experience">The Experience</a><a href="/stories">Muse Stories</a><a class="nav-cta" href="/contact">Contact</a></nav>
+---
+// Shared masthead for all pages (Codex home/portfolio + legacy experience/stories/contact).
+// Markup/structure ported from the Codex header in Glammuse/index.html + css/styles.css,
+// but the links are the REAL Astro routes (no Codex mailto/consultation).
+//
+// Selectors/attributes the mobile-menu toggle exposes for motion.ts initNav():
+//   - toggle button:  #menu-toggle  (toggles aria-expanded "true"/"false")
+//   - nav element:     #primary-nav  (gets/removes the .is-open class)
+//   - body:            gets/removes the .menu-open class
+// These match what the Codex js/main.js used, so initNav() can target them unchanged.
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/experience', label: 'The experience' },
+  { href: '/stories', label: 'Muse stories' },
+] as const;
+
+// Mark the active route so the header renders correctly on every page.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="The Glam Muse Series, home">
+    <span class="brand__top">THE</span>
+    <span class="brand__name">GLAM MUSE</span>
+    <span class="brand__bottom">SERIES</span>
+  </a>
+  <button
+    class="menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-controls="primary-nav"
+    aria-expanded="false"
+    aria-label="Open navigation"
+  >
+    <span></span><span></span>
+  </button>
+  <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+    ))}
+    <a class="nav-contact" href="/contact" aria-current={isActive('/contact') ? 'page' : undefined}>Contact</a>
+  </nav>
 </header>
