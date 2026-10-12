@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Pic from '../components/Pic.astro';
+import '../styles/codex-base.css';
+import '../styles/codex-content.css';
+
+// Instagram "link in bio" landing page (modeled on the "Link" mockup).
+// Standalone: no site Header/Footer — just the bio card. Values are defaults;
+// swap the portrait/card images and links as needed (or wire to a CMS entry).
+const portrait = '/images/story-portrait.webp';
+const name = 'Luis';
+const greeting = 'Hola,';
+const tagline = 'Every beautiful connection begins with a conversation.';
+const location = 'Serving Nashville & Beyond';
+const phone = 'tel:+10000000000';
+const email = 'mailto:hello@luisquintanastudio.com';
+
+const cards = [
+  {
+    kind: 'glam',
+    image: '/images/ms-muse-1.webp',
+    titleTop: 'The',
+    titleMain: 'Glam Muse',
+    titleBottom: 'Series',
+    sub: 'Your Beauty, Rediscovered.',
+    button: 'Book your consultation',
+    href: '/contact',
+    external: false,
+  },
+  {
+    kind: 'weddings',
+    image: '/images/portfolio-banner.webp',
+    titleMain: 'Weddings &',
+    titleMain2: 'Engagements',
+    sub: 'The Day, As It Felt.',
+    button: 'Book your consultation',
+    href: 'https://luisquintanastudio.com',
+    external: true,
+  },
+];
+---
+<Base
+  title="Luis Quintana Studio — Links"
+  description="Every beautiful connection begins with a conversation. Serving Nashville & beyond."
+>
+  <main class="link-page" id="main-content">
+    <div class="link-wrap">
+      <div class="link-portrait">
+        <Pic src={portrait} alt="A portrait of Luis." priority sizes="190px" />
+      </div>
+
+      <h1 class="link-name"><em>{greeting}</em> I’m {name}.</h1>
+      <p class="link-tagline">{tagline}</p>
+      <p class="eyebrow link-location">{location}</p>
+
+      <div class="link-contact">
+        <a class="link-pill" href={phone} aria-label="Call the studio">
+          <span class="link-pill__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.5a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z"/></svg>
+          </span>
+          <span class="link-pill__label">Call</span>
+        </a>
+        <a class="link-pill" href={email} aria-label="Email the studio">
+          <span class="link-pill__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
+          </span>
+          <span class="link-pill__label">Email</span>
+        </a>
+      </div>
+
+      <div class="link-cards">
+        {cards.map((c) => (
+          <a
+            class={`link-card link-card--${c.kind}`}
+            href={c.href}
+            {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          >
+            <div class="link-card__image">
+              <Pic src={c.image} alt={c.titleMain} sizes="(max-width: 680px) 92vw, 620px" />
+            </div>
+            <div class="link-card__veil" aria-hidden="true"></div>
+            <div class="link-card__content">
+              <p class="link-card__title">
+                {c.titleTop && <span class="link-card__title-top">{c.titleTop}</span>}
+                <span class="link-card__title-main">{c.titleMain}</span>
+                {c.titleMain2 && <span class="link-card__title-main">{c.titleMain2}</span>}
+                {c.titleBottom && <span class="link-card__title-bottom">{c.titleBottom}</span>}
+              </p>
+              <span class="short-rule" aria-hidden="true"></span>
+              <p class="link-card__sub">{c.sub}</p>
+              <span class="link-card__button">{c.button}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <span class="short-rule link-divider" aria-hidden="true"></span>
+      <p class="link-footer">Looking forward to meeting you.</p>
+    </div>
+  </main>
+</Base>
