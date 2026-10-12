@@ -101,6 +101,7 @@ const settings = defineCollection({
     homeHeroImage: z.string().optional(),
     homePortraitImage: z.string().optional(),
     homeClosingImage: z.string().optional(),
+    homeExperienceImage: z.string().optional(),
 
     // portfolio.json — Portfolio page non-grid images.
     portfolioHeroImage: z.string().optional(),

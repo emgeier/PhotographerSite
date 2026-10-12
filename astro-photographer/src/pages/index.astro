@@ -19,6 +19,7 @@ const home = await getEntry('settings', 'home');
 const hero = home?.data.homeHeroImage ?? '/images/home-hero.webp';
 const portrait = home?.data.homePortraitImage ?? '/images/home-portrait.webp';
 const closing = home?.data.homeClosingImage ?? '/images/home-closing.webp';
+const experienceImage = home?.data.homeExperienceImage ?? '/images/home-experience-bg.webp';
 ---
 <Base>
   <main id="main-content">
@@ -69,9 +70,11 @@ const closing = home?.data.homeClosingImage ?? '/images/home-closing.webp';
       </div>
     </section>
 
-    <!-- EXPERIENCE STEPS: pure CSS texture, no image (Codex .experience__texture gradient). -->
+    <!-- EXPERIENCE STEPS: full-bleed background image + dark overlay for strong
+         contrast (same treatment as the Contact "A Simple Beginning" band). The
+         image is CMS-editable (home.json homeExperienceImage). -->
     <section class="experience section" id="experience" aria-labelledby="experience-title">
-      <div class="experience__texture" aria-hidden="true"></div>
+      <img class="experience__photo" src={experienceImage} alt="" aria-hidden="true" />
       <div class="container experience__inner">
         <div class="experience__intro">
           <div data-reveal>

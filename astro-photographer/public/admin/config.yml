@@ -73,6 +73,7 @@ collections:
           - { name: homeHeroImage, label: Hero image, widget: image, required: false }
           - { name: homePortraitImage, label: '“Look again” portrait', widget: image, required: false }
           - { name: homeClosingImage, label: Closing image, widget: image, required: false }
+          - { name: homeExperienceImage, label: 'Experience section background', widget: image, required: false }
 
       - name: portfolio
         label: 'Portfolio page — images'

@@ -1,5 +1,6 @@
 {
   "homeHeroImage": "/images/home-hero.webp",
   "homePortraitImage": "/images/home-portrait.webp",
-  "homeClosingImage": "/images/home-closing.webp"
+  "homeClosingImage": "/images/home-closing.webp",
+  "homeExperienceImage": "/images/home-experience-bg.webp"
 }
