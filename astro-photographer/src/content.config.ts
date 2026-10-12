@@ -24,6 +24,32 @@ const galleryItem = z
 // Astro 7.3.5 Content Layer collection. The glob loader's `entry.id` is the
 // filename stem (e.g. "heather"), which is the route slug — nothing reads
 // `entry.slug`. See .agents/tasks/activecampaign-aws/design.md §3.2.
+// The CMS writes empty strings ('') for optional fields the editor leaves
+// blank. Treat '' (and whitespace-only) as "unset" so a blank field falls back
+// to its default rather than overriding it or failing validation.
+// `imageOr(default)` -> an optional string that defaults to `fallback` when
+// empty/absent. `optionalUrl` -> a URL that is undefined when empty/absent.
+const imageOr = (fallback: string) =>
+  z.preprocess(
+    (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+    z.string().default(fallback),
+  );
+const optionalUrl = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+  z.string().url().optional(),
+);
+const optionalText = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+  z.string().optional(),
+);
+// Optional string list: drop empty/whitespace entries, and treat an
+// absent/empty list as "unset" (undefined) so the page's fallback applies.
+const optionalList = z.preprocess((v) => {
+  if (!Array.isArray(v)) return undefined;
+  const cleaned = v.filter((x) => typeof x === 'string' && x.trim() !== '');
+  return cleaned.length ? cleaned : undefined;
+}, z.array(z.string()).optional());
+
 const muses = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/muses' }),
   schema: z.object({
@@ -35,8 +61,8 @@ const muses = defineCollection({
 
     // Media — all optional with current-asset defaults so lightly-seeded muses
     // render identically to today without per-file media.
-    cardImage: z.string().default('/images/ms-muse-1.svg'), // stories.astro grid thumb
-    heroImage: z.string().default('/images/st-hero.svg'), // [slug] hero
+    cardImage: imageOr('/images/ms-muse-1.svg'), // stories.astro grid thumb
+    heroImage: imageOr('/images/st-hero.svg'), // [slug] hero
     // Gallery mosaic + lightbox. Each item is `{ image, caption? }` (see
     // galleryItem above): a bare string or a {image,caption} object both work.
     gallery: z.array(galleryItem).default([
@@ -45,13 +71,13 @@ const muses = defineCollection({
       '/images/st-gallery-7.svg', '/images/st-gallery-8.svg', '/images/st-gallery-9.svg',
       '/images/st-gallery-10.svg',
     ]),
-    beforeImage: z.string().default('/images/st-before.svg'),
-    afterImage: z.string().default('/images/st-after.svg'),
-    motionImage: z.string().default('/images/st-motion.svg'), // short-film still
+    beforeImage: imageOr('/images/st-before.svg'),
+    afterImage: imageOr('/images/st-after.svg'),
+    motionImage: imageOr('/images/st-motion.svg'), // short-film still
     // S3 media-bucket URL for the muse film, served through CloudFront:
     // https://<CloudFrontDomainName>/media/<path>.mp4 (never a raw S3 URL — OAC
     // blocks direct reads). Omitted entirely on all seeds (never '').
-    videoUrl: z.string().url().optional(),
+    videoUrl: optionalUrl,
 
     // Long-form body copy that is hardcoded in [slug].astro today. heroPara is
     // the SUFFIX only (no {first} token); the template renders `{first} {heroPara}`.
@@ -62,7 +88,7 @@ const muses = defineCollection({
     // stories.astro FEATURED block paragraph: a SHORT standalone sentence, with
     // no derived `first`, stored as the FULL literal string. Only the featured
     // entry (Heather) needs it today.
-    featuredPara: z.string().optional(),
+    featuredPara: optionalText,
   }),
 });
 
@@ -75,39 +101,42 @@ const muses = defineCollection({
 // (passthrough <img> through Pic), so the CMS can upload/swap them freely.
 const settings = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/settings' }),
+  // Every field uses the empty-string-tolerant helpers: a field the editor
+  // leaves blank in the CMS (saved as '' or an empty list) is treated as unset,
+  // so the page's hardcoded fallback applies instead of an empty value.
   schema: z.object({
     // gallery.json — shared editorial caption pool.
-    galleryCaptions: z.array(z.string()).optional(),
+    galleryCaptions: optionalList,
 
     // experience.json — The Experience page images.
-    heroImage: z.string().optional(),
-    processImages: z.array(z.string()).optional(),
-    insideImages: z.array(z.string()).optional(),
-    ctaImage: z.string().optional(),
+    heroImage: optionalText,
+    processImages: optionalList,
+    insideImages: optionalList,
+    ctaImage: optionalText,
 
     // contact.json — Contact page images.
-    contactHeroImage: z.string().optional(),
-    contactAboutImage: z.string().optional(),
-    contactStepsImage: z.string().optional(),
-    contactCloseImage: z.string().optional(),
+    contactHeroImage: optionalText,
+    contactAboutImage: optionalText,
+    contactStepsImage: optionalText,
+    contactCloseImage: optionalText,
 
     // stories.json — Muse Stories listing page band images + hero.
-    lookAgainImage: z.string().optional(),
-    motionImage: z.string().optional(),
-    storiesCtaImage: z.string().optional(),
-    storiesHeroImage: z.string().optional(),
+    lookAgainImage: optionalText,
+    motionImage: optionalText,
+    storiesCtaImage: optionalText,
+    storiesHeroImage: optionalText,
 
     // home.json — Home page images.
-    homeHeroImage: z.string().optional(),
-    homePortraitImage: z.string().optional(),
-    homeClosingImage: z.string().optional(),
-    homeExperienceImage: z.string().optional(),
+    homeHeroImage: optionalText,
+    homePortraitImage: optionalText,
+    homeClosingImage: optionalText,
+    homeExperienceImage: optionalText,
 
     // portfolio.json — Portfolio page non-grid images.
-    portfolioHeroImage: z.string().optional(),
-    portfolioBannerImage: z.string().optional(),
-    portfolioFilmImage: z.string().optional(),
-    portfolioClosingImage: z.string().optional(),
+    portfolioHeroImage: optionalText,
+    portfolioBannerImage: optionalText,
+    portfolioFilmImage: optionalText,
+    portfolioClosingImage: optionalText,
   }),
 });
 
