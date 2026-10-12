@@ -1,0 +1,33 @@
+{
+  "linkPortrait": "/images/story-portrait.webp",
+  "linkName": "Luis",
+  "linkGreeting": "Hola,",
+  "linkTagline": "Every beautiful connection begins with a conversation.",
+  "linkLocation": "Serving Nashville & Beyond",
+  "linkPhone": "tel:+10000000000",
+  "linkEmail": "mailto:hello@luisquintanastudio.com",
+  "linkCards": [
+    {
+      "kind": "glam",
+      "image": "/images/ms-muse-1.webp",
+      "titleTop": "The",
+      "titleMain": "Glam Muse",
+      "titleBottom": "Series",
+      "sub": "Your Beauty, Rediscovered.",
+      "button": "Book your consultation",
+      "href": "/contact",
+      "external": false
+    },
+    {
+      "kind": "weddings",
+      "image": "/images/portfolio-banner.webp",
+      "titleMain": "Weddings &",
+      "titleMain2": "Engagements",
+      "sub": "The Day, As It Felt.",
+      "button": "Book your consultation",
+      "href": "https://luisquintanastudio.com",
+      "external": true
+    }
+  ],
+  "linkFooter": "Looking forward to meeting you."
+}

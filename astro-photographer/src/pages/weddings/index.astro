@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
+
+// Weddings home — served at weddings.luisquintanastudio.com/ via a CloudFront
+// Function host rewrite (weddings host root -> /weddings/index.html). Also
+// directly reachable at /weddings. Content/images are defaults for now.
+const heroImage = '/images/portfolio-banner.webp';
+const heroEyebrow = 'Weddings & Engagements';
+const heroTitle = 'The day, as it felt.';
+const heroLede = 'Timeless, editorial wedding photography for couples who want to remember how the day felt — not just how it looked.';
+
+const introEyebrow = 'The approach';
+const introHeading = 'Quietly cinematic. Unmistakably yours.';
+const introPara = 'From the first look to the last dance, every frame is made to feel honest and alive — the glances, the laughter, the moments between the moments.';
+const introImage = '/images/story-portrait.webp';
+
+const ctaTitle = 'Let’s tell your story.';
+const ctaCopy = 'Every beautiful day begins with a conversation. Tell me about yours.';
+const ctaButton = 'Book your consultation';
+const ctaImage = '/images/home-closing.webp';
+---
+<Base
+  title="Weddings & Engagements — Luis Quintana Studio"
+  description="Timeless, editorial wedding and engagement photography. The day, as it felt."
+>
+  <main id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero hero" aria-labelledby="wd-hero-title">
+      <Header />
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic src={heroImage} alt="An editorial wedding portrait at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="hero__veil wd-hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content wd-hero__content">
+        <p class="eyebrow wd-hero__eyebrow" data-hero-item>{heroEyebrow}</p>
+        <h1 id="wd-hero-title" class="hero__title wd-hero__title">
+          <span class="line-mask"><span data-hero-line>{heroTitle}</span></span>
+        </h1>
+        <p class="wd-hero__lede" data-hero-item>{heroLede}</p>
+        <a class="button" href="/contact" data-hero-item>{ctaButton}</a>
+      </div>
+    </section>
+
+    <!-- INTRO: editorial two-column -->
+    <section class="wd-intro" aria-labelledby="wd-intro-title">
+      <div class="content-container wd-intro__row">
+        <figure class="wd-intro__photo image-frame" data-parallax>
+          <Pic src={introImage} alt="A couple in a quiet, candid moment." sizes="(max-width: 768px) 100vw, 50vw" />
+        </figure>
+        <div class="wd-intro__copy" data-reveal>
+          <p class="eyebrow">{introEyebrow}</p>
+          <h2 id="wd-intro-title" class="display-title wd-intro__title">{introHeading}</h2>
+          <span class="short-rule" aria-hidden="true"></span>
+          <p class="wd-intro__para">{introPara}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="wd-cta" id="contact" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A soft, golden closing frame." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="content-container wd-cta__content" data-reveal>
+        <h2 id="wd-cta-title" class="display-title wd-cta__title">{ctaTitle}</h2>
+        <p class="wd-cta__copy">{ctaCopy}</p>
+        <a class="button" href="/contact">{ctaButton}</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+  <SiteMotion />
+</Base>

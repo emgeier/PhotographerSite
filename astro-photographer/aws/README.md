@@ -343,3 +343,107 @@ to `/auth` → GitHub → `/callback`, which posts the token back and closes. Th
 loads the muses collection. If login fails, check the OAuth Lambda's CloudWatch logs
 (`/aws/lambda/<stack>-OAuthFunction-*`): `server_misconfigured` = secret not set (12c);
 `exchange_failed` = client id/secret or callback URL mismatch with the OAuth App.
+
+## 13. Domains & the weddings subdomain — manage via CloudFormation, NOT the console
+
+The CloudFront **aliases** and **viewer certificate** are managed by this template
+(`DomainName`, `WeddingsDomainName`, `AcmCertificateArn` → the distribution's `Aliases`
+and `ViewerCertificate`). CloudFormation treats the template + the parameters you pass as
+the source of truth, so **a stack redeploy overwrites anything you changed in the
+CloudFront console** for those properties (configuration drift is reset on deploy).
+
+> ⚠️ **Do not set the domain alias or certificate in the CloudFront console.** Set them
+> through these parameters. If you set them only in the console and later redeploy
+> *without* passing the matching parameters, CloudFormation reverts the alias/cert to the
+> template defaults (empty) — which **removes the alias and reverts to the default
+> `*.cloudfront.net` certificate**, taking the custom domain offline.
+
+### 13a. Parameters that drive domains
+
+| Parameter | Example | Effect |
+|---|---|---|
+| `DomainName` | `muse.luisquintanastudio.com` | Primary alias → serves `/index.html` (muse home). |
+| `WeddingsDomainName` | `weddings.luisquintanastudio.com` | Second alias. The `CleanUrlFunction` rewrites this host's root `/` → `/weddings/index.html`. Deeper paths (e.g. `/contact`) resolve normally for both hosts. |
+| `AcmCertificateArn` | `arn:aws:acm:us-east-1:…:certificate/…` | Viewer cert. **MUST cover BOTH hosts** — use a SAN cert listing both names, or a wildcard `*.luisquintanastudio.com`. Must be in **us-east-1**. |
+
+`aws cloudformation deploy` resets any parameter you don't pass to its template `Default`
+(empty for the domain/cert params) — it does **not** silently keep previous values. So on
+every redeploy you must pass **all** params you want kept.
+
+### 13b. Before redeploying: capture the current parameters
+
+So you don't drop anything, print the stack's current parameters and reuse them:
+
+```bash
+aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+  --query 'Stacks[0].Parameters' --output table
+```
+
+If `DomainName` / `AcmCertificateArn` show up **empty** here but the custom domain works
+live, that confirms console drift (the template thinks there's no alias/cert). You will
+*formalize* the console state by passing the real values below.
+
+### 13c. Issue a cert that covers both hosts (one time)
+
+In **ACM, region us-east-1** (CloudFront requirement), request/validate either:
+- a SAN cert for `muse.luisquintanastudio.com` **and** `weddings.luisquintanastudio.com`, or
+- a wildcard `*.luisquintanastudio.com` (covers both, plus any future subdomain).
+
+Copy its ARN for `AcmCertificateArn`.
+
+### 13d. Preview the change set first (recommended, non-destructive)
+
+Generate but DON'T execute the change set, then review the `Aliases` / `ViewerCertificate`
+diffs before applying:
+
+```bash
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse --region us-east-2 \
+  --capabilities CAPABILITY_IAM \
+  --no-execute-changeset \
+  --parameter-overrides \
+    DomainName='muse.luisquintanastudio.com' \
+    WeddingsDomainName='weddings.luisquintanastudio.com' \
+    AcmCertificateArn='arn:aws:acm:us-east-1:<acct>:certificate/<id>' \
+    AcApiUrl='https://acct.api-us1.com' AcListId='7' AcTags='' \
+    AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
+    AllowedOrigin='https://muse.luisquintanastudio.com' \
+    ContactSuccessUrl='https://muse.luisquintanastudio.com/contact' \
+    CmsRepo='emgeier/PhotographerSite' CmsBranch='main' \
+    GitHubRepo='emgeier/PhotographerSite' GitHubBranch='main' \
+    CreateGitHubOidcProvider='false' \
+    OAuthClientId='<github-oauth-client-id>'
+```
+
+Review the printed change set (or open it in the CloudFormation console). Confirm the only
+distribution changes are: `Aliases` → `[muse…, weddings…]`, `ViewerCertificate` → your
+cert, and the `CleanUrlFunction` code update. Then execute the named change set it prints,
+or re-run the same command **without** `--no-execute-changeset` to apply.
+
+> Replace every `Ac*/Cms*/GitHub*/OAuth*` value above with the real ones from §13b — these
+> are placeholders. Omitting any of them resets it to its template default on deploy.
+
+### 13e. DNS
+
+Point the subdomains at the CloudFront distribution domain (`CloudFrontDomainName` output):
+- `muse.luisquintanastudio.com` → the distribution (CNAME, or Route 53 A/AAAA ALIAS).
+- `weddings.luisquintanastudio.com` → the **same** distribution (one distribution serves
+  both hosts; the function routes by `Host`).
+
+### 13f. Ship the weddings page + verify
+
+The weddings home lives at `src/pages/weddings/index.astro` → builds to
+`dist/weddings/index.html`. Push to `main` (the Actions workflow builds + syncs), or sync
+manually. Then:
+
+```bash
+# muse root -> muse home; weddings root -> weddings home
+curl -sI https://muse.luisquintanastudio.com/        | grep -i '^HTTP'
+curl -sI https://weddings.luisquintanastudio.com/    | grep -i '^HTTP'
+# both resolve shared clean URLs
+curl -sI https://weddings.luisquintanastudio.com/contact | grep -i '^HTTP'
+```
+
+If a host 403s on `/`, re-check that the cert covers it and the alias is present on the
+distribution (`aws cloudfront get-distribution-config --id <DistributionId>`).

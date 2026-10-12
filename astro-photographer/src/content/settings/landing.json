@@ -1,0 +1,31 @@
+{
+  "museEyebrow": "Muse story",
+  "museName": "Kaylee",
+  "museSub": "A story of confidence, freedom, and rediscovery.",
+  "museLede": "A real story, real moments, and portraits that celebrate who she is and who she’s becoming.",
+  "landingHeroImage": "/images/ms-muse-3.webp",
+  "filmPoster": "/images/ms-motion.webp",
+  "filmTitle": "A story in motion.",
+  "filmCopy": "Movement, laughter, quiet moments. A deeper look into Kaylee’s experience with The Glam Muse Series.",
+  "filmVideoUrl": "",
+  "landingGallery": [
+    "/images/muses/portrait-05.webp",
+    "/images/muses/portrait-06.webp",
+    "/images/muses/portrait-07.webp",
+    "/images/muses/portrait-08.webp",
+    "/images/muses/portrait-09.webp",
+    "/images/muses/portrait-01.webp",
+    "/images/muses/portrait-02.webp",
+    "/images/muses/portrait-03.webp",
+    "/images/muses/portrait-04.webp",
+    "/images/ms-muse-3.webp"
+  ],
+  "deserveTitle": "You deserve this.",
+  "deservePara1": "This experience is about more than beautiful portraits. It’s about giving yourself permission to be seen, to feel confident, and to celebrate you — exactly as you are right now.",
+  "deservePara2": "My hope is that my story inspires you to take this step for yourself, because every woman deserves to feel beautiful, confident, and empowered.",
+  "deserveSignature": "Kaylee",
+  "deserveImage": "/images/home-portrait.webp",
+  "landingCtaTitle": "It’s time to tell your story.",
+  "landingCtaCopy": "You deserve to see yourself differently — and this is where it begins.",
+  "landingCtaImage": "/images/home-closing.webp"
+}

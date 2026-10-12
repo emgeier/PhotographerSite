@@ -4,29 +4,30 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
 
-// A single-muse landing page (modeled on the "Landing Page" mockup, featuring
-// Kaylee). Content/images below are the defaults; they can be moved to a
-// settings/landing.json CMS entry later with the same getEntry() pattern.
-const museEyebrow = 'Muse story';
-const museName = 'Kaylee';
-const museSub = 'A story of confidence, freedom, and rediscovery.';
-const museLede = 'A real story, real moments, and portraits that celebrate who she is and who she’s becoming.';
-const heroImage = '/images/ms-muse-3.webp';
+// Single-muse landing page (modeled on the "Landing Page" mockup). Content is
+// CMS-editable via settings/landing.json; each field falls back to its default.
+const lp = await getEntry('settings', 'landing');
+const museEyebrow = lp?.data.museEyebrow ?? 'Muse story';
+const museName = lp?.data.museName ?? 'Kaylee';
+const museSub = lp?.data.museSub ?? 'A story of confidence, freedom, and rediscovery.';
+const museLede = lp?.data.museLede ?? 'A real story, real moments, and portraits that celebrate who she is and who she’s becoming.';
+const heroImage = lp?.data.landingHeroImage ?? '/images/ms-muse-3.webp';
 
-const filmPoster = '/images/ms-motion.webp';
+const filmPoster = lp?.data.filmPoster ?? '/images/ms-motion.webp';
 const filmEyebrow = 'The film';
-const filmTitle = 'A story in motion.';
-const filmCopy = 'Movement, laughter, quiet moments. A deeper look into Kaylee’s experience with The Glam Muse Series.';
-const filmVideoUrl = '';
+const filmTitle = lp?.data.filmTitle ?? 'A story in motion.';
+const filmCopy = lp?.data.filmCopy ?? 'Movement, laughter, quiet moments. A deeper look into Kaylee’s experience with The Glam Muse Series.';
+const filmVideoUrl = lp?.data.filmVideoUrl ?? '';
 
 const galleryEyebrow = 'The portraits';
-const galleryName = 'Kaylee';
+const galleryName = museName;
 const gallerySub = 'A collection of moments that feel like her.';
 // 10 portraits for the 2×5 grid (clickable lightbox).
-const gallery = [
+const gallery = lp?.data.landingGallery ?? [
   '/images/muses/portrait-05.webp', '/images/muses/portrait-06.webp', '/images/muses/portrait-07.webp',
   '/images/muses/portrait-08.webp', '/images/muses/portrait-09.webp', '/images/muses/portrait-01.webp',
   '/images/muses/portrait-02.webp', '/images/muses/portrait-03.webp', '/images/muses/portrait-04.webp',
@@ -47,22 +48,23 @@ const galleryCaptions = [
 const captionFor = (i: number) => galleryCaptions[i % galleryCaptions.length];
 
 const deserveEyebrow = 'From one muse to another';
-const deserveTitle = 'You deserve this.';
-const deservePara1 = 'This experience is about more than beautiful portraits. It’s about giving yourself permission to be seen, to feel confident, and to celebrate you — exactly as you are right now.';
-const deservePara2 = 'My hope is that my story inspires you to take this step for yourself, because every woman deserves to feel beautiful, confident, and empowered.';
-const deserveSignature = 'Kaylee';
-const deserveImage = '/images/home-portrait.webp';
+const deserveTitle = lp?.data.deserveTitle ?? 'You deserve this.';
+const deservePara1 = lp?.data.deservePara1 ?? 'This experience is about more than beautiful portraits. It’s about giving yourself permission to be seen, to feel confident, and to celebrate you — exactly as you are right now.';
+const deservePara2 = lp?.data.deservePara2 ?? 'My hope is that my story inspires you to take this step for yourself, because every woman deserves to feel beautiful, confident, and empowered.';
+const deserveSignature = lp?.data.deserveSignature ?? 'Kaylee';
+const deserveImage = lp?.data.deserveImage ?? '/images/home-portrait.webp';
 
+// Process steps stay in-page (fixed, shared across muses).
 const steps = [
   { n: '01', t: 'LET’S TALK', p: 'A 15–20 minute Zoom call to understand your vision, preferences, and what makes you, uniquely you.' },
   { n: '02', t: 'YOUR SESSION', p: 'A relaxed, guided portrait experience with professional hair and makeup, up to 5 looks.' },
   { n: '03', t: 'THE REVEAL', p: 'A private, same-day unveiling of your portraits — a celebration of you, with options for artwork and collections.' },
 ];
 
-const ctaTitle = 'It’s time to tell your story.';
-const ctaCopy = 'You deserve to see yourself differently — and this is where it begins.';
+const ctaTitle = lp?.data.landingCtaTitle ?? 'It’s time to tell your story.';
+const ctaCopy = lp?.data.landingCtaCopy ?? 'You deserve to see yourself differently — and this is where it begins.';
 const ctaButton = 'Book your consultation';
-const ctaImage = '/images/home-closing.webp';
+const ctaImage = lp?.data.landingCtaImage ?? '/images/home-closing.webp';
 ---
 <Base
   title="Kaylee — A Muse Story — The Glam Muse Series"

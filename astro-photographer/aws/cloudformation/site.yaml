@@ -82,8 +82,19 @@ Parameters:
     Type: String
     Default: ''
     Description: >-
-      Optional custom domain (alias) for CloudFront. When empty, the default
-      *.cloudfront.net domain is used and no Aliases are set.
+      Optional custom domain (alias) for CloudFront, e.g.
+      muse.luisquintanastudio.com. When empty, the default *.cloudfront.net
+      domain is used and no Aliases are set.
+  WeddingsDomainName:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional second alias for the weddings subdomain, e.g.
+      weddings.luisquintanastudio.com. When set (together with an ACM cert that
+      covers it), it is added as a CloudFront alias and the CleanUrlFunction
+      rewrites that host's root to /weddings/index.html. The ACM cert in
+      AcmCertificateArn MUST cover BOTH DomainName and this host (use a SAN cert
+      or a wildcard *.luisquintanastudio.com).
   GitHubRepo:
     Type: String
     Default: ''
@@ -115,6 +126,12 @@ Conditions:
   # BOTH a domain name and a cert before setting Aliases.
   HasDomainName: !And
     - !Not [!Equals [!Ref DomainName, '']]
+    - !Not [!Equals [!Ref AcmCertificateArn, '']]
+  # The weddings alias is added only when BOTH custom domains are set alongside
+  # a cert (CloudFront rejects Aliases without a matching ACM cert).
+  HasWeddingsDomain: !And
+    - !Not [!Equals [!Ref DomainName, '']]
+    - !Not [!Equals [!Ref WeddingsDomainName, '']]
     - !Not [!Equals [!Ref AcmCertificateArn, '']]
   # CI/CD: create the deploy role only when a GitHub repo is supplied.
   HasGitHubRepo: !Not [!Equals [!Ref GitHubRepo, '']]
@@ -173,12 +190,28 @@ Resources:
       Name: !Sub '${AWS::StackName}-clean-urls'
       AutoPublish: true
       FunctionConfig:
-        Comment: Rewrites clean URLs to Astro static index.html files.
+        Comment: Clean URLs + weddings-subdomain root rewrite.
         Runtime: cloudfront-js-2.0
-      FunctionCode: |
+      # The weddings host name is injected at deploy time via !Sub so the single
+      # distribution can serve a different home page per subdomain:
+      #   weddings.<domain>/  -> /weddings/index.html   (weddings home)
+      #   muse.<domain>/       -> /index.html             (muse home, default)
+      # Everything else (clean URLs for both hosts) is unchanged.
+      FunctionCode: !Sub |
+        var WEDDINGS_HOST = '${WeddingsDomainName}';
         function handler(event) {
           var request = event.request;
           var uri = request.uri;
+          var host = (request.headers.host && request.headers.host.value) || '';
+
+          // Weddings subdomain: map its bare root to the /weddings home page.
+          // Only the root is remapped; deeper paths fall through to the shared
+          // clean-URL logic below (so /contact etc. still resolve normally).
+          if (WEDDINGS_HOST && host === WEDDINGS_HOST && (uri === '/' || uri === '')) {
+            request.uri = '/weddings/index.html';
+            return request;
+          }
+
           // Pass through any URI that already has a file extension (incl. .html,
           // .css, images), so real assets and /404.html are served untouched.
           var lastSegment = uri.split('/').pop();
@@ -202,9 +235,12 @@ Resources:
         Comment: !Sub '${AWS::StackName} static site'
         DefaultRootObject: index.html
         Aliases: !If
-          - HasDomainName
-          - [!Ref DomainName]
-          - !Ref AWS::NoValue
+          - HasWeddingsDomain
+          - [!Ref DomainName, !Ref WeddingsDomainName]
+          - !If
+            - HasDomainName
+            - [!Ref DomainName]
+            - !Ref AWS::NoValue
         Origins:
           - Id: site-origin
             DomainName: !GetAtt SiteBucket.RegionalDomainName

@@ -84,6 +84,61 @@ collections:
           - { name: portfolioFilmImage, label: Experience film still, widget: image, required: false }
           - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
 
+      - name: landing
+        label: 'Landing page (/landing) — content'
+        file: astro-photographer/src/content/settings/landing.json
+        fields:
+          - { name: museEyebrow, label: 'Hero eyebrow', widget: string, required: false }
+          - { name: museName, label: 'Muse name', widget: string, required: false }
+          - { name: museSub, label: 'Hero subtitle', widget: string, required: false }
+          - { name: museLede, label: 'Hero lede', widget: text, required: false }
+          - { name: landingHeroImage, label: 'Hero image', widget: image, required: false }
+          - { name: filmPoster, label: 'Film poster image', widget: image, required: false }
+          - { name: filmTitle, label: 'Film — title', widget: string, required: false }
+          - { name: filmCopy, label: 'Film — copy', widget: text, required: false }
+          - { name: filmVideoUrl, label: 'Film — video link (optional)', widget: string, required: false }
+          - name: landingGallery
+            label: 'Portrait gallery (clickable)'
+            widget: list
+            field: { name: image, label: Image, widget: image }
+          - { name: deserveTitle, label: '“You deserve this” — title', widget: string, required: false }
+          - { name: deservePara1, label: '“You deserve this” — paragraph 1', widget: text, required: false }
+          - { name: deservePara2, label: '“You deserve this” — paragraph 2', widget: text, required: false }
+          - { name: deserveSignature, label: '“You deserve this” — signature', widget: string, required: false }
+          - { name: deserveImage, label: '“You deserve this” — photo', widget: image, required: false }
+          - { name: landingCtaTitle, label: 'Closing CTA — title', widget: string, required: false }
+          - { name: landingCtaCopy, label: 'Closing CTA — copy', widget: text, required: false }
+          - { name: landingCtaImage, label: 'Closing CTA — background image', widget: image, required: false }
+
+      - name: link
+        label: 'Instagram link page (/link) — content'
+        file: astro-photographer/src/content/settings/link.json
+        fields:
+          - { name: linkPortrait, label: 'Portrait (circular)', widget: image, required: false }
+          - { name: linkGreeting, label: 'Greeting (gold italic, e.g. “Hola,”)', widget: string, required: false }
+          - { name: linkName, label: 'Name', widget: string, required: false }
+          - { name: linkTagline, label: 'Tagline', widget: string, required: false }
+          - { name: linkLocation, label: 'Location line', widget: string, required: false }
+          - { name: linkPhone, label: 'Call link (tel: URL)', widget: string, required: false, hint: 'e.g. tel:+16155551234' }
+          - { name: linkEmail, label: 'Email link (mailto: URL)', widget: string, required: false, hint: 'e.g. mailto:hello@luisquintanastudio.com' }
+          - name: linkCards
+            label: 'Cards'
+            widget: list
+            label_singular: Card
+            summary: '{{fields.titleMain}}'
+            fields:
+              - { name: kind, label: 'Kind (glam or weddings — controls image crop)', widget: string, required: false }
+              - { name: image, label: 'Image', widget: image, required: false }
+              - { name: titleTop, label: 'Title — top line (small, optional)', widget: string, required: false }
+              - { name: titleMain, label: 'Title — main line', widget: string, required: false }
+              - { name: titleMain2, label: 'Title — second main line (optional)', widget: string, required: false }
+              - { name: titleBottom, label: 'Title — bottom line (small, optional)', widget: string, required: false }
+              - { name: sub, label: 'Subtitle (italic)', widget: string, required: false }
+              - { name: button, label: 'Button label', widget: string, required: false }
+              - { name: href, label: 'Button link', widget: string, required: false }
+              - { name: external, label: 'Opens in new tab (external)', widget: boolean, default: false, required: false }
+          - { name: linkFooter, label: 'Footer line', widget: string, required: false }
+
   - name: muses
     label: Muses
     folder: astro-photographer/src/content/muses

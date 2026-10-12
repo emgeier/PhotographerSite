@@ -137,6 +137,52 @@ const settings = defineCollection({
     portfolioBannerImage: optionalText,
     portfolioFilmImage: optionalText,
     portfolioClosingImage: optionalText,
+
+    // landing.json — the /landing single-muse feature page.
+    museEyebrow: optionalText,
+    museName: optionalText,
+    museSub: optionalText,
+    museLede: optionalText,
+    landingHeroImage: optionalText,
+    filmPoster: optionalText,
+    filmTitle: optionalText,
+    filmCopy: optionalText,
+    filmVideoUrl: optionalText,
+    landingGallery: optionalList,
+    deserveTitle: optionalText,
+    deservePara1: optionalText,
+    deservePara2: optionalText,
+    deserveSignature: optionalText,
+    deserveImage: optionalText,
+    landingCtaTitle: optionalText,
+    landingCtaCopy: optionalText,
+    landingCtaImage: optionalText,
+
+    // link.json — the /link "link in bio" page.
+    linkPortrait: optionalText,
+    linkName: optionalText,
+    linkGreeting: optionalText,
+    linkTagline: optionalText,
+    linkLocation: optionalText,
+    linkPhone: optionalText,
+    linkEmail: optionalText,
+    linkCards: z
+      .array(
+        z.object({
+          image: z.string().optional(),
+          titleTop: z.string().optional(),
+          titleMain: z.string().optional(),
+          titleMain2: z.string().optional(),
+          titleBottom: z.string().optional(),
+          sub: z.string().optional(),
+          button: z.string().optional(),
+          href: z.string().optional(),
+          external: z.boolean().optional(),
+          kind: z.string().optional(),
+        }),
+      )
+      .optional(),
+    linkFooter: optionalText,
   }),
 });
 

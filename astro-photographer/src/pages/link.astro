@@ -1,21 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
 import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
 
-// Instagram "link in bio" landing page (modeled on the "Link" mockup).
-// Standalone: no site Header/Footer — just the bio card. Values are defaults;
-// swap the portrait/card images and links as needed (or wire to a CMS entry).
-const portrait = '/images/story-portrait.webp';
-const name = 'Luis';
-const greeting = 'Hola,';
-const tagline = 'Every beautiful connection begins with a conversation.';
-const location = 'Serving Nashville & Beyond';
-const phone = 'tel:+10000000000';
-const email = 'mailto:hello@luisquintanastudio.com';
+// Instagram "link in bio" page (modeled on the "Link" mockup). Standalone: no
+// site Header/Footer. CMS-editable via settings/link.json; each field falls
+// back to its default.
+const ln = await getEntry('settings', 'link');
+const portrait = ln?.data.linkPortrait ?? '/images/story-portrait.webp';
+const name = ln?.data.linkName ?? 'Luis';
+const greeting = ln?.data.linkGreeting ?? 'Hola,';
+const tagline = ln?.data.linkTagline ?? 'Every beautiful connection begins with a conversation.';
+const location = ln?.data.linkLocation ?? 'Serving Nashville & Beyond';
+const phone = ln?.data.linkPhone ?? 'tel:+10000000000';
+const email = ln?.data.linkEmail ?? 'mailto:hello@luisquintanastudio.com';
+const footer = ln?.data.linkFooter ?? 'Looking forward to meeting you.';
 
-const cards = [
+const defaultCards = [
   {
     kind: 'glam',
     image: '/images/ms-muse-1.webp',
@@ -38,6 +41,9 @@ const cards = [
     external: true,
   },
 ];
+const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
+  ? ln.data.linkCards
+  : defaultCards;
 ---
 <Base
   title="Luis Quintana Studio — Links"
@@ -95,7 +101,7 @@ const cards = [
       </div>
 
       <span class="short-rule link-divider" aria-hidden="true"></span>
-      <p class="link-footer">Looking forward to meeting you.</p>
+      <p class="link-footer">{footer}</p>
     </div>
   </main>
 </Base>

@@ -723,3 +723,63 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
   .link-pill, .link-card__button { transition: none; }
   .link-card:hover .link-card__button { transform: none; }
 }
+
+/* ============================================================= *
+ * WEDDINGS home (/weddings — served at weddings.luisquintanastudio.com).
+ * Reuses the Codex hero + CTA treatments; sections prefixed .wd-*.
+ * ============================================================= */
+.wd-hero.hero { min-height: 710px; height: min(760px, 58vw); background: var(--ink); color: var(--ivory); }
+.wd-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
+.wd-hero .hero__image img { object-position: center 38%; }
+.wd-hero__veil { background: linear-gradient(90deg, var(--ink) 0%, rgba(23, 23, 23, 0.82) 32%, rgba(23, 23, 23, 0.38) 54%, transparent 78%); }
+.wd-hero__content { max-width: var(--content-width); color: var(--ivory); }
+.wd-hero__eyebrow { margin-bottom: 20px; font-size: 12px; letter-spacing: 4px; color: var(--champagne); }
+.wd-hero__title { max-width: 620px; font-size: clamp(60px, 6vw, 92px); line-height: 0.95; letter-spacing: -2px; text-transform: uppercase; }
+.wd-hero__lede { margin-top: 24px; max-width: 420px; color: #e7e2d9; font-size: var(--body-size); line-height: var(--body-leading); }
+.wd-hero__content .button { margin-top: 30px; min-width: 272px; }
+/* Light-on-dark header for the weddings hero masthead. */
+.wd-hero .site-header, .wd-hero .site-header a { color: var(--ivory); }
+.wd-hero .primary-nav .nav-contact { border-color: rgba(244, 240, 232, 0.5); }
+.wd-hero .primary-nav .nav-contact:hover { color: var(--ink); background: var(--ivory); }
+.wd-hero .menu-toggle span { background: var(--ivory); }
+
+/* Intro — editorial two-column. */
+.wd-intro { padding-block: 64px; background: var(--paper); }
+.wd-intro__row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
+.wd-intro__photo { aspect-ratio: 0.92; }
+.wd-intro__photo img { object-position: center 30%; }
+.wd-intro__copy .eyebrow { margin-bottom: 14px; font-size: 11px; letter-spacing: 3px; color: var(--champagne); }
+.wd-intro__title { font-size: clamp(42px, 4.4vw, 64px); line-height: 1; letter-spacing: -1.4px; }
+.wd-intro__copy .short-rule { margin: 22px 0 24px; background: var(--champagne); }
+.wd-intro__para { max-width: 420px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+
+/* Closing CTA — full-bleed image + overlay. */
+.wd-cta { position: relative; min-height: 420px; overflow: hidden; background: var(--ink); color: var(--ivory); display: flex; align-items: center; }
+.wd-cta__image { position: absolute; inset: 0; }
+.wd-cta__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.wd-cta__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(17, 15, 13, 0.9) 0%, rgba(17, 15, 13, 0.78) 42%, rgba(17, 15, 13, 0.5) 100%); }
+.wd-cta__content { position: relative; z-index: 1; padding-block: 64px; }
+.wd-cta__title { font-size: clamp(44px, 4.4vw, 64px); line-height: 1; letter-spacing: -1px; text-transform: uppercase; }
+.wd-cta__copy { margin-top: 18px; max-width: 360px; color: #e7e2d9; font-size: var(--body-size); line-height: var(--body-leading); }
+.wd-cta__content .button { margin-top: 26px; min-width: 272px; }
+
+@media (max-width: 1199px) {
+  .wd-hero.hero { min-height: 600px; height: 62vw; }
+  .wd-intro__row { gap: 56px; }
+}
+
+@media (max-width: 768px) {
+  .wd-hero.hero { flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ink); }
+  .wd-hero.hero .hero__image { position: relative; order: 2; inset: auto; top: auto; width: 100%; height: clamp(320px, 80vw, 480px); }
+  .wd-hero__veil { display: none; }
+  .wd-hero__content { order: 1; padding-bottom: 34px; color: var(--ivory); }
+
+  .wd-intro__row { grid-template-columns: 1fr; gap: 30px; }
+  .wd-intro__photo { order: 2; width: min(360px, 100%); }
+  .wd-intro__copy { order: 1; }
+
+  .wd-cta { min-height: 0; flex-direction: column; }
+  .wd-cta__image { position: relative; order: 2; height: clamp(300px, 78vw, 460px); }
+  .wd-cta__veil { display: none; }
+  .wd-cta__content { order: 1; padding-block: 46px 38px; background: var(--ink); }
+}
