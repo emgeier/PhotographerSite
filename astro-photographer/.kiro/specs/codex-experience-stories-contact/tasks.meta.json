@@ -1,0 +1,165 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Create `src/components/ContactDialog.astro` markup + AC form": [
+      {
+        "executionId": "843f91ab-2aaa-4e2d-a864-7fa7a885d0dc",
+        "chatSessionId": "sess_fdf20426-7fc6-4ded-bb16-62953a9c58bf",
+        "timestamp": 1791679958937
+      },
+      {
+        "executionId": "843f91ab-2aaa-4e2d-a864-7fa7a885d0dc",
+        "chatSessionId": "sess_fdf20426-7fc6-4ded-bb16-62953a9c58bf",
+        "timestamp": 1791680064970
+      }
+    ],
+    "1. Build the shared Contact dialog component (`ContactDialog.astro`)": [
+      {
+        "executionId": "843f91ab-2aaa-4e2d-a864-7fa7a885d0dc",
+        "chatSessionId": "sess_fdf20426-7fc6-4ded-bb16-62953a9c58bf",
+        "timestamp": 1791680065000
+      }
+    ],
+    "3.1 Add `data-open-contact` to `Header.astro` and `Footer.astro` Contact links": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791681942994
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682108314
+      }
+    ],
+    "3.2 Add `data-open-contact` to Home, Portfolio, and story-detail CTAs": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791681944309
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682109654
+      }
+    ],
+    "5.1 Author `src/styles/codex-content.css` for Experience + Stories sections": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791681945320
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682110732
+      }
+    ],
+    "5. Create the Codex content stylesheet (`codex-content.css`)": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682110761
+      }
+    ],
+    "2.1 Implement `serializeForm(form)` and the `ContactPayload` type": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682114236
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791682183245
+      }
+    ],
+    "6.1 Rebuild `experience.astro` with Codex primitives + reveal motion": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791685813493
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791685936357
+      }
+    ],
+    "7.1 Preserve the muses frontmatter data pipeline": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791685814444
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791685937241
+      }
+    ],
+    "2.3 Implement `initContactDialog()` open/close + single-dialog + focus": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791685940745
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791686330450
+      }
+    ],
+    "7.2 Rebuild `stories.astro` sections with Codex primitives + reveal motion": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791686335281
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687549585
+      }
+    ],
+    "6.2 Route every Experience image through `Pic`": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791686336219
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687548672
+      }
+    ],
+    "6. Rebuild the Experience page (`experience.astro`)": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687548705
+      }
+    ],
+    "2.4 Implement the AC fetch submit path": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687561967
+      },
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687646952
+      }
+    ],
+    "2. Build the Contact dialog controller (`contact-dialog.ts`)": [
+      {
+        "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
+        "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
+        "timestamp": 1791687646980
+      }
+    ]
+  }
+}

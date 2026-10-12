@@ -1,6 +1,26 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+// A single gallery photo. Authors may set a bespoke `caption`; when omitted the
+// story page falls back to the shared editorial pool (see the `settings`
+// collection) rotated by index.
+//
+// Backward/CMS compatible: a gallery entry may be written either as a bare
+// string path ("/images/foo.webp") or as an object ({ image, caption }). Both
+// normalize to `{ image, caption? }` so existing string lists keep working and
+// the CMS object widget authors new ones.
+const galleryItem = z
+  .union([
+    z.string(),
+    z.object({
+      image: z.string(),
+      caption: z.string().optional(),
+    }),
+  ])
+  .transform((value) =>
+    typeof value === 'string' ? { image: value, caption: undefined } : value,
+  );
+
 // Astro 7.3.5 Content Layer collection. The glob loader's `entry.id` is the
 // filename stem (e.g. "heather"), which is the route slug — nothing reads
 // `entry.slug`. See .agents/tasks/activecampaign-aws/design.md §3.2.
@@ -17,7 +37,9 @@ const muses = defineCollection({
     // render identically to today without per-file media.
     cardImage: z.string().default('/images/ms-muse-1.svg'), // stories.astro grid thumb
     heroImage: z.string().default('/images/st-hero.svg'), // [slug] hero
-    gallery: z.array(z.string()).default([
+    // Gallery mosaic + lightbox. Each item is `{ image, caption? }` (see
+    // galleryItem above): a bare string or a {image,caption} object both work.
+    gallery: z.array(galleryItem).default([
       '/images/st-gallery-1.svg', '/images/st-gallery-2.svg', '/images/st-gallery-3.svg',
       '/images/st-gallery-4.svg', '/images/st-gallery-5.svg', '/images/st-gallery-6.svg',
       '/images/st-gallery-7.svg', '/images/st-gallery-8.svg', '/images/st-gallery-9.svg',
@@ -44,4 +66,15 @@ const muses = defineCollection({
   }),
 });
 
-export const collections = { muses };
+// Site settings — a single JSON entry editable in the CMS. Holds the shared
+// editorial caption pool used as the default for any gallery photo without a
+// bespoke caption. The story-detail page reads `getEntry('settings', 'gallery')`
+// and falls back to a built-in pool when the entry is absent.
+const settings = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/settings' }),
+  schema: z.object({
+    galleryCaptions: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { muses, settings };

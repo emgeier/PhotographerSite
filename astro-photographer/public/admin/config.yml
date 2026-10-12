@@ -13,6 +13,21 @@ media_folder: public/images   # CMS-uploaded images commit here -> dist/images -
 public_folder: /images        # referenced as /images/... (site origin, NOT the /media/* media prefix)
 
 collections:
+  # Site settings — a single JSON file. The gallery caption pool is the shared
+  # default used for any story-gallery photo without a bespoke caption.
+  - name: settings
+    label: Settings
+    files:
+      - name: gallery
+        label: Gallery captions (shared pool)
+        file: src/content/settings/gallery.json
+        fields:
+          - name: galleryCaptions
+            label: Editorial caption pool
+            widget: list
+            field: { name: caption, label: Caption, widget: string }
+            hint: 'Default captions used for story-gallery photos that have no bespoke caption. Applied in order, rotating by photo position.'
+
   - name: muses
     label: Muses
     folder: src/content/muses
@@ -26,18 +41,28 @@ collections:
       - { name: featured, label: Featured, widget: boolean, default: false }
       - { name: cardImage, label: Card image, widget: image, required: false }
       - { name: heroImage, label: Hero image, widget: image, required: false }
-      - { name: gallery, label: Gallery, widget: list, field: { name: image, widget: image }, required: false }
+      - name: gallery
+        label: Gallery
+        widget: list
+        required: false
+        label_singular: Photo
+        summary: '{{fields.caption | default(fields.image)}}'
+        fields:
+          - { name: image, label: Image, widget: image }
+          - { name: caption, label: Caption (optional — defaults to the shared editorial pool), widget: string, required: false }
       - { name: beforeImage, label: Before, widget: image, required: false }
       - { name: afterImage, label: After, widget: image, required: false }
-      - { name: motionImage, label: Motion still, widget: image, required: false }
+      - { name: motionImage, label: 'In Motion — poster image', widget: image, required: false, hint: 'Poster frame for the "In motion" section. Leave blank to use the shared placeholder.' }
       # videoUrl: an https://<cloudfront-domain>/media/... URL (served through
       # CloudFront, never a raw S3 URL — OAC blocks direct reads). The schema is
       # z.string().url(), so a non-URL (or a value missing /media/) fails the build;
-      # the pattern steers authors. Blank -> the key is omitted from the Markdown.
+      # the pattern steers authors. Blank -> the key is omitted from the Markdown
+      # and the "In motion" poster shows "Coming soon" instead of linking out.
       - name: videoUrl
-        label: Video URL (S3 via CloudFront)
+        label: 'In Motion — video link (S3 via CloudFront)'
         widget: string
         required: false
+        hint: 'Optional. The "In motion" poster links to this film in a new tab. Leave blank for a "Coming soon" placeholder.'
         pattern: ['^https://.+/media/.+', 'Must be a https://<cloudfront-domain>/media/... URL']
       - { name: heroPara, label: Hero paragraph (suffix, no first name), widget: text, required: false }
       - { name: introPara, label: Intro paragraph, widget: text, required: false }

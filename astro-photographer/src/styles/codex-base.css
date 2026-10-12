@@ -132,9 +132,14 @@ button { border: 0; }
 .brand--footer .brand__top, .brand--footer .brand__bottom { font-size: 11px; }
 .studio-byline { margin-top: 15px; text-align: center; font: 400 8px/1.5 var(--sans); letter-spacing: 1.5px; text-transform: uppercase; color: #c1b9aa; }
 .preview-note { margin-top: 7px; font: 400 8px/1.5 var(--sans); color: #c1b9aa; }
+.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; }
 .footer-nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 25px; font: 500 8px/1.5 var(--sans); letter-spacing: 1.4px; text-transform: uppercase; }
 .footer-nav a { padding-block: 8px; transition: color 250ms ease; }
 .footer-nav a:hover { color: var(--champagne); }
+.footer-social { display: flex; align-items: center; justify-content: flex-end; gap: 18px; margin: 0; padding: 0; list-style: none; }
+.footer-social a { display: inline-flex; align-items: center; justify-content: center; color: var(--ivory); transition: color 250ms ease, transform 350ms var(--ease); }
+.footer-social a:hover { color: var(--champagne); transform: translateY(-2px); }
+.footer-social svg { display: block; }
 .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding-top: 24px; border-top: 1px solid rgba(244, 240, 232, 0.28); }
 .footer-bottom p { font: 400 8px/1.5 var(--sans); letter-spacing: 1.2px; text-transform: uppercase; }
 .noscript-note { padding: 22px; background: var(--ivory); font: 13px/1.6 var(--sans); text-align: center; }
@@ -205,6 +210,7 @@ button { border: 0; }
   .hero__title { font-size: 94px; }
 }
 @media (max-width: 1199px) {
+  :root { --header-h: 120px; }
   .container { width: calc(100% - 112px); }
   .site-header, .footer-container { width: calc(100% - 80px); }
   .site-header { height: var(--header-h); }
@@ -277,6 +283,7 @@ button { border: 0; }
 
 /* Mobile keeps the portraits generous and the controls comfortable to touch. */
 @media (max-width: 768px) {
+  :root { --header-h: 108px; }
   html { scroll-padding-top: 16px; }
   .container, .footer-container { width: calc(100% - 48px); }
   .site-header { width: calc(100% - 48px); height: var(--header-h); }
@@ -354,7 +361,9 @@ button { border: 0; }
   .brand--footer .brand__top, .brand--footer .brand__bottom { font-size: 11px; }
   .studio-byline { font-size: 8px; }
   .preview-note { text-align: center; font-size: 7px; }
+  .footer-right { width: 100%; align-items: center; gap: 18px; }
   .footer-nav { justify-content: center; width: 100%; gap: 14px 22px; font-size: 8px; letter-spacing: 1.1px; }
+  .footer-social { justify-content: center; }
   .footer-bottom { flex-direction: column; align-items: center; gap: 14px; padding-top: 23px; text-align: center; }
   .footer-bottom p { font-size: 7px; letter-spacing: 0.9px; }
   .dialog { width: calc(100% - 28px); max-height: calc(100dvh - 28px); }

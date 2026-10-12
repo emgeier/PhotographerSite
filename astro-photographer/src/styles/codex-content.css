@@ -1,0 +1,516 @@
+/* codex-content.css — Experience + Stories page section styles, authored
+ * against the Codex design system (tokens + primitives) that already live in
+ * global.css :root and codex-base.css. This file is NEW and is consumed by the
+ * rebuilt experience.astro (task 6) and stories.astro (task 7).
+ *
+ * Conventions mirrored from codex-base.css / codex-portfolio.css:
+ *   - Tokens only: --content-width (1120px, 112px gutter), --header-h,
+ *     --serif, --sans, --black, --ivory, --paper, --umber, --champagne,
+ *     --body-size, --body-leading, --ease. No new :root tokens (Req 14.3).
+ *   - Layout width uses the Codex 112px gutter:
+ *     width: min(var(--content-width), calc(100% - 112px)).
+ *   - Headings are .display-title (serif, weight 100) with .eyebrow labels,
+ *     .short-rule dividers, .button CTAs, .image-frame photo wrappers.
+ *   - Process numerals reuse the small-label pattern of
+ *     .experience-step__number / .portfolio-process__number
+ *     (13px, uppercase, var(--champagne)) — see .ex2-step__number below.
+ *
+ * Class prefixes .ex2-* / .ms2-* intentionally avoid the legacy global.css
+ * .ex-* / .ms-* blocks so stories/[slug].astro and any other legacy surfaces
+ * styled by global.css keep working untouched during the migration (OQ-5).
+ * global.css itself is NOT modified by this task. */
+
+/* ============================================================= *
+ * Shared content-section helpers (both pages)
+ * ============================================================= */
+
+.content-container { width: min(var(--content-width), calc(100% - 112px)); margin-inline: auto; }
+
+/* Small process-numeral label — the exact pattern used by
+ * .experience-step__number / .portfolio-process__number in the Codex system:
+ * 13px, uppercase, var(--champagne). Reused by the Experience process steps. */
+.ex2-step__number { font-family: var(--sans); display: block; color: var(--champagne); font-size: 13px; font-weight: 600; line-height: 1; letter-spacing: 2px; text-transform: uppercase; }
+
+/* ============================================================= *
+ * EXPERIENCE PAGE
+ * ============================================================= */
+
+/* Hero — Codex .hero masthead treatment (absolute Header, hero__image + veil,
+ * hero__content). The Experience hero is the DARK masthead (fade-to-black on
+ * the left where the Header + copy sit), restoring the look of the original
+ * .ex-hero: ink background, light text, and a left-opaque veil fading to clear
+ * over the photo on the right. Scoped to .ex2-hero so Home/Portfolio/Stories
+ * keep the shared light hero. */
+.ex2-hero.hero { background: var(--ink); color: var(--ivory); }
+/* Dark veil: solid on the left (behind header + copy), clearing to the right so
+ * the hero photo reads through. Mirrors the original .ex-hero-photo mask. */
+.ex2-hero .hero__veil { background: linear-gradient(90deg, var(--ink) 0%, rgba(23, 23, 23, 0.86) 30%, rgba(23, 23, 23, 0.5) 52%, rgba(23, 23, 23, 0.12) 74%, transparent 90%); }
+.ex2-hero .hero__content { max-width: var(--content-width); color: var(--ivory); }
+.ex2-hero__title { max-width: 560px; }
+.ex2-hero__title em { font-style: normal; color: var(--champagne); }
+.ex2-hero__lede { max-width: 430px; margin-top: 32px; color: #e7e2d9; font-size: var(--body-size); line-height: var(--body-leading); }
+.ex2-hero .eyebrow { color: var(--champagne); }
+.ex2-hero .text-link { margin-top: 30px; color: var(--ivory); }
+/* The absolute Header sits on the dark hero: render its brand + nav light. */
+.ex2-hero .site-header, .ex2-hero .site-header a { color: var(--ivory); }
+.ex2-hero .primary-nav .nav-contact { border-color: rgba(244, 240, 232, 0.5); }
+.ex2-hero .primary-nav .nav-contact:hover { color: var(--ink); background: var(--ivory); }
+.ex2-hero .menu-toggle span { background: var(--ivory); }
+
+/* Process — section rhythm like home .experience / portfolio .portfolio-process:
+ * an eyebrow + display-title heading row with an intro, then a 3-up grid of
+ * reveal cards (image, small numeral, short-rule, h3, copy). */
+.ex2-process { padding-block: 60px; background: var(--paper); }
+.ex2-process__head { display: grid; grid-template-columns: 1.45fr 1fr; gap: 90px; align-items: end; margin-bottom: 46px; }
+.ex2-process__head .eyebrow { margin-bottom: 15px; font-size: 11px; letter-spacing: 3.2px; color: var(--champagne); }
+.ex2-process__head h2 { font-size: clamp(48px, 4.6vw, 69px); line-height: 0.93; letter-spacing: -1.6px; }
+.ex2-process__intro { max-width: 360px; padding-bottom: 2px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+.ex2-process__steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 72px; margin: 0; padding: 0; list-style: none; }
+.ex2-step { min-width: 0; }
+.ex2-step .image-frame { aspect-ratio: 0.86; margin-bottom: 27px; }
+.ex2-step .ex2-step__number { margin-top: 2px; }
+.ex2-step .short-rule { width: 57px; margin: 20px 0 23px; background: #b2a08a; }
+.ex2-step h3 { margin-bottom: 13px; font-size: 22px; letter-spacing: 3.5px; text-transform: uppercase; }
+.ex2-step p { max-width: 300px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+
+/* Inside the experience — heading row + a 4-up .image-frame grid. */
+.ex2-inside { padding-block: 20px 60px; background: var(--ivory); }
+.ex2-inside__head { display: grid; grid-template-columns: 1.45fr 1fr; gap: 90px; align-items: end; margin-bottom: 40px; }
+.ex2-inside__head .eyebrow { margin-bottom: 15px; font-size: 11px; letter-spacing: 3.2px; color: var(--champagne); }
+.ex2-inside__head h2 { font-size: clamp(44px, 4.2vw, 61px); line-height: 0.95; letter-spacing: -1.4px; text-transform: uppercase; }
+.ex2-inside__intro { max-width: 360px; padding-bottom: 2px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+.ex2-inside__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.ex2-inside__grid .image-frame { aspect-ratio: 0.78; }
+
+/* Closing CTA — Codex closing treatment (like .closing): eyebrow + display
+ * title + short-rule + .button link to /contact. */
+.ex2-cta { position: relative; min-height: 420px; overflow: hidden; background: #dad4ca; }
+.ex2-cta__image { position: absolute; inset: -25px 0; }
+/* Show more of the top of the portrait (was 42%, which cropped the top). */
+.ex2-cta__image img { object-position: center 22%; }
+/* Fade whiter on the left so the gold heading reads clearly: a near-opaque
+ * ivory wash behind the copy, clearing over the photo on the right. */
+.ex2-cta__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.96) 0%, rgba(244, 240, 232, 0.88) 34%, rgba(244, 240, 232, 0.6) 52%, transparent 72%); pointer-events: none; }
+.ex2-cta__content { position: relative; z-index: 1; padding-block: 72px 56px; }
+.ex2-cta__content .eyebrow { margin-bottom: 21px; font-size: 13px; letter-spacing: 4px; color: var(--champagne); }
+.ex2-cta__content h2 { font-size: clamp(58px, 5.4vw, 88px); line-height: 0.97; letter-spacing: -1.8px; color: var(--ink); }
+/* Deeper bronze (not the light champagne) so "your moment." stays legible on
+ * the ivory wash — scoped to this section only. */
+.ex2-cta__content h2 em { font-style: normal; color: #8a6d3f; }
+.ex2-cta__content .short-rule { margin: 23px 0 24px; }
+.ex2-cta__content .button { min-width: 282px; }
+
+/* ============================================================= *
+ * STORIES PAGE
+ * ============================================================= */
+
+/* Hero — Codex .hero masthead treatment. */
+/* Match the home hero style: same dimensions, image position, and the plain
+ * `.hero__title` treatment (serif, not uppercase). Pin the home dimensions so
+ * the box can't fall back to the legacy global.css `.hero{height:765px}`. */
+.ms2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: #e7ded0; }
+.ms2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
+/* Set the hero portrait further right, into the clear side of the veil. */
+.ms2-hero .hero__image img { object-position: 88% top; }
+.ms2-hero__title { max-width: 520px; }
+.ms2-hero__sub { margin-top: 30px; font-size: 13px; letter-spacing: 2.4px; line-height: var(--body-leading); text-transform: uppercase; }
+.ms2-hero .short-rule { margin: 26px 0 24px; background: var(--champagne); }
+.ms2-hero__lede { max-width: 420px; color: #4a443b; font-size: var(--body-size); line-height: var(--body-leading); }
+
+/* Featured muse — editorial two-column band like .perspective: an image-frame
+ * portrait + a copy column + a slide counter. The inner ids/attrs are owned by
+ * the rebuilt markup (task 7.3) so the rotator script keeps working. */
+.ms2-featured { padding-block: 56px; background: var(--paper); }
+.ms2-featured__row { display: grid; grid-template-columns: 440px minmax(0, 1fr) auto; align-items: center; gap: 76px; }
+.ms2-featured__photo { position: relative; overflow: hidden; width: 100%; aspect-ratio: 0.84; background: #dedbd5; }
+.ms2-featured__photo img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
+.ms2-featured__copy .eyebrow { font-size: 10px; letter-spacing: 2.5px; color: var(--champagne); }
+.ms2-featured__name { margin-top: 14px; font-size: clamp(56px, 5.6vw, 80px); line-height: 0.95; letter-spacing: -2px; }
+.ms2-featured__tag { margin-top: 16px; font-family: var(--serif); font-weight: 100; font-size: 24px; line-height: 1.2; }
+.ms2-featured__para { margin-top: 18px; max-width: 440px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+.ms2-featured__link.button { margin-top: 29px; min-width: 258px; }
+.ms2-featured__count { font: 400 12px/1.6 var(--sans); letter-spacing: 3px; text-align: center; color: #8a8276; }
+.ms2-featured__controls { display: flex; justify-content: flex-end; gap: 14px; margin-top: 30px; }
+.ms2-arrow { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgba(23, 23, 23, 0.4); border-radius: 50%; background: transparent; font: 20px/1 var(--serif); color: var(--black); transition: border-color 250ms ease, background 250ms ease, transform 350ms var(--ease); }
+.ms2-arrow:hover { border-color: var(--champagne); background: rgba(184, 156, 116, 0.12); }
+
+/* Meet the muses — centered heading (eyebrow + display-title flanked by
+ * short-rules) + a 3-column grid of story cards. */
+.ms2-meet { padding-block: 60px 53px; background: var(--ivory); }
+.ms2-meet__head { margin-bottom: 40px; text-align: center; }
+.ms2-meet__head .eyebrow { font-size: 11px; letter-spacing: 3.2px; color: var(--champagne); }
+.ms2-meet__title { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 16px; font-size: clamp(32px, 3vw, 43px); line-height: 1.1; letter-spacing: 8px; text-transform: uppercase; }
+.ms2-meet__title .short-rule { width: 44px; background: var(--champagne); }
+.ms2-meet__all { display: inline-flex; align-items: center; gap: 13px; margin-top: 20px; font: 600 9px/1.5 var(--sans); letter-spacing: 1.9px; text-transform: uppercase; }
+.ms2-meet__all span { font-size: 15px; transition: transform 350ms var(--ease); }
+.ms2-meet__all:hover span { transform: translateX(5px); }
+.ms2-meet__sub { margin-top: 14px; font-size: 10px; letter-spacing: 2.2px; text-transform: uppercase; color: #8a8276; }
+.ms2-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 84px; }
+.ms2-card { display: block; min-width: 0; padding: 0; background: transparent; text-align: left; }
+.ms2-card__image { aspect-ratio: 0.945; margin-bottom: 23px; }
+/* Anchor the near-square crop toward the top (the face) so more of the bottom
+ * is cut off rather than the top. */
+.ms2-card__image img { object-position: center 18%; }
+.ms2-card:hover img, .ms2-card:focus-visible img { scale: 1.045; }
+.ms2-card__label { font-size: 10px; letter-spacing: 2.5px; color: var(--champagne); }
+.ms2-card__name { margin-top: 12px; font-size: 34px; line-height: 1; letter-spacing: -1px; }
+.ms2-card__tag { margin-top: 11px; font-family: var(--serif); font-weight: 100; font-size: 17px; line-height: 1.25; }
+.ms2-card .short-rule { width: 45px; margin: 17px 0 0; background: var(--champagne); transition: width 500ms var(--ease); }
+.ms2-card:hover .short-rule { width: 70px; }
+.ms2-card__link { display: inline-flex; align-items: center; gap: 12px; margin-top: 17px; font: 600 9px/1.5 var(--sans); letter-spacing: 1.9px; text-transform: uppercase; }
+.ms2-card__link span { font-size: 15px; transition: transform 350ms var(--ease); }
+.ms2-card__link:hover span { transform: translateX(5px); }
+
+/* Look again — dark tonal band reusing the umber treatment of home .experience. */
+.ms2-look { position: relative; overflow: hidden; padding-block: 56px; color: var(--ivory); background: var(--umber); }
+.ms2-look__row { position: relative; display: grid; grid-template-columns: 1fr 440px 1fr; align-items: center; gap: 60px; }
+.ms2-look__copy .ms2-look__title { font-size: clamp(52px, 5vw, 72px); line-height: 0.96; letter-spacing: -1.6px; text-transform: uppercase; }
+.ms2-look__sub { margin-top: 18px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--champagne); }
+.ms2-look__copy .short-rule { width: 59px; margin-top: 24px; background: #b2a08a; }
+.ms2-look__photo { position: relative; overflow: hidden; width: 100%; aspect-ratio: 0.82; background: #2a251f; }
+.ms2-look__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.ms2-look__para { max-width: 300px; font-size: var(--body-size); line-height: var(--body-leading); color: #d7cfc1; }
+
+/* In motion — video teaser placeholder (poster/link, no wired player, Req 5). */
+.ms2-motion { padding-block: 56px; background: var(--paper); }
+.ms2-motion__row { display: grid; grid-template-columns: minmax(0, 1fr) 31%; align-items: center; gap: 76px; }
+.ms2-video { position: relative; display: block; width: 100%; aspect-ratio: 1.8; overflow: hidden; background: #3c3329; }
+.ms2-video img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; transition: scale 1200ms var(--ease); }
+.ms2-video::after { position: absolute; inset: 0; background: rgba(17, 15, 12, 0.1); content: ""; pointer-events: none; }
+.ms2-play { position: absolute; z-index: 1; top: 50%; left: 50%; display: grid; place-items: center; width: 65px; height: 65px; border: 1px solid rgba(255, 253, 248, 0.7); border-radius: 50%; background: rgba(40, 33, 25, 0.08); transform: translate(-50%, -50%); transition: background 350ms ease, scale 500ms var(--ease); }
+.ms2-play::before { content: ""; border-style: solid; border-width: 10px 0 10px 17px; border-color: transparent transparent transparent #fffdf8; margin-left: 4px; }
+.ms2-video__caption { position: absolute; z-index: 1; right: 0; bottom: 0; left: 0; padding: 35px 22px 18px; color: var(--ivory); background: linear-gradient(transparent, rgba(17, 15, 12, 0.4)); font: 500 8px/1.5 var(--sans); letter-spacing: 2px; text-align: center; text-transform: uppercase; opacity: 0; transition: opacity 350ms ease; }
+.ms2-video:hover img, .ms2-video:focus-visible img { scale: 1.025; }
+.ms2-video:hover .ms2-play, .ms2-video:focus-visible .ms2-play { background: rgba(244, 240, 232, 0.16); scale: 1.08; }
+.ms2-video:hover .ms2-video__caption, .ms2-video:focus-visible .ms2-video__caption { opacity: 1; }
+.ms2-motion__copy .eyebrow { margin-bottom: 16px; font-size: 10px; letter-spacing: 3px; color: var(--champagne); }
+.ms2-motion__title { font-size: clamp(46px, 4.2vw, 61px); line-height: 0.95; letter-spacing: -1.4px; text-transform: uppercase; }
+.ms2-motion__copy .short-rule { width: 49px; margin: 24px 0; background: #9f9386; }
+.ms2-motion__para { max-width: 330px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+.ms2-motion__link { display: inline-flex; align-items: center; gap: 13px; margin-top: 24px; font: 600 9px/1.5 var(--sans); letter-spacing: 1.9px; text-transform: uppercase; }
+.ms2-motion__link span { font-size: 15px; transition: transform 350ms var(--ease); }
+.ms2-motion__link:hover span { transform: translateX(5px); }
+
+/* Closing CTA — Codex closing treatment with a photographic backdrop. */
+.ms2-cta { position: relative; min-height: 480px; overflow: hidden; background: #dad4ca; }
+.ms2-cta__image { position: absolute; inset: -25px 0; }
+.ms2-cta__image img { object-position: center 30%; }
+.ms2-cta__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.84), rgba(244, 240, 232, 0.52) 38%, transparent 60%); pointer-events: none; }
+.ms2-cta__content { position: relative; z-index: 1; padding-block: 72px 56px; }
+.ms2-cta__content .eyebrow { margin-bottom: 21px; font-size: 13px; letter-spacing: 4px; color: var(--champagne); }
+.ms2-cta__title { font-size: clamp(56px, 5.2vw, 84px); line-height: 0.97; letter-spacing: -1.8px; text-transform: uppercase; }
+.ms2-cta__italic { margin-top: 18px; font-family: var(--serif); font-weight: 100; font-style: italic; font-size: 27px; }
+.ms2-cta__content .short-rule { margin: 23px 0 20px; }
+.ms2-cta__sub { margin-bottom: 24px; font-size: var(--body-size); line-height: var(--body-leading); color: #4a443b; }
+.ms2-cta__content .button { min-width: 282px; }
+
+/* ============================================================= *
+ * Responsive — mirror the Codex breakpoints (1441 / 1199 / 960 / 768)
+ * ============================================================= */
+
+@media (max-width: 1199px) {
+  .ex2-process__head, .ex2-inside__head { gap: 70px; }
+  .ex2-process__steps { gap: 52px; }
+  .ms2-featured__row { grid-template-columns: 360px minmax(0, 1fr) auto; gap: 56px; }
+  .ms2-grid { gap: 64px; }
+  .ms2-look__row { gap: 48px; }
+  .ms2-motion__row { gap: 52px; }
+}
+
+@media (max-width: 960px) and (min-width: 769px) {
+  .ex2-process, .ex2-inside, .ms2-featured, .ms2-meet, .ms2-look, .ms2-motion { padding-block: 44px; }
+  .ex2-process__head, .ex2-inside__head { gap: 56px; }
+  .ex2-process__steps { gap: 42px; }
+  .ex2-inside__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .ms2-featured__row { grid-template-columns: 300px minmax(0, 1fr) auto; gap: 42px; }
+  .ms2-grid { gap: 52px; }
+  .ms2-look__row { grid-template-columns: 1fr 340px 1fr; gap: 36px; }
+  .ms2-motion__row { grid-template-columns: minmax(0, 1fr) 34%; gap: 42px; }
+}
+
+@media (max-width: 768px) {
+  .content-container { width: calc(100% - 48px); }
+  .ms2-hero.hero { background: var(--ivory); }
+  /* Experience hero stays the dark masthead on mobile too (matches the
+   * original .ex-hero). The stacked hero image sits below; the content
+   * area keeps the ink background + light text. */
+  .ex2-hero.hero { background: var(--ink); color: var(--ivory); }
+  .ex2-hero .hero__content, .ex2-hero .site-header, .ex2-hero .site-header a, .ex2-hero .text-link { color: var(--ivory); }
+  .ex2-hero__lede { color: #e7e2d9; }
+
+  .ex2-process, .ex2-inside, .ms2-featured, .ms2-meet, .ms2-look, .ms2-motion { padding-block: 42px; }
+
+  .ex2-process__head, .ex2-inside__head { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
+  .ex2-process__head h2 { font-size: clamp(48px, 11.5vw, 69px); }
+  .ex2-process__intro, .ex2-inside__intro { max-width: 420px; }
+  .ex2-process__steps { grid-template-columns: 1fr; gap: 34px; }
+  .ex2-step { display: grid; grid-template-columns: 92px 1fr; column-gap: 22px; align-items: start; }
+  .ex2-step .image-frame { grid-column: 1 / -1; aspect-ratio: 1.3; margin-bottom: 20px; }
+  .ex2-step .ex2-step__number { grid-column: 1; }
+  .ex2-step .short-rule { display: none; }
+  .ex2-step h3 { grid-column: 2; margin: 2px 0 10px; font-size: 20px; letter-spacing: 2.8px; }
+  .ex2-step p { grid-column: 2; max-width: 390px; }
+  .ex2-inside__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+  .ex2-cta, .ms2-cta { display: flex; flex-direction: column; min-height: 0; background: var(--ivory); }
+  .ex2-cta__image, .ms2-cta__image { position: relative; inset: auto; order: 2; height: clamp(305px, 78vw, 475px); }
+  .ex2-cta__image img, .ms2-cta__image img { object-position: right top; }
+  .ex2-cta__veil, .ms2-cta__veil { display: none; }
+  .ex2-cta__content, .ms2-cta__content { order: 1; padding-block: 45px 36px; }
+  .ex2-cta__content h2 { font-size: clamp(56px, 13vw, 80px); }
+  .ms2-cta__title { font-size: clamp(52px, 12vw, 80px); }
+  .ex2-cta__content .button, .ms2-cta__content .button { min-width: 258px; }
+
+  .ms2-featured__row { grid-template-columns: 1fr; gap: 30px; }
+  .ms2-featured__photo { width: min(360px, 100%); }
+  .ms2-featured__count { text-align: left; }
+  .ms2-featured__controls { justify-content: flex-start; }
+
+  .ms2-meet__head { margin-bottom: 31px; }
+  .ms2-meet__title { gap: 14px; font-size: clamp(26px, 7vw, 35px); letter-spacing: 5px; }
+  .ms2-meet__title .short-rule { width: 30px; }
+  .ms2-grid { grid-template-columns: 1fr; gap: 36px; width: min(360px, 100%); margin-inline: auto; }
+
+  .ms2-look__row { grid-template-columns: 1fr; gap: 26px; }
+  .ms2-look__photo { width: min(360px, 100%); order: 2; }
+  .ms2-look__copy { order: 1; }
+  .ms2-look__para { order: 3; max-width: 460px; }
+
+  .ms2-motion__row { grid-template-columns: 1fr; gap: 29px; }
+  .ms2-video { aspect-ratio: 1.55; }
+  .ms2-video__caption { opacity: 1; }
+}
+
+@media (max-width: 360px) {
+  .ex2-step { grid-template-columns: 62px 1fr; column-gap: 16px; }
+  .ex2-inside__grid { grid-template-columns: 1fr; }
+}
+
+/* Reduced-motion safety: disable the decorative hover scale/transitions so the
+ * rebuilt pages are fully readable with no animation (Req 7.1 / 7.2). The GSAP
+ * reveal safety-net is handled by SiteMotion; this covers CSS-only motion. */
+@media (prefers-reduced-motion: reduce) {
+  .ex2-step .image-frame img,
+  .ms2-card__image img,
+  .ms2-card .short-rule,
+  .ms2-video img,
+  .ms2-play,
+  .ms2-video__caption,
+  .ms2-arrow,
+  .ms2-meet__all span,
+  .ms2-card__link span,
+  .ms2-motion__link span { transition: none; }
+  .ms2-card:hover img, .ms2-card:focus-visible img,
+  .ms2-video:hover img, .ms2-video:focus-visible img { scale: 1; }
+}
+
+/* ============================================================= *
+ * Parallax headroom (desktop) — SiteMotion/motion.ts applies a vertical
+ * scrub of about ±18px (CONFIG.desktopParallax 35) to the inner <img> of any
+ * [data-parallax] element. The hero (.hero__image inset:-3% 0) and the closing
+ * CTAs (.ex2-cta__image / .ms2-cta__image inset:-25px 0) already overflow their
+ * boxes, so their drift reads as motion. The content-grid frames below size
+ * their img to the frame, so the same drift would expose a gap at the top or
+ * bottom edge. Give those parallaxed images the Codex "oversized inner image"
+ * treatment (cf. .perspective__image img) so the movement stays covered.
+ *
+ * Scoped to (min-width: 769px) because motion.ts only wires [data-parallax] on
+ * desktop; on mobile these stay plain object-fit:cover frames.
+ * ============================================================= */
+
+@media (min-width: 769px) {
+  .ex2-inside__grid .image-frame[data-parallax],
+  .ms2-card__image[data-parallax],
+  .ms2-look__photo[data-parallax] { position: relative; overflow: hidden; }
+
+  .ex2-inside__grid .image-frame[data-parallax] img,
+  .ms2-card__image[data-parallax] img,
+  .ms2-look__photo[data-parallax] img {
+    position: absolute;
+    top: -28px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 56px);
+    object-fit: cover;
+    will-change: transform;
+  }
+}
+
+/* Reduced motion: no parallax tween runs, so pin the inner image flush to its
+ * frame (undo the headroom offset) — the photo stays perfectly framed and
+ * static. */
+@media (prefers-reduced-motion: reduce) {
+  .ex2-inside__grid .image-frame[data-parallax] img,
+  .ms2-card__image[data-parallax] img,
+  .ms2-look__photo[data-parallax] img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    will-change: auto;
+  }
+}
+
+/* ============================================================= *
+ * STORY DETAIL (stories/[slug]) — dark hero masthead
+ *
+ * Matches the Experience page: ink background, light nav, a left-opaque veil
+ * fading to clear over the portrait on the right, and the Codex hero copy
+ * scale. Scoped to .st2-hero so only the story-detail hero is affected; the
+ * rest of the legacy .st-* body sections (styled by global.css) are untouched.
+ * ============================================================= */
+
+/* Same box dimensions + image inset as the home hero (the dark color treatment
+ * is intentional for story detail). Pin so it can't fall back to the legacy
+ * global.css `.hero{height:765px}`. */
+.st2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: var(--ink); color: var(--ivory); }
+.st2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
+/* Dark veil: solid on the left (behind header + copy), clearing to the right so
+ * the muse portrait reads through. */
+.st2-hero .hero__veil { background: linear-gradient(90deg, var(--ink) 0%, rgba(23, 23, 23, 0.86) 30%, rgba(23, 23, 23, 0.5) 52%, rgba(23, 23, 23, 0.12) 74%, transparent 90%); }
+/* Push the portrait toward the right (into the clear side of the veil), like
+ * the other hero images, so the subject sits out of the dark text column. */
+.st2-hero .hero__image img { object-position: 78% 28%; }
+.st2-hero .hero__content { max-width: var(--content-width); color: var(--ivory); }
+.st2-hero__eyebrow { margin-bottom: 20px; font-size: 11px; letter-spacing: 4px; color: var(--champagne); }
+.st2-hero__name { max-width: 560px; text-transform: uppercase; letter-spacing: -2.4px; }
+.st2-hero__tag { margin-top: 20px; font-family: var(--serif); font-weight: 100; font-size: 24px; line-height: 1.2; color: var(--ivory); }
+.st2-hero .short-rule { margin: 24px 0; background: var(--champagne); }
+.st2-hero__para { max-width: 440px; color: #e7e2d9; font-size: var(--body-size); line-height: var(--body-leading); }
+.st2-hero__link { margin-top: 30px; color: var(--ivory); }
+/* The absolute Header sits on the dark hero: render its brand + nav light. */
+.st2-hero .site-header, .st2-hero .site-header a { color: var(--ivory); }
+.st2-hero .primary-nav .nav-contact { border-color: rgba(244, 240, 232, 0.5); }
+.st2-hero .primary-nav .nav-contact:hover { color: var(--ink); background: var(--ivory); }
+.st2-hero .menu-toggle span { background: var(--ivory); }
+
+@media (max-width: 768px) {
+  /* Keep the story-detail hero dark on mobile (stacked image below the copy). */
+  .st2-hero.hero { background: var(--ink); color: var(--ivory); }
+  .st2-hero .hero__content, .st2-hero .site-header, .st2-hero .site-header a, .st2-hero__link { color: var(--ivory); }
+  .st2-hero__para { color: #e7e2d9; }
+}
+
+/* ============================================================= *
+ * CONTACT (contact.astro) — light hero masthead
+ *
+ * The shared LIGHT Codex masthead (like Home/Portfolio): the generic ivory
+ * `.hero__veil` + dark text + absolute Header rendered dark. Scoped to
+ * `.ct2-hero`; the rest of the contact page's legacy `.ct-*` sections (form,
+ * steps, close) are untouched and keep working. Movement via SiteMotion.
+ * ============================================================= */
+
+/* Pin the exact home-hero dimensions (two-class specificity wins over any
+ * single-class `.hero` from global.css / codex-base.css regardless of import
+ * order) so the contact hero box matches the home page at every breakpoint. */
+.ct2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: #e7ded0; }
+.ct2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
+.ct2-hero .hero__image img { object-position: center top; }
+.ct2-hero .hero__content { max-width: var(--content-width); }
+.ct2-hero__title { max-width: 560px; }
+.ct2-hero__lede { max-width: 430px; margin-top: 28px; color: #4a443b; font-size: var(--body-size); line-height: var(--body-leading); }
+.ct2-hero__sub { margin-top: 26px; font-size: 11px; letter-spacing: 2.4px; line-height: var(--body-leading); color: var(--champagne); }
+.ct2-hero .short-rule { margin-top: 26px; background: var(--champagne); }
+
+/* ============================================================= *
+ * Story-detail mosaic — tiles are clickable <button> lightbox triggers.
+ * Reset the native button chrome so they render exactly like the former
+ * <figure> tiles, add a pointer + gentle hover zoom (matches the portfolio
+ * grid affordance). global.css still owns the .st-tile grid placement. */
+button.st-tile {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: hidden;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* Anchor the cover-crop toward the top (the face) so more of the bottom is cut
+ * off rather than the top — matches the Stories-page muse-card crop. */
+button.st-tile img { object-position: center 18%; transition: scale 1100ms var(--ease); }
+button.st-tile:hover img, button.st-tile:focus-visible img { scale: 1.05; }
+button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  button.st-tile img { transition: none; }
+  button.st-tile:hover img, button.st-tile:focus-visible img { scale: 1; }
+}
+
+/* ============================================================= *
+ * CONTACT hero — mirror the home hero height at every breakpoint so the box
+ * matches the home page exactly (two-class specificity wins over the legacy
+ * global.css `.hero{height:765px}` and the codex-base `.hero`).
+ * ============================================================= */
+@media (min-width: 1441px) {
+  .ct2-hero.hero { height: 790px; }
+}
+@media (max-width: 1199px) {
+  .ct2-hero.hero { min-height: 600px; height: 62vw; }
+}
+@media (max-width: 960px) and (min-width: 769px) {
+  .ct2-hero.hero { min-height: 520px; height: 57vw; }
+}
+@media (max-width: 768px) {
+  /* Stacked like the home hero on mobile: image below the copy, auto height. */
+  .ct2-hero.hero { flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ivory); }
+  .ct2-hero.hero .hero__image { position: relative; order: 2; inset: auto; top: auto; width: 100%; height: 450px; flex-shrink: 0; }
+  .ct2-hero.hero .hero__content { order: 1; }
+}
+@media (max-width: 380px) {
+  .ct2-hero.hero .hero__image { height: 420px; }
+}
+
+/* ============================================================= *
+ * CONTACT — "Tell me about you" row.
+ * The middle copy column was removed, so the row is now photo + form. Make it
+ * a 2-column grid with a larger photo that fills the freed space. Scoped
+ * override of the legacy global.css `.ct-about-row` (3-col); global.css stays
+ * untouched. Two-class specificity (.ct-about .ct-about-row) wins.
+ * ============================================================= */
+.ct-about .ct-about-row { grid-template-columns: 1fr 1fr; gap: 56px; align-items: stretch; }
+/* Let the enlarged portrait fill the taller of the two columns. */
+.ct-about .ct-about-photo { align-self: stretch; }
+.ct-about .ct-about-photo img { width: 100%; height: 100%; min-height: 720px; object-fit: cover; }
+
+@media (max-width: 768px) {
+  .ct-about .ct-about-row { grid-template-columns: 1fr; gap: 30px; }
+  .ct-about .ct-about-photo img { min-height: 420px; }
+}
+
+/* ============================================================= *
+ * STORIES hero — mirror the home hero height at every breakpoint so the box
+ * matches the home page (two-class specificity wins over the legacy
+ * global.css `.hero{height:765px}` and the codex-base `.hero`). The ≤768px
+ * stacked layout is inherited from the shared `.hero` mobile rules; only the
+ * background is flipped above.
+ * ============================================================= */
+@media (min-width: 1441px) {
+  .ms2-hero.hero { height: 790px; }
+}
+@media (max-width: 1199px) {
+  .ms2-hero.hero { min-height: 600px; height: 62vw; }
+}
+@media (max-width: 960px) and (min-width: 769px) {
+  .ms2-hero.hero { min-height: 520px; height: 57vw; }
+}
+
+/* ============================================================= *
+ * STORY-DETAIL hero — mirror the home hero height at every breakpoint so the
+ * box matches the other heroes (dark color treatment is intentional). The
+ * ≤768px stacked layout is inherited from the shared `.hero` mobile rules.
+ * ============================================================= */
+@media (min-width: 1441px) {
+  .st2-hero.hero { height: 790px; }
+}
+@media (max-width: 1199px) {
+  .st2-hero.hero { min-height: 600px; height: 62vw; }
+}
+@media (max-width: 960px) and (min-width: 769px) {
+  .st2-hero.hero { min-height: 520px; height: 57vw; }
+}

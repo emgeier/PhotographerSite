@@ -286,11 +286,14 @@ export function initLightbox(): void {
 
   const dialog = document.querySelector<HTMLDialogElement>('#gallery-dialog');
   const image = document.querySelector<HTMLImageElement>('#gallery-image');
+  // Title is OPTIONAL: the dialog may omit the per-image title line and keep
+  // only the static collection eyebrow + the caption.
   const titleEl = document.querySelector<HTMLElement>('#gallery-title');
   const captionEl = document.querySelector<HTMLElement>('#gallery-caption');
   const countEl = document.querySelector<HTMLElement>('#gallery-count');
   // If the dialog or any required stage element is missing, no-op safely.
-  if (!dialog || !image || !titleEl || !captionEl || !countEl) return;
+  // (titleEl is intentionally not required.)
+  if (!dialog || !image || !captionEl || !countEl) return;
 
   // Markup is the source of truth (Requirement 6.1): snapshot the cards in DOM
   // order so the gallery order equals the grid order.
@@ -325,7 +328,7 @@ export function initLightbox(): void {
     galleryIndex = wrapIndex(index, len);
     const entry = GALLERY[galleryIndex];
     galleryTween?.kill();
-    // `image`, `titleEl`, `captionEl`, `countEl` are proven non-null above.
+    // `image`, `captionEl`, `countEl` are proven non-null above; titleEl is optional.
     const stage = image as HTMLImageElement;
     try {
       gsap?.set(stage, { opacity: 1, scale: 1 });
@@ -334,7 +337,8 @@ export function initLightbox(): void {
     }
     stage.src = entry.image;
     stage.alt = entry.alt;
-    (titleEl as HTMLElement).textContent = entry.title;
+    // Title is optional — only write it when the element is present.
+    if (titleEl) titleEl.textContent = entry.title;
     (captionEl as HTMLElement).textContent = entry.caption;
     (countEl as HTMLElement).textContent = `${pad(galleryIndex + 1)} / ${pad(len)}`;
     if (animate && !reducedMotion.matches) {
@@ -399,6 +403,149 @@ export function initLightbox(): void {
         galleryIndex + (event.key === 'ArrowRight' ? 1 : -1),
         true,
       );
+    }
+  });
+
+  // Touch-swipe beyond ~55px wrap-navigates (left swipe → next, right → prev).
+  const SWIPE_THRESHOLD = 55;
+  let touchStartX: number | null = null;
+  image.addEventListener(
+    'touchstart',
+    (event) => {
+      touchStartX = event.changedTouches[0]?.clientX ?? null;
+    },
+    { passive: true },
+  );
+  image.addEventListener(
+    'touchend',
+    (event) => {
+      if (touchStartX === null) return;
+      const endX = event.changedTouches[0]?.clientX ?? touchStartX;
+      const delta = endX - touchStartX;
+      if (Math.abs(delta) > SWIPE_THRESHOLD) {
+        renderGallery(galleryIndex + (delta < 0 ? 1 : -1), true);
+      }
+      touchStartX = null;
+    },
+    { passive: true },
+  );
+}
+
+// --- initStoryGallery (story-detail mosaic lightbox) ------------------------
+
+/**
+ * Wire a native `<dialog>` lightbox for the story-detail mosaic, reusing the
+ * same single-dialog invariant, focus-return, keyboard + swipe navigation, and
+ * `body.dialog-open` contract as `initLightbox` — but driven by generic
+ * `[data-gallery-item]` triggers so it is decoupled from the portfolio grid.
+ *
+ * DOM contract — `stories/[slug].astro` renders:
+ *  - triggers:  `[data-gallery-item]` elements (the mosaic tiles), each wrapping
+ *               one `<img>` and optionally carrying `data-caption`.
+ *  - dialog:    `#st-gallery-dialog` (native `<dialog class="gallery-dialog">`).
+ *  - stage img: `#st-gallery-image`.
+ *  - caption:   `#st-gallery-caption` (figcaption) — OPTIONAL.
+ *  - count:     `#st-gallery-count` (rendered `NN / NN`).
+ *  - prev btn:  `[data-st-gallery-prev]`.
+ *  - next btn:  `[data-st-gallery-next]`.
+ *
+ * Mirrors the simplified portfolio popup: a static collection eyebrow + a
+ * per-image caption, no per-image title line. Safe no-op when the dialog or
+ * triggers are absent.
+ */
+export function initStoryGallery(): void {
+  const triggers = $$<HTMLElement>('[data-gallery-item]');
+  if (!triggers.length) return;
+
+  const dialog = document.querySelector<HTMLDialogElement>('#st-gallery-dialog');
+  const image = document.querySelector<HTMLImageElement>('#st-gallery-image');
+  const captionEl = document.querySelector<HTMLElement>('#st-gallery-caption');
+  const countEl = document.querySelector<HTMLElement>('#st-gallery-count');
+  // Dialog + stage image + count are required; caption is optional.
+  if (!dialog || !image || !countEl) return;
+
+  // Snapshot the tiles in DOM order so gallery order equals mosaic order.
+  const GALLERY = triggers.map((tile) => {
+    const img = tile.querySelector<HTMLImageElement>('img');
+    return {
+      image: img?.getAttribute('src') ?? '',
+      alt: img?.alt ?? '',
+      caption: tile.dataset.caption ?? '',
+    };
+  });
+  const len = GALLERY.length;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let galleryIndex = 0;
+  let galleryTween: gsap.core.Tween | undefined;
+  let lastTrigger: HTMLElement | null = null;
+  const pad = (n: number): string => String(n).padStart(2, '0');
+
+  function renderGallery(index: number, animate = false): void {
+    galleryIndex = wrapIndex(index, len);
+    const entry = GALLERY[galleryIndex];
+    galleryTween?.kill();
+    const stage = image as HTMLImageElement;
+    try {
+      gsap?.set(stage, { opacity: 1, scale: 1 });
+    } catch {
+      /* gsap missing: static image still renders. */
+    }
+    stage.src = entry.image;
+    stage.alt = entry.alt;
+    if (captionEl) captionEl.textContent = entry.caption;
+    (countEl as HTMLElement).textContent = `${pad(galleryIndex + 1)} / ${pad(len)}`;
+    if (animate && !reducedMotion.matches) {
+      try {
+        galleryTween = gsap.fromTo(
+          stage,
+          { opacity: 0.25, scale: 0.995 },
+          { opacity: 1, scale: 1, duration: 0.6, ease: 'power1.out' },
+        );
+      } catch {
+        /* no-op: animation is a progressive enhancement. */
+      }
+    }
+  }
+
+  function openGallery(trigger: HTMLElement): void {
+    if (dialog!.open) return;
+    // Single open dialog at a time: close any other open dialog first.
+    const active = document.querySelector<HTMLDialogElement>('dialog[open]');
+    if (active && active !== dialog) active.close();
+    lastTrigger = trigger;
+    dialog!.showModal();
+    document.body.classList.add('dialog-open');
+  }
+
+  triggers.forEach((trigger, index) => {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      renderGallery(index);
+      openGallery(trigger);
+    });
+  });
+
+  dialog.addEventListener('close', () => {
+    if (!document.querySelector('dialog[open]')) {
+      document.body.classList.remove('dialog-open');
+    }
+    if (lastTrigger?.isConnected) {
+      lastTrigger.focus({ preventScroll: true });
+    }
+  });
+
+  document
+    .querySelector<HTMLElement>('[data-st-gallery-prev]')
+    ?.addEventListener('click', () => renderGallery(galleryIndex - 1, true));
+  document
+    .querySelector<HTMLElement>('[data-st-gallery-next]')
+    ?.addEventListener('click', () => renderGallery(galleryIndex + 1, true));
+
+  dialog.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault();
+      renderGallery(galleryIndex + (event.key === 'ArrowRight' ? 1 : -1), true);
     }
   });
 

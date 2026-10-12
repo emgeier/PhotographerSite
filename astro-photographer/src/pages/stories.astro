@@ -3,16 +3,21 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
+import '../styles/codex-content.css';
 import { getCollection } from 'astro:content';
 
 const entries = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order);
 const muses = entries.map(e => ({
   src: e.data.cardImage, slug: e.id, n: e.data.number, name: e.data.name, tag: e.data.tagline,
 }));
+// Featured muse: the entry marked `featured`, else the first ordered entry.
+// `featured` is `undefined` only when the collection is empty — every
+// derivation below is guarded so a zero-entry collection never throws at build.
 const featured = entries.find(e => e.data.featured) ?? entries[0];
-const featuredPara = featured.data.featuredPara
-  ?? 'Heather came to this experience at a moment of change — ready to see herself with fresh eyes.';
+const fallbackPara = 'Heather came to this experience at a moment of change — ready to see herself with fresh eyes.';
+const featuredPara = featured?.data.featuredPara ?? fallbackPara;
 // All muses as featured-rotator slides (client script cycles through these).
 const featuredList = entries.map(e => ({
   slug: e.id,
@@ -22,109 +27,166 @@ const featuredList = entries.map(e => ({
   image: e.data.cardImage,
   para: e.data.featuredPara ?? featuredPara,
 }));
-const featuredIndex = Math.max(0, entries.findIndex(e => e.id === featured.id));
+const featuredIndex = featured
+  ? Math.max(0, entries.findIndex(e => e.id === featured.id))
+  : 0;
 ---
 <Base title="Muse Stories — The Glam Muse Series" description="Portraits are only part of the story. Meet the women behind them.">
-  <main>
-    <section class="ms-hero">
-      <Header/>
-      <div class="wrap ms-hero-copy">
-        <p class="eyebrow ms-hero-eyebrow">THE GLAM MUSE SERIES</p>
-        <h1 class="display ms-hero-title" data-hero-line>MUSE<br/>STORIES</h1>
-        <p class="eyebrow ms-hero-sub">EVERY WOMAN.<br/>A STORY WORTH TELLING.</p>
-        <span class="ms-rule"></span>
-        <p class="ms-hero-lede">Portraits are only part of the story.<br/>Meet the women behind them.</p>
-      </div>
-      <img class="ms-hero-photo" src="/images/ms-hero.webp" alt="Placeholder for muse stories hero portrait" />
-    </section>
+  <main id="main-content">
+    <!-- HERO: Codex .hero masthead (absolute Header, hero__image + veil,
+         hero__content), parallax on the hero image, line-mask title lines.
+         Mirrors experience.astro / portfolio.astro so the pages stay consistent. -->
+<section class="ms-hero">
+            <header class="site-header">
+                <a class="brand" href="/" aria-label="The Glam Muse Series, home">
+                    <span class="brand__top">THE</span>
+                    <span class="brand__name">GLAM MUSE</span>
+                    <span class="brand__bottom">SERIES</span>
+                </a>
+                <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation">
+                    <span></span>
+                    <span></span>
+                </button>
+                <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
+                    <a href="/">Home</a>
+                    <a href="/portfolio">Portfolio</a>
+                    <a href="/experience">The experience</a>
+                    <a href="/stories" aria-current="page">Muse stories</a>
+                    <a class="nav-contact" href="/contact">Contact</a>
+                </nav>
+            </header>
+            <div class="wrap ms-hero-copy">
+                <h1 class="display ms-hero-title" data-hero-line>
+                    MUSE
+                    <br>
+                    STORIES
+                </h1>
+                <p class="eyebrow ms-hero-sub">
+                    EVERY WOMAN.
+                    <br>
+                    A STORY WORTH TELLING.
+                </p>
+                <span class="ms-rule"></span>
+                <p class="ms-hero-lede">
+                    Portraits are only part of the story.
+                    <br>
+                    
+                </p>
+            </div>
+            <img class="ms-hero-photo" src="/images/ms-hero.webp" alt="Placeholder for muse stories hero portrait">
+        </section>
 
-    <section class="ms-featured">
-      <div class="wrap ms-featured-row" data-featured-rotator>
-        <img class="ms-featured-photo" id="ms-featured-photo" src={featured.data.cardImage} alt={`Portrait of ${featured.data.name}`} />
-        <div class="ms-featured-copy" data-reveal>
-          <p class="eyebrow ms-featured-label" id="ms-featured-label">{featured.data.number}</p>
-          <h2 class="display ms-featured-name" id="ms-featured-name">{featured.data.name}</h2>
-          <p class="ms-featured-tag" id="ms-featured-tag">{featured.data.tagline}</p>
-          <p class="ms-featured-para" id="ms-featured-para">{featuredPara}</p>
-          <a class="ms-button" id="ms-featured-link" href={`/stories/${featured.id}`}>READ HER STORY <span aria-hidden="true">&rarr;</span></a>
+    <!-- FEATURED MUSE: editorial two-column band. The rotator script at the
+         bottom mutates the ids/attrs below (#ms-featured-photo, -label, -name,
+         -tag, -para, -link, -current, [data-featured-prev/next]). The featured
+         portrait stays a passthrough <img> (string cardImage) so the script can
+         set .src at runtime — it is intentionally NOT routed through Pic and
+         NOT given data-parallax. Guarded so an empty collection never throws. -->
+    {featured && (
+      <section class="ms2-featured" id="stories-featured" aria-labelledby="ms-featured-name">
+        <div class="content-container ms2-featured__row" data-featured-rotator>
+          <div class="ms2-featured__photo image-frame">
+            <img id="ms-featured-photo" src={featured.data.cardImage} alt={`Portrait of ${featured.data.name}`} />
+          </div>
+          <div class="ms2-featured__copy" data-reveal>
+            <h2 class="ms2-featured__name display-title" id="ms-featured-name">{featured.data.name}</h2>
+            <p class="ms2-featured__tag" id="ms-featured-tag">{featured.data.tagline}</p>
+            <p class="ms2-featured__para" id="ms-featured-para">{featuredPara}</p>
+            <a class="button ms2-featured__link" id="ms-featured-link" href={`/stories/${featured.id}`}>Read her story <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="ms2-featured__nav" aria-hidden="true">
+            <span class="ms2-featured__count"><span id="ms-featured-current">{String(featuredIndex + 1).padStart(2, "0")}</span><br />/<br />{String(featuredList.length).padStart(2, "0")}</span>
+          </div>
         </div>
-        <div class="ms-featured-nav">
-          <span class="ms-featured-count"><span id="ms-featured-current">{String(featuredIndex + 1).padStart(2, "0")}</span><br/>/<br/>{String(featuredList.length).padStart(2, "0")}</span>
+        <div class="content-container ms2-featured__controls">
+          <button class="ms2-arrow" type="button" data-featured-prev aria-label="Previous muse">←</button>
+          <button class="ms2-arrow" type="button" data-featured-next aria-label="Next muse">→</button>
         </div>
-      </div>
-      <div class="wrap ms-featured-controls">
-        <button class="ms-arrow" type="button" data-featured-prev aria-label="Previous muse">&larr;</button>
-        <button class="ms-arrow" type="button" data-featured-next aria-label="Next muse">&rarr;</button>
-      </div>
-      <script type="application/json" id="ms-featured-data" set:html={JSON.stringify(featuredList)}></script>
-    </section>
+        <script type="application/json" id="ms-featured-data" set:html={JSON.stringify(featuredList)}></script>
+      </section>
+    )}
 
-    <section class="ms-meet">
-      <div class="wrap">
-        <div class="ms-meet-head" data-reveal>
-          <p class="eyebrow ms-meet-eyebrow">THE WOMEN</p>
-          <h2 class="display ms-meet-title"><span class="ms-meet-dash"></span>MEET THE MUSES<span class="ms-meet-dash"></span></h2>
-          <a class="ms-meet-all" href="#">VIEW ALL STORIES <span aria-hidden="true">&rarr;</span></a>
-          <p class="eyebrow ms-meet-sub">EVERY WOMAN. A DIFFERENT STORY.</p>
+    <!-- MEET THE MUSES: centered heading + 3-up grid of story cards, each
+         linking /stories/{entry.id} in collection order. Card photos route
+         through Pic (string cardImage → passthrough <img>) and are parallaxed. -->
+    <section class="ms2-meet" aria-labelledby="ms-meet-title">
+      <div class="content-container">
+        <div class="ms2-meet__head" data-reveal>
+          <p class="eyebrow">The women</p>
+          <h2 id="ms-meet-title" class="ms2-meet__title display-title">
+            <span class="short-rule" aria-hidden="true"></span>Meet the muses<span class="short-rule" aria-hidden="true"></span>
+          </h2>
+          <p class="ms2-meet__sub">Every woman. A different story.</p>
         </div>
-        <div class="ms-grid">
+        <div class="ms2-grid">
           {muses.map(m => (
-            <article class="ms-card" data-reveal>
-              <img src={m.src} alt={`${m.name} placeholder portrait`} />
-              <p class="eyebrow ms-card-label">{m.n}</p>
-              <h3 class="display ms-card-name">{m.name}</h3>
-              <p class="ms-card-tag">{m.tag}</p>
-              <span class="ms-card-rule"></span>
-              <a class="ms-card-link" href={`/stories/${m.slug}`}>READ HER STORY <span aria-hidden="true">&rarr;</span></a>
-            </article>
+            <a class="ms2-card" href={`/stories/${m.slug}`} data-reveal>
+              <span class="ms2-card__image image-frame" data-parallax>
+                <Pic src={m.src} alt={`A portrait of ${m.name}.`} sizes="(max-width: 768px) 100vw, 33vw" />
+              </span>
+              <span class="ms2-card__name display-title">{m.name}</span>
+              <br/>
+              <span class="ms2-card__tag">{m.tag}</span>
+              <span class="short-rule" aria-hidden="true"></span>
+              <span class="ms2-card__link">Read her story <span aria-hidden="true">→</span></span>
+            </a>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="ms-look">
-      <div class="wrap ms-look-row">
-        <div class="ms-look-copy" data-reveal>
-          <h2 class="display ms-look-title">LOOK AGAIN.</h2>
-          <p class="eyebrow ms-look-sub">A FRESH PERSPECTIVE.</p>
-          <span class="ms-rule ms-rule-light"></span>
+    <!-- LOOK AGAIN. — dark tonal band with a parallaxed portrait. -->
+    <section class="ms2-look" aria-labelledby="ms-look-title">
+      <div class="content-container ms2-look__row">
+        <div class="ms2-look__copy" data-reveal>
+          <h2 id="ms-look-title" class="ms2-look__title display-title">Look again.</h2>
+          <p class="ms2-look__sub">A fresh perspective.</p>
+          <span class="short-rule" aria-hidden="true"></span>
         </div>
-        <img class="ms-look-photo" src="/images/ms-look-again.webp" alt="Placeholder portrait" />
-        <p class="ms-look-para">Every woman carries a story — shaped by where she's been, who she is now, and what she's still becoming.</p>
+        <figure class="ms2-look__photo image-frame" data-parallax>
+          <Pic src="/images/ms-look-again.webp" alt="An editorial portrait inviting a fresh perspective." sizes="(max-width: 768px) 100vw, 440px" />
+        </figure>
+        <p class="ms2-look__para">Every woman carries a story — shaped by where she's been, who she is now, and what she's still becoming.</p>
       </div>
     </section>
 
-    <section class="ms-motion">
-      <div class="wrap ms-motion-row">
-        <a class="ms-video" href="#" aria-label="Press play">
-          <img src="/images/ms-motion.webp" alt="Video thumbnail placeholder" />
-          <span class="ms-play"></span>
-          <span class="ms-video-caption">PRESS PLAY</span>
+    <!-- IN MOTION. — teaser placeholder. Poster + play affordance only (plain
+         link), NO wired video player and NO video <dialog> (Req 5.1 / 5.2). -->
+    <section class="ms2-motion" aria-labelledby="ms-motion-title">
+      <div class="content-container ms2-motion__row">
+        <a class="ms2-video" href="#stories" aria-label="Press play">
+          <Pic src="/images/ms-motion.webp" alt="A video poster frame from the muse stories." sizes="(max-width: 768px) 100vw, 66vw" />
+          <span class="ms2-play" aria-hidden="true"></span>
+          <span class="ms2-video__caption">Press play</span>
         </a>
-        <div class="ms-motion-copy" data-reveal>
-          <p class="eyebrow ms-motion-eyebrow">THE MUSES</p>
-          <h2 class="display ms-motion-title">IN MOTION.</h2>
-          <span class="ms-rule ms-rule-light ms-rule-start"></span>
-          <p class="ms-motion-para">Movement. Laughter. Quiet moments.<br/>The pieces photographs cannot always hold.</p>
-          <a class="ms-motion-link" href="#">WATCH THE STORIES <span aria-hidden="true">&rarr;</span></a>
+        
+        <div class="ms2-motion__copy" data-reveal>
+          <p class="eyebrow">The muses</p>
+          <h2 id="ms-motion-title" class="ms2-motion__title display-title">In motion.</h2>
+          <span class="short-rule" aria-hidden="true"></span>
+          <p class="ms2-motion__para">Movement. Laughter. Quiet moments.</p>
         </div>
       </div>
     </section>
 
-    <section class="ms-cta">
-      <img class="ms-cta-photo" src="/images/ms-cta.webp" alt="Placeholder portrait" />
-      <div class="wrap ms-cta-copy" data-reveal>
-        <p class="eyebrow ms-cta-eyebrow">THE GLAM MUSE SERIES</p>
-        <h2 class="display ms-cta-title">YOU'VE SEEN<br/>THEIR STORIES.</h2>
-        <p class="ms-cta-italic">Now imagine yours.</p>
-        <span class="ms-rule"></span>
-        <p class="ms-cta-sub">What could your story look like?</p>
-        <a class="ms-button" href="/contact">BOOK YOUR CONSULTATION <span aria-hidden="true">&rarr;</span></a>
+    <!-- CLOSING CTA: Codex closing treatment with a .button link to /contact. -->
+    <section class="ms2-cta" id="contact" aria-labelledby="ms-cta-title">
+      <div class="ms2-cta__image" data-parallax>
+        <Pic src="/images/ms-cta.webp" alt="A soft editorial portrait inviting you to imagine your own story." sizes="100vw" />
+      </div>
+      <div class="ms2-cta__veil" aria-hidden="true"></div>
+      <div class="content-container ms2-cta__content" data-reveal>
+        <p class="eyebrow">The Glam Muse Series</p>
+        <h2 id="ms-cta-title" class="ms2-cta__title display-title">You've seen<br />their stories.</h2>
+        <p class="ms2-cta__italic">Now imagine yours.</p>
+        <span class="short-rule" aria-hidden="true"></span>
+        <p class="ms2-cta__sub">What could your story look like?</p>
+        <a class="button" href="/contact">Book your consultation</a>
       </div>
     </section>
   </main>
-  <Footer/>
-  <SiteMotion/>
+  <Footer />
+  <SiteMotion />
   <script>
     // Featured-muse rotator: the prev/next arrows cycle the featured block
     // through all muses (data embedded in #ms-featured-data). Progressive
@@ -148,7 +210,6 @@ const featuredIndex = Math.max(0, entries.findIndex(e => e.id === featured.id));
         function render() {
           const s = slides[i];
           if (photo) { photo.src = s.image; photo.alt = "Portrait of " + s.name; }
-          if (label) label.textContent = s.number;
           if (name) name.textContent = s.name;
           if (tag) tag.textContent = s.tagline;
           if (para) para.textContent = s.para;

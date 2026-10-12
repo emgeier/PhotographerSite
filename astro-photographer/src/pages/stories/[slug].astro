@@ -2,7 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
+import { getCollection, getEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const entries = await getCollection('muses');
@@ -13,27 +17,79 @@ const { muse } = Astro.props;
 const first = muse.name.charAt(0) + muse.name.slice(1).toLowerCase();
 const tagUpper = muse.tagline.toUpperCase();
 
-const gallery = muse.gallery;
+// Normalize gallery to { image, caption? } (the schema already does this, but
+// guard here so a raw string entry never breaks rendering).
+const gallery = (muse.gallery ?? []).map((g) =>
+  typeof g === 'string' ? { image: g, caption: undefined } : g,
+);
+// Story-detail hero uses the SAME portrait as the Stories page (the collection
+// cardImage), so the detail hero matches the grid/featured imagery.
+const heroImage = muse.cardImage;
+
+// IN MOTION. — poster image + optional video link, both CMS-editable per muse.
+// `motionImage` defaults to the placeholder /images/st-motion.svg in the schema;
+// treat that (or any unset .svg placeholder) as "no custom still" and show the
+// shared /images/ms-motion.webp teaser instead. An author-set raster wins.
+const MOTION_PLACEHOLDER = '/images/ms-motion.webp';
+const motionPoster =
+  muse.motionImage && !muse.motionImage.endsWith('/images/st-motion.svg')
+    ? muse.motionImage
+    : MOTION_PLACEHOLDER;
+// `videoUrl` is optional (an https://<cloudfront>/media/*.mp4 link). When set,
+// the poster links out to it in a new tab; when absent it stays a placeholder.
+const motionVideoUrl = muse.videoUrl ?? '';
+
+// Shared editorial caption pool, editable in the CMS via the `settings`
+// collection (src/content/settings/gallery.json). Falls back to a built-in
+// pool if the settings entry is absent or empty.
+const FALLBACK_CAPTIONS = [
+  'A quiet gaze. An entirely personal kind of presence.',
+  'The simple beauty of feeling entirely yourself.',
+  'Room for stillness. Space to be seen.',
+  'A pause. A breath. A fresh perspective.',
+  'Softness has a strength all its own.',
+  'The familiar, seen in a new way.',
+  'The moments between the poses.',
+  'Light, movement, and the woman she already is.',
+  'Not transformed. Revealed.',
+  'Her story, in a single frame.',
+];
+const settings = await getEntry('settings', 'gallery');
+const captionPool =
+  settings?.data.galleryCaptions && settings.data.galleryCaptions.length > 0
+    ? settings.data.galleryCaptions
+    : FALLBACK_CAPTIONS;
+
+// Per-photo caption: the bespoke caption if the author set one, else the shared
+// pool rotated by index.
+const captionFor = (i: number): string =>
+  gallery[i]?.caption ?? captionPool[i % captionPool.length];
 ---
-<Base title={`${first} — Muse Stories — The Glam Muse Series`} description={`${muse.number}: ${muse.tagline} ${first}'s story in The Glam Muse Series.`}>
-  <main>
-    <section class="st-hero">
+<Base title={`${first} — Muse Stories — The Glam Muse Series`} description={`${muse.tagline} ${first}'s story in The Glam Muse Series.`}>
+  <main id="main-content">
+    <!-- HERO: Codex .hero masthead treatment (absolute Header, hero__image +
+         veil, hero__content). Styled by the shared `.st2-hero` dark masthead in
+         codex-content.css so the story-detail header matches the Experience
+         page (fade-to-black, light nav). Movement via SiteMotion. -->
+    <section class="st2-hero hero" aria-labelledby="st-hero-name">
       <Header/>
-      <div class="st-hero-row">
-        <div class="st-hero-copy">
-          <p class="eyebrow st-hero-eyebrow">{muse.number}</p>
-          <h1 class="display st-hero-name">{muse.name}</h1>
-          <p class="st-hero-tag">{tagUpper}</p>
-          <span class="st-rule"></span>
-          <p class="st-hero-para">{first} {muse.heroPara}</p>
-          <a class="st-hero-link" href="#st-story">HER STORY <span aria-hidden="true">&darr;</span></a>
-        </div>
-        <img class="st-hero-photo" src={muse.heroImage} alt={`${first} hero portrait placeholder`} />
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic src={heroImage} alt={`${first} — ${muse.tagline}`} priority sizes="100vw" />
+      </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <h1 id="st-hero-name" class="hero__title st2-hero__name display-title">
+          <span class="line-mask"><span data-hero-line>{muse.name}</span></span>
+        </h1>
+        <p class="st2-hero__tag" data-hero-item>{tagUpper}</p>
+        <span class="short-rule" aria-hidden="true" data-hero-item></span>
+        <p class="st2-hero__para" data-hero-item>{first} {muse.heroPara}</p>
+        <a class="text-link st2-hero__link" href="#st-story" data-hero-item>Her story <span aria-hidden="true">↓</span></a>
       </div>
     </section>
 
     <section class="st-intro" id="st-story">
-      <div class="wrap st-intro-row">
+      <div class="wrap st-intro-row" data-reveal>
         <div class="st-intro-head">
           <h2 class="display st-intro-title">BEFORE THE CAMERA,<br/>THERE WAS HER STORY.</h2>
           <span class="st-rule st-rule-wide"></span>
@@ -44,8 +100,17 @@ const gallery = muse.gallery;
 
     <section class="st-mosaic">
       <div class="wrap st-mosaic-grid">
-        {gallery.map((src, i) => (
-          <figure class={`st-tile st-tile-${i+1}`}><img src={src} alt={`${first} gallery portrait ${i+1}`} /></figure>
+        {gallery.map((photo, i) => (
+          <button
+            type="button"
+            class={`st-tile st-tile-${i+1}`}
+            data-gallery-item
+            data-caption={captionFor(i)}
+            data-reveal
+            aria-label={`View ${first} portrait ${i+1} of ${gallery.length}`}
+          >
+            <img src={photo.image} alt={`${first} gallery portrait ${i+1}`} />
+          </button>
         ))}
         <div class="st-caption st-caption-a">
           <p class="display st-caption-text">A DIFFERENT<br/>PERSPECTIVE.</p>
@@ -59,7 +124,7 @@ const gallery = muse.gallery;
     </section>
 
     <section class="st-transform">
-      <div class="wrap st-transform-row">
+      <div class="wrap st-transform-row" data-reveal>
         <div class="st-transform-copy">
           <p class="eyebrow st-transform-eyebrow">THE TRANSFORMATION</p>
           <h2 class="display st-transform-title">SHE WAS<br/>ALWAYS THERE.</h2>
@@ -74,23 +139,36 @@ const gallery = muse.gallery;
       </div>
     </section>
 
-    <section class="st-motion">
-      <img class="st-motion-photo" src={muse.motionImage} alt={`${first} short film still placeholder`} />
-      <div class="wrap st-motion-row">
-        <div class="st-motion-copy">
-          <h2 class="display st-motion-title">{muse.name},<br/>IN MOTION.</h2>
-          <p class="eyebrow st-motion-sub">A SHORT FILM</p>
-          <span class="st-rule st-rule-light"></span>
+    <!-- IN MOTION. — matches the Stories page .ms2-motion teaser (size + image).
+         Poster image + optional video link are CMS-editable per muse
+         (`motionImage` + `videoUrl`). With a videoUrl the poster links out to
+         the film; without one it stays a non-navigating placeholder. -->
+    <section class="ms2-motion" aria-labelledby="st-motion-title">
+      <div class="content-container ms2-motion__row">
+        {motionVideoUrl ? (
+          <a class="ms2-video" href={motionVideoUrl} target="_blank" rel="noopener noreferrer" aria-label={`Watch ${first}'s short film`}>
+            <Pic src={motionPoster} alt={`${first} short film poster frame.`} sizes="(max-width: 768px) 100vw, 66vw" />
+            <span class="ms2-play" aria-hidden="true"></span>
+            <span class="ms2-video__caption">Press play</span>
+          </a>
+        ) : (
+          <span class="ms2-video" role="img" aria-label={`${first} short film poster — coming soon`}>
+            <Pic src={motionPoster} alt={`${first} short film poster frame.`} sizes="(max-width: 768px) 100vw, 66vw" />
+            <span class="ms2-play" aria-hidden="true"></span>
+            <span class="ms2-video__caption">Coming soon</span>
+          </span>
+        )}
+        <div class="ms2-motion__copy" data-reveal>
+          <p class="eyebrow">A short film</p>
+          <h2 id="st-motion-title" class="ms2-motion__title display-title">{muse.name}, in motion.</h2>
+          <span class="short-rule" aria-hidden="true"></span>
+          <p class="ms2-motion__para">Movement. Laughter. Quiet moments.</p>
         </div>
-        <a class="st-video" href="#" aria-label="Press play">
-          <span class="st-play"></span>
-          <span class="st-video-caption">PRESS PLAY</span>
-        </a>
       </div>
     </section>
 
     <section class="st-seen">
-      <div class="wrap st-seen-copy">
+      <div class="wrap st-seen-copy" data-reveal>
         <h2 class="display st-seen-title">You&rsquo;ve Seen Her Story.</h2>
         <p class="st-seen-italic">Now imagine yours.</p>
         <span class="st-rule st-rule-center"></span>
@@ -98,19 +176,49 @@ const gallery = muse.gallery;
     </section>
 
     <section class="st-cta">
-      <div class="wrap st-cta-row">
+      <div class="wrap st-cta-row" data-reveal>
         <div class="st-cta-copy">
-          <p class="eyebrow st-cta-eyebrow">THE GLAM MUSE SERIES</p>
           <h2 class="display st-cta-title">WHAT COULD<br/>YOUR STORY LOOK LIKE?</h2>
           <span class="st-rule"></span>
-          <p class="st-cta-sub">Every Muse begins with a conversation.</p>
+          <p class="eyebrow st-cta-eyebrow">Every Muse Story begins with a conversation.</p>
         </div>
         <div class="st-cta-action">
-          <p class="st-cta-ask">ARE YOU THE NEXT MUSE?</p>
           <a class="st-cta-button" href="/contact">BOOK YOUR CONSULTATION <span aria-hidden="true">&rarr;</span></a>
         </div>
       </div>
     </section>
   </main>
   <Footer/>
+
+  <!-- Mosaic lightbox — same style as the portfolio popup (collection eyebrow +
+       caption, no per-image title). DOM contract initStoryGallery() requires. -->
+  <dialog class="dialog gallery-dialog" id="st-gallery-dialog" aria-labelledby="st-gallery-label">
+    <form method="dialog">
+      <button class="dialog-close dialog-close--light" type="submit" aria-label="Close portrait viewer">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+    <div class="gallery-dialog__heading">
+      <p class="eyebrow" id="st-gallery-label">{first}</p>
+    </div>
+    <div class="gallery-stage">
+      <button class="gallery-arrow" type="button" data-st-gallery-prev aria-label="Previous portrait">
+        <span aria-hidden="true">←</span>
+      </button>
+      <figure>
+        <img id="st-gallery-image" class="gallery-stage__image" src={gallery[0]?.image} alt={`${first} portrait`} />
+        <figcaption id="st-gallery-caption">{captionFor(0)}</figcaption>
+      </figure>
+      <button class="gallery-arrow" type="button" data-st-gallery-next aria-label="Next portrait">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+    <p id="st-gallery-count" class="gallery-count" aria-live="polite">01 / {String(gallery.length).padStart(2, '0')}</p>
+  </dialog>
+
+  <SiteMotion/>
+  <script>
+    import { initStoryGallery } from '../../scripts/portfolio.ts';
+    initStoryGallery();
+  </script>
 </Base>

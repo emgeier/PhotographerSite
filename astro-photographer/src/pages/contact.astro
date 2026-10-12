@@ -2,7 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
+import '../styles/codex-content.css';
 
 const steps = [
   { n:'01', t:'YOUR INQUIRY', p:'Send a few details about yourself and what brought you here.' },
@@ -12,33 +15,38 @@ const steps = [
 ---
 <Base title="Contact — The Glam Muse Series" description="Tell me a little about yourself and what brought you here. This is simply the beginning of the conversation.">
   <main>
-    <section class="ct-hero">
+    <!-- HERO: Codex .hero masthead treatment (absolute Header, hero__image +
+         veil, hero__content) — the shared LIGHT masthead like Home/Portfolio.
+         Styled by `.ct2-hero` in codex-content.css. Movement via SiteMotion. -->
+    <section class="ct2-hero hero" aria-labelledby="ct-hero-title">
       <Header/>
-      <div class="wrap ct-hero-copy">
-        <p class="eyebrow">CONTACT</p>
-        <h1 class="display ct-hero-title">Start the<br/>Conversation.</h1>
-        <span class="rule ct-hero-rule"></span>
-        <p class="ct-hero-lede">You don’t need to have everything figured out. Tell me a little about yourself, what brought you here, and what you would love to experience.</p>
-        <p class="eyebrow ct-hero-sub">THIS IS SIMPLY THE BEGINNING<br/>OF THE CONVERSATION.</p>
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic src="/images/ct-hero.webp" alt="A softly lit editorial portrait inviting you to start the conversation." priority sizes="100vw" />
       </div>
-      <img class="ct-hero-photo" src="/images/ct-hero.webp" alt="Placeholder for contact hero portrait" />
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <p class="eyebrow" data-hero-item>Begin here</p>
+        <h1 id="ct-hero-title" class="hero__title ct2-hero__title display-title">
+          <span class="line-mask"><span data-hero-line>Start the</span></span>
+          <span class="line-mask"><span data-hero-line>conversation.</span></span>
+        </h1>
+        <span class="short-rule" aria-hidden="true" data-hero-item></span>
+          <p class="eyebrow ct2-hero__sub">Tell me about you. Every woman arrives here for a different reason.</p>
+
+          <p class="ect2-hero__lede data-hero-item">Maybe you’re celebrating something.<br/> <br/>Maybe you’re rediscovering yourself. <br/><br/>Maybe you’re stepping into a new chapter.</p>
+
+          <p class="eyebrow ct2-hero__sub">There is no perfect answer.</p>
+                  <span class="short-rule" aria-hidden="true" data-hero-item></span>
+
+      </div>
     </section>
 
     <section class="ct-about">
-      <div class="wrap ct-about-row">
+      <div class="wrap ct-about-row" data-reveal>
         <figure class="ct-about-photo">
           <img src="/images/ct-about.webp" alt="Placeholder black-and-white portrait" />
           <figcaption class="eyebrow ct-about-caption">EVERY WOMAN.<br/>A STORY WORTH SEEING.</figcaption>
         </figure>
-
-        <div class="ct-about-copy">
-          <p class="eyebrow ct-about-eyebrow">BEGIN HERE</p>
-          <h2 class="display ct-about-title">Tell Me<br/>About You.</h2>
-          <span class="rule ct-about-rule"></span>
-          <p class="ct-about-para">Every woman arrives here for a different reason.</p>
-          <p class="ct-about-para">Maybe you’re celebrating something. Maybe you’re rediscovering yourself. Maybe you’re stepping into a new chapter.</p>
-          <p class="ct-about-para">There is no perfect answer. I’d just love to know what brought you here.</p>
-        </div>
 
         <form class="ct-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
           <div class="ct-form-row">
@@ -99,7 +107,7 @@ const steps = [
 
     <section class="ct-steps">
       <img class="ct-steps-photo" src="/images/ct-steps-band.webp" alt="" />
-      <div class="wrap ct-steps-inner">
+      <div class="wrap ct-steps-inner" data-reveal>
         <div class="ct-steps-head">
           <div>
             <p class="eyebrow ct-steps-eyebrow">WHAT HAPPENS NEXT</p>
@@ -120,16 +128,20 @@ const steps = [
       </div>
     </section>
 
-    <section class="ct-close">
-      <div class="wrap ct-close-copy">
-        <h2 class="display ct-close-title">You,<br/>In Full.</h2>
-        <span class="rule ct-close-rule"></span>
-        <p class="eyebrow ct-close-sub">NOT TRANSFORMED.<br/>REVEALED.</p>
+    <section class="closing" aria-labelledby="ct-close-title">
+      <div class="closing__image" data-parallax>
+        <Pic src="/images/ct-close.webp" alt="A soft closing portrait." sizes="100vw" />
       </div>
-      <img class="ct-close-photo" src="/images/ct-close.webp" alt="Placeholder for closing portrait" />
+      <div class="closing__veil" aria-hidden="true"></div>
+      <div class="container closing__content" data-reveal>
+        <h2 id="ct-close-title" class="display-title">You, <br/> complete.</h2>
+        <span class="short-rule" aria-hidden="true"></span>
+        <p class="eyebrow">Not transformed.<br />Revealed.</p>
+      </div>
     </section>
   </main>
   <Footer/>
+  <SiteMotion/>
 </Base>
 
 <script is:inline>

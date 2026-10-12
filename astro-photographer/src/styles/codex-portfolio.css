@@ -5,8 +5,9 @@
 .portfolio-page .eyebrow { font-size: 11px; letter-spacing: 3.2px; }
 
 /* Quiet, spacious opening. The model is kept below the masthead. */
-.portfolio-hero { position: relative; display: flex; align-items: center; height: clamp(550px, 44vw, 650px); min-height: 0; overflow: hidden; background: #e9e2d7; }
-.portfolio-hero__image.hero__image { inset: var(--header-h) 0 -35px; }
+/* Match the home hero's dimensions so the hero image isn't cropped. */
+.portfolio-hero { position: relative; display: flex; align-items: center; min-height: 710px; height: min(760px, 58vw); overflow: hidden; background: #e9e2d7; }
+.portfolio-hero__image.hero__image { inset: -3% 0; top: var(--header-h); }
 .portfolio-hero__image img { object-position: center top; }
 .portfolio-hero__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.26), rgba(244, 240, 232, 0.06) 42%, transparent 64%); pointer-events: none; }
 .portfolio-hero__content { position: relative; z-index: 1; padding-top: calc(var(--header-h) + 24px); padding-bottom: 35px; }
@@ -14,6 +15,11 @@
 .portfolio-hero h1 { font-size: clamp(84px, 7.7vw, 112px); line-height: 0.86; letter-spacing: -4.6px; text-transform: uppercase; }
 .portfolio-hero .line-mask { padding-bottom: 9px; margin-bottom: -9px; }
 .portfolio-hero__intro { max-width: 420px; margin-top: 24px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
+
+/* Largest screens — match the home hero height. */
+@media (min-width: 1441px) {
+  .portfolio-hero { height: 790px; }
+}
 
 /* Photography leads the collection: generous tiles, fine gutters, no chrome. */
 .portfolio-collection { padding-block: 16px; }
@@ -74,9 +80,9 @@
 .portfolio-process__step h3 { margin-bottom: 17px; font: 500 11px/1.5 var(--sans); letter-spacing: 2px; text-transform: uppercase; }
 .portfolio-process__step p { max-width: 300px; margin-inline: auto; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
 
-.portfolio-closing { position: relative; min-height: 578px; overflow: hidden; background: #e9e2d7; }
+.portfolio-closing { position: relative; min-height: 680px; overflow: hidden; background: #e9e2d7; }
 .portfolio-closing__image { position: absolute; inset: -25px 0; }
-.portfolio-closing__image img { object-position: center 19%; }
+.portfolio-closing__image img { object-position: center top; }
 .portfolio-closing__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.86), rgba(244, 240, 232, 0.53) 36%, transparent 59%); pointer-events: none; }
 .portfolio-closing__content { position: relative; padding-block: 62px; }
 .portfolio-closing__content > .eyebrow { margin-bottom: 22px; }
@@ -97,8 +103,8 @@
 .experience-video-link:hover { color: #c8b598; }
 
 @media (max-width: 1199px) and (min-width: 769px) {
-  .portfolio-hero { height: 560px; }
-  .portfolio-hero__image.hero__image { top: var(--header-h); }
+  /* Mirror the home hero's responsive height so the image stays uncropped. */
+  .portfolio-hero { min-height: 600px; height: 62vw; }
   .portfolio-hero__content { padding-top: 125px; }
   .portfolio-hero h1 { font-size: 91px; letter-spacing: -3.8px; }
   .portfolio-hero__intro { font-size: var(--body-size); }
@@ -111,7 +117,7 @@
   .portfolio-manifesto h2 { font-size: 56px; }
   .portfolio-process__step { padding-inline: 25px; }
   .portfolio-process__step p { font-size: var(--body-size); }
-  .portfolio-closing { min-height: 520px; }
+  .portfolio-closing { min-height: 620px; }
   .portfolio-closing h2 { font-size: 61px; }
   .portfolio-closing__intro { font-size: var(--body-size); }
 }

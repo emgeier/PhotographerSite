@@ -3,77 +3,119 @@ import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
+import '../styles/codex-content.css';
 
+// Content carried forward verbatim from the previous bespoke experience page.
+// Image sources stay string /images/* paths, so Pic emits passthrough <img>
+// (task 6.2 formally covers Pic routing; this keeps the build intact).
 const steps = [
-  { src:'/images/ex-process-1.webp', n:'01', t:'CONSULTATION', p:'We\u2019ll connect to learn about you\u2014your vision, your style, and what you want this experience to feel like.' },
-  { src:'/images/ex-process-2.png', n:'02', t:'SESSION', p:'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot tailored to you.' },
-  { src:'/images/ex-process-3.webp', n:'03', t:'REVEAL', p:'See your images the same day in a private reveal\u2014an unforgettable moment to celebrate you.' },
+  { src: '/images/ex-process-1.webp', n: '01', t: 'CONSULTATION', p: 'We\u2019ll connect to learn about you\u2014 your vision, your style, and what you want from this experience.' },
+  { src: '/images/ex-process-2.png', n: '02', t: 'SESSION', p: 'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot.' },
+  { src: '/images/ex-process-3.webp', n: '03', t: 'REVEAL', p: 'See your images the same day in a private reveal\u2014 a time to celebrate you.' },
 ];
 const inside = [
-  '/images/ex-inside-1.png','/images/ex-inside-2.png','/images/ex-inside-3.png','/images/ex-inside-4.png',
+  '/images/ex-inside-1.png',
+  '/images/ex-inside-2.png',
+  '/images/ex-inside-3.png',
+  '/images/ex-inside-4.png',
 ];
 ---
-<Base title="The Experience — The Glam Muse Series" description="A simple, intentional process designed to make you feel confident, comfortable, and fully yourself from start to finish.">
-  <main>
-    <section class="ex-hero">
-      <Header/>
-      <div class="wrap ex-hero-copy">
-        <p class="eyebrow"></p>
-        <h1 class="display ex-hero-title" data-hero-item>AN EXPERIENCE<br/>THAT FEELS<br/>LIKE <em class="ex-accent">YOU.</em></h1>
-        <p class="ex-hero-lede" data-hero-item>Your story, your personality, your style— brought together in portraits that reflect how you want to be seen.</p>
-        <span class="ex-rule"></span>
-        <a class="ex-step-inside" href="#ex-process">STEP INSIDE <span aria-hidden="true">&rarr;</span></a>
+<Base
+  title="The Experience — The Glam Muse Series"
+  description="A simple, intentional process designed to make you feel confident, comfortable, and fully yourself from start to finish."
+>
+  <main id="main-content">
+    <!-- HERO: Codex .hero masthead treatment (absolute Header, hero__image + veil,
+         hero__content), parallax on the hero image, line-mask title lines. -->
+    <section class="ex2-hero hero" id="experience" aria-labelledby="experience-hero-title">
+      <Header />
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic
+          src="/images/ex-hero.png"
+          alt="A softly lit editorial portrait from The Glam Muse Series experience."
+          priority
+          sizes="100vw"
+        />
       </div>
-      <img class="ex-hero-photo" src="/images/ex-hero.png" alt="Placeholder for experience hero portrait" />
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <h1 id="experience-hero-title" class="hero__title ex2-hero__title display-title">
+          <span class="line-mask"><span data-hero-line>An experience</span></span>
+          <span class="line-mask"><span data-hero-line>that feels</span></span>
+          <span class="line-mask"><span data-hero-line>like <em>you.</em></span></span>
+        </h1>
+        <p class="ex2-hero__lede" data-hero-item>Your story, your personality, your style— brought together in portraits that reflect how you want to be seen.</p>
+        <a class="text-link" href="#ex-process" data-hero-item>Step inside <span aria-hidden="true">→</span></a>
+      </div>
     </section>
 
-    <section class="ex-process" id="ex-process">
-      <div class="wrap">
-        <div class="ex-process-head-row" data-reveal>
-          <div class="ex-process-head-copy">
-            <p class="eyebrow ex-eyebrow-gold">THE PROCESS</p>
-            <h2 class="display ex-process-head">CONSULTATION.<br/>SESSION.<br/>REVEAL.</h2>
+    <!-- PROCESS: eyebrow + display-title heading row + intro, then a 3-up grid
+         of reveal cards (image, small numeral, short-rule, h3, copy). -->
+    <section class="ex2-process" id="ex-process" aria-labelledby="ex-process-title">
+      <div class="content-container">
+        <div class="ex2-process__head" data-reveal>
+          <div>
+            <p class="eyebrow">The process</p>
+            <h2 id="ex-process-title" class="display-title">Consultation.<br />Session.<br />Reveal.</h2>
           </div>
-          <p class="ex-process-intro">A simple, intentional process designed to make you feel confident, comfortable, and fully yourself from start to finish.</p>
+          <p class="ex2-process__intro">A simple, intentional process designed to make you feel confident, comfortable, and fully yourself from start to finish.</p>
         </div>
-        <div class="ex-steps">
-          {steps.map(s => (
-            <article data-reveal>
-              <img src={s.src} alt={`${s.t} step placeholder`} />
-              <b>{s.n}</b>
+        <ol class="ex2-process__steps">
+          {steps.map((s) => (
+            <li class="ex2-step" data-reveal>
+              <span class="image-frame">
+                <Pic src={s.src} alt={`${s.t} — a moment from the experience.`} sizes="(max-width: 768px) 100vw, 33vw" />
+              </span>
+              <span class="ex2-step__number" aria-hidden="true">{s.n}</span>
+              <span class="short-rule" aria-hidden="true"></span>
               <h3>{s.t}</h3>
               <p>{s.p}</p>
-            </article>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- INSIDE THE EXPERIENCE: heading row + a 4-up .image-frame grid, each
+         photo parallaxed to match Home/Portfolio content imagery. -->
+    <section class="ex2-inside" aria-labelledby="ex-inside-title">
+      <div class="content-container">
+        <div class="ex2-inside__head" data-reveal>
+          <div>
+            <p class="eyebrow">Inside the experience</p>
+            <h2 id="ex-inside-title" class="display-title">This time is yours.</h2>
+          </div>
+          <p class="ex2-inside__intro">From the moment you arrive to the final reveal, everything is considered so you can simply be present.</p>
+        </div>
+        <div class="ex2-inside__grid">
+          {inside.map((src, i) => (
+            <figure class="image-frame" data-reveal data-parallax>
+              <Pic src={src} alt={`Inside the experience, moment ${i + 1}.`} sizes="(max-width: 768px) 50vw, 25vw" />
+            </figure>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="ex-inside">
-      <div class="wrap">
-        <div class="ex-inside-head-row" data-reveal>
-          <div class="ex-inside-head-copy">
-            <p class="eyebrow ex-eyebrow-gold">INSIDE THE EXPERIENCE</p>
-            <h2 class="display ex-inside-head">THIS TIME IS YOURS.</h2>
-          </div>
-          <p class="ex-inside-intro">From the moment you arrive to the final reveal, everything is considered so you can simply be present.</p>
-        </div>
-        <div class="ex-inside-grid">
-          {inside.map((src, i) => <figure data-reveal><img src={src} alt={`Inside the experience placeholder ${i+1}`} /></figure>)}
-        </div>
+    <!-- CLOSING CTA: Codex closing treatment with a .button link to /contact. -->
+    <section class="ex2-cta" id="contact" aria-labelledby="ex-cta-title">
+      <div class="ex2-cta__image" data-parallax>
+        <Pic
+          src="/images/ex-hero.png"
+          alt="A soft, editorial portrait inviting you to begin your own experience."
+          sizes="100vw"
+        />
       </div>
-    </section>
-
-    <section class="ex-cta">
-      <div class="wrap ex-cta-copy" data-reveal>
-        <p class="eyebrow ex-eyebrow-gold">THE GLAM MUSE SERIES</p>
-        <h2 class="display ex-cta-head">LET THIS BE<br/><em class="ex-accent">YOUR MOMENT.</em></h2>
-        <span class="ex-rule ex-rule-center"></span>
-        <a class="ex-cta-button" href="/contact">BOOK YOUR CONSULTATION <span aria-hidden="true">&rarr;</span></a>
+      <div class="ex2-cta__veil" aria-hidden="true"></div>
+      <div class="content-container ex2-cta__content" data-reveal>
+        <h2 id="ex-cta-title" class="display-title">Let this be<br /><em>your moment.</em></h2>
+        <span class="short-rule" aria-hidden="true"></span>
+        <a class="button" href="/contact">Book your consultation</a>
       </div>
     </section>
   </main>
-  <Footer/>
-  <SiteMotion/>
+  <Footer />
+  <SiteMotion />
 </Base>

@@ -330,7 +330,10 @@ redeploy the site so `/admin/config.yml` on CloudFront carries the real URL:
 ```bash
 npm run build
 aws s3 sync dist/ s3://<SiteBucketName> --delete --profile muse
-aws cloudfront create-invalidation --distribution-id <DistributionId> --paths '/admin/*' --profile muse
+# Invalidate ALL paths: rebuilds change the content-hashed /_astro/*.css|js names,
+# and --delete removes the old ones. Invalidating only /admin/* leaves stale page
+# HTML cached that still links the deleted hashes -> unstyled pages until TTL.
+aws cloudfront create-invalidation --distribution-id <DistributionId> --paths '/*' --profile muse
 ```
 
 ### 12e. Test

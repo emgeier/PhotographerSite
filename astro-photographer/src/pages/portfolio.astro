@@ -252,15 +252,14 @@ const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
   <Footer />
 
   <!-- Lightbox gallery — exact DOM contract initLightbox() in portfolio.ts requires. -->
-  <dialog class="dialog gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-title">
+  <dialog class="dialog gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-heading-label">
     <form method="dialog">
       <button class="dialog-close dialog-close--light" type="submit" aria-label="Close portrait gallery">
         <span aria-hidden="true">×</span>
       </button>
     </form>
     <div class="gallery-dialog__heading">
-      <p class="eyebrow">The portrait collection</p>
-      <h2 id="gallery-title">Quiet confidence</h2>
+      <p class="eyebrow" id="gallery-heading-label">The portrait collection</p>
     </div>
     <div class="gallery-stage">
       <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous portrait">
