@@ -59,6 +59,12 @@ jobs:
           # Baked into the static output at build time. Empty is tolerated (the
           # contact form stays inert) but a real value wires up submissions.
           PUBLIC_AC_FORM_ENDPOINT: ${{ vars.PUBLIC_AC_FORM_ENDPOINT }}
+          # Adobe Typekit kit id for ivypresto-display (the serif used by all
+          # hero/display titles). Baked in at build time: without it Base.astro
+          # omits the Typekit <link>, the font falls back to Georgia, and
+          # font-weight:100 titles render heavy. Must be set as a repo Actions
+          # variable (Settings > Secrets and variables > Actions > Variables).
+          PUBLIC_ADOBE_FONTS_PROJECT: ${{ vars.PUBLIC_ADOBE_FONTS_PROJECT }}
         run: npm run build
 
       # TEMP DEBUG: prints the exact OIDC `sub` the token carries and the role
