@@ -12,7 +12,7 @@
 .portfolio-hero__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.26), rgba(244, 240, 232, 0.06) 42%, transparent 64%); pointer-events: none; }
 .portfolio-hero__content { position: relative; z-index: 1; padding-top: calc(var(--header-h) + 24px); padding-bottom: 35px; }
 .portfolio-hero__content .eyebrow { margin-bottom: 18px; }
-.portfolio-hero h1 { font-size: clamp(84px, 7.7vw, 112px); line-height: 0.86; letter-spacing: -4.6px; text-transform: uppercase; }
+.portfolio-hero h1 { font-size: clamp(84px, 7.7vw, 112px); line-height: 0.86; letter-spacing: -4.6px; }
 .portfolio-hero .line-mask { padding-bottom: 9px; margin-bottom: -9px; }
 .portfolio-hero__intro { max-width: 420px; margin-top: 24px; color: #625d53; font-size: var(--body-size); line-height: var(--body-leading); }
 

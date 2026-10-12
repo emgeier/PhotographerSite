@@ -173,8 +173,8 @@
 }
 
 /* ===== Muse Stories page ===== */
-.ms-hero{height:620px;background:var(--ivory);position:relative;overflow:hidden}
-.ms-hero-copy{position:relative;z-index:2;padding-top:calc(var(--header-h) + 24px)}
+.ms-hero{height:720px;background:var(--ivory);position:relative;overflow:hidden}
+.ms-hero-copy{position:relative;z-index:2;padding-top:calc(var(--header-h) + 150px)}
 .ms-hero-eyebrow{color:var(--ink);margin-bottom:14px}
 .ms-hero-title{font-size:6.6rem;line-height:.9;margin:0 0 26px}
 .ms-hero-sub{line-height:1.9;letter-spacing:.3em;margin:0 0 26px}

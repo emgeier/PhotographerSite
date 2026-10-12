@@ -153,7 +153,10 @@
 .ms2-card__image img { object-position: center 18%; }
 .ms2-card:hover img, .ms2-card:focus-visible img { scale: 1.045; }
 .ms2-card__label { font-size: 10px; letter-spacing: 2.5px; color: var(--champagne); }
-.ms2-card__name { margin-top: 12px; font-size: 34px; line-height: 1; letter-spacing: -1px; }
+/* The card name is a <span>, so it misses the global h1-h3 serif/weight-100
+ * rule and would fall back to the body sans. Set the serif explicitly so it
+ * matches the featured muse name font. */
+.ms2-card__name { margin-top: 12px; font-family: var(--serif); font-weight: 100; font-size: 34px; line-height: 1; letter-spacing: -1px; }
 .ms2-card__tag { margin-top: 11px; font-family: var(--serif); font-weight: 100; font-size: 17px; line-height: 1.25; }
 .ms2-card .short-rule { width: 45px; margin: 17px 0 0; background: var(--champagne); transition: width 500ms var(--ease); }
 .ms2-card:hover .short-rule { width: 70px; }
@@ -514,3 +517,36 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 @media (max-width: 960px) and (min-width: 769px) {
   .st2-hero.hero { min-height: 520px; height: 57vw; }
 }
+
+/* ============================================================= *
+ * Story-detail (stories/[slug]) legacy .st-* labels — the original design set
+ * these small uppercase labels to font-weight:700, which reads heavy/bold next
+ * to the weight-100 Codex headings. Lighten them to a normal weight for a more
+ * refined, consistent look. Scoped overrides; global.css stays untouched.
+ * ============================================================= */
+.st-transform-caps,
+.st-cta-ask,
+.st-cta-button,
+.st-transform-pair figcaption { font-weight: 400; }
+
+/* ============================================================= *
+ * Story-detail closing — the former dark .st-cta band is merged into the light,
+ * centered .st-seen section. These style the folded-in CTA copy + button on the
+ * ivory background (the old button was white-on-ink; make it ink-on-ivory).
+ * ============================================================= */
+.st-seen-cta-title { margin-top: 40px; font-size: clamp(40px, 4.4vw, 58px); line-height: 1; letter-spacing: -1px; }
+.st-seen-cta-sub { margin-top: 18px; font-size: 11px; letter-spacing: 2.4px; color: var(--champagne); }
+.st-seen-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 17px 26px;
+  border: 1px solid rgba(23, 23, 23, 0.4);
+  color: var(--ink);
+  font: 400 .57rem/1 var(--sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 250ms ease, background 250ms ease, border-color 250ms ease;
+}
+.st-seen-cta-button:hover { color: var(--ivory); background: var(--ink); border-color: var(--ink); }

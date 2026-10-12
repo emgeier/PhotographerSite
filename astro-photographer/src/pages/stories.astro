@@ -7,6 +7,7 @@ import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
 import { getCollection } from 'astro:content';
+import hero from '../assets/images/hero.webp';
 
 const entries = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order);
 const muses = entries.map(e => ({
@@ -36,26 +37,19 @@ const featuredIndex = featured
     <!-- HERO: Codex .hero masthead (absolute Header, hero__image + veil,
          hero__content), parallax on the hero image, line-mask title lines.
          Mirrors experience.astro / portfolio.astro so the pages stay consistent. -->
-<section class="ms-hero">
-            <header class="site-header">
-                <a class="brand" href="/" aria-label="The Glam Muse Series, home">
-                    <span class="brand__top">THE</span>
-                    <span class="brand__name">GLAM MUSE</span>
-                    <span class="brand__bottom">SERIES</span>
-                </a>
-                <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation">
-                    <span></span>
-                    <span></span>
-                </button>
-                <nav class="primary-nav" id="primary-nav" aria-label="Main navigation">
-                    <a href="/">Home</a>
-                    <a href="/portfolio">Portfolio</a>
-                    <a href="/experience">The experience</a>
-                    <a href="/stories" aria-current="page">Muse stories</a>
-                    <a class="nav-contact" href="/contact">Contact</a>
-                </nav>
-            </header>
-            <div class="wrap ms-hero-copy">
+      
+        <section class="ms-hero" id="portfolio" aria-labelledby="portfolio-title">
+      <Header />
+      <div class="ms-hero__image hero__image" data-hero-image data-parallax>
+        <Pic
+          src={hero}
+          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+          priority
+          sizes="100vw"
+        />
+      </div>
+      <div class="ms-hero__veil" aria-hidden="true"></div>
+<div class="wrap ms-hero-copy">
                 <h1 class="display ms-hero-title" data-hero-line>
                     MUSE
                     <br>
@@ -73,8 +67,7 @@ const featuredIndex = featured
                     
                 </p>
             </div>
-            <img class="ms-hero-photo" src="/images/ms-hero.webp" alt="Placeholder for muse stories hero portrait">
-        </section>
+    </section>
 
     <!-- FEATURED MUSE: editorial two-column band. The rotator script at the
          bottom mutates the ids/attrs below (#ms-featured-photo, -label, -name,

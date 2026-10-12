@@ -37,8 +37,7 @@ interface PortfolioCard {
 const cards: PortfolioCard[] = [
   {
     src: portrait01,
-    title: 'Quiet confidence',
-    caption: 'A quiet gaze. An entirely personal kind of presence.',
+    caption: 'Quiet confidence',
     alt: 'An editorial portrait of a blonde woman in an ivory blouse turning gently toward the camera.',
   },
   {
@@ -112,8 +111,7 @@ const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
       <div class="container portfolio-hero__content">
         <p class="eyebrow" data-hero-item>The portfolio</p>
         <h1 id="portfolio-title">
-          <span class="line-mask"><span data-hero-line>You,</span></span>
-          <span class="line-mask"><span data-hero-line>in full.</span></span>
+          <span class="line-mask"><span data-hero-line>You, in full.</span></span>
         </h1>
         <p class="portfolio-hero__intro" data-hero-item>
           A collection of women, real stories,<br class="desktop-break" /> and portraits that celebrate who<br class="desktop-break" /> they are and who they’ve become.
@@ -252,14 +250,14 @@ const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
   <Footer />
 
   <!-- Lightbox gallery — exact DOM contract initLightbox() in portfolio.ts requires. -->
-  <dialog class="dialog gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-heading-label">
+  <dialog class="dialog gallery-dialog" id="gallery-dialog" aria-labelledby="gallery-label">
     <form method="dialog">
       <button class="dialog-close dialog-close--light" type="submit" aria-label="Close portrait gallery">
         <span aria-hidden="true">×</span>
       </button>
     </form>
     <div class="gallery-dialog__heading">
-      <p class="eyebrow" id="gallery-heading-label">The portrait collection</p>
+      <p class="eyebrow" id="gallery-label">The portrait collection</p>
     </div>
     <div class="gallery-stage">
       <button class="gallery-arrow" type="button" data-gallery-prev aria-label="Previous portrait">
