@@ -66,14 +66,47 @@ const muses = defineCollection({
   }),
 });
 
-// Site settings — a single JSON entry editable in the CMS. Holds the shared
-// editorial caption pool used as the default for any gallery photo without a
-// bespoke caption. The story-detail page reads `getEntry('settings', 'gallery')`
-// and falls back to a built-in pool when the entry is absent.
+// Site settings — CMS-editable JSON singletons under src/content/settings.
+// Each page has its own entry (e.g. `experience.json`), plus the shared
+// `gallery.json` caption pool. ALL fields are optional so one permissive schema
+// validates every settings file; each page reads the fields it needs via
+// `getEntry('settings', '<name>')` and falls back to its hardcoded defaults
+// when the entry or a field is absent. Image fields are `/images/*` strings
+// (passthrough <img> through Pic), so the CMS can upload/swap them freely.
 const settings = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/settings' }),
   schema: z.object({
-    galleryCaptions: z.array(z.string()).default([]),
+    // gallery.json — shared editorial caption pool.
+    galleryCaptions: z.array(z.string()).optional(),
+
+    // experience.json — The Experience page images.
+    heroImage: z.string().optional(),
+    processImages: z.array(z.string()).optional(),
+    insideImages: z.array(z.string()).optional(),
+    ctaImage: z.string().optional(),
+
+    // contact.json — Contact page images.
+    contactHeroImage: z.string().optional(),
+    contactAboutImage: z.string().optional(),
+    contactStepsImage: z.string().optional(),
+    contactCloseImage: z.string().optional(),
+
+    // stories.json — Muse Stories listing page band images + hero.
+    lookAgainImage: z.string().optional(),
+    motionImage: z.string().optional(),
+    storiesCtaImage: z.string().optional(),
+    storiesHeroImage: z.string().optional(),
+
+    // home.json — Home page images.
+    homeHeroImage: z.string().optional(),
+    homePortraitImage: z.string().optional(),
+    homeClosingImage: z.string().optional(),
+
+    // portfolio.json — Portfolio page non-grid images.
+    portfolioHeroImage: z.string().optional(),
+    portfolioBannerImage: z.string().optional(),
+    portfolioFilmImage: z.string().optional(),
+    portfolioClosingImage: z.string().optional(),
   }),
 });
 

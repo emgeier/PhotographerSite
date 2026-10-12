@@ -9,8 +9,12 @@ backend:
   base_url: https://tbrubqn47k.execute-api.us-east-2.amazonaws.com
   auth_endpoint: /auth
 
-media_folder: public/images   # CMS-uploaded images commit here -> dist/images -> site bucket
-public_folder: /images        # referenced as /images/... (site origin, NOT the /media/* media prefix)
+# All backend paths are relative to the REPO ROOT. The Astro app lives in the
+# astro-photographer/ subdirectory, so every repo path is prefixed accordingly.
+# public_folder stays /images because that is the URL path the built site
+# serves from (not a repo path).
+media_folder: astro-photographer/public/images   # CMS-uploaded images commit here -> dist/images -> site bucket
+public_folder: /images                           # referenced as /images/... (site origin, NOT the /media/* media prefix)
 
 collections:
   # Site settings — a single JSON file. The gallery caption pool is the shared
@@ -20,7 +24,7 @@ collections:
     files:
       - name: gallery
         label: Gallery captions (shared pool)
-        file: src/content/settings/gallery.json
+        file: astro-photographer/src/content/settings/gallery.json
         fields:
           - name: galleryCaptions
             label: Editorial caption pool
@@ -28,9 +32,60 @@ collections:
             field: { name: caption, label: Caption, widget: string }
             hint: 'Default captions used for story-gallery photos that have no bespoke caption. Applied in order, rotating by photo position.'
 
+      - name: experience
+        label: 'The Experience page — images'
+        file: astro-photographer/src/content/settings/experience.json
+        fields:
+          - { name: heroImage, label: Hero image, widget: image, required: false }
+          - name: processImages
+            label: Process step images (3, in order)
+            widget: list
+            field: { name: image, label: Image, widget: image }
+            hint: 'Consultation, Session, Reveal — one image each, in order.'
+          - name: insideImages
+            label: Inside-the-experience grid images (4)
+            widget: list
+            field: { name: image, label: Image, widget: image }
+          - { name: ctaImage, label: Closing CTA background image, widget: image, required: false }
+
+      - name: contact
+        label: 'Contact page — images'
+        file: astro-photographer/src/content/settings/contact.json
+        fields:
+          - { name: contactHeroImage, label: Hero image, widget: image, required: false }
+          - { name: contactAboutImage, label: 'About (black-and-white portrait)', widget: image, required: false }
+          - { name: contactStepsImage, label: 'Steps band image', widget: image, required: false }
+          - { name: contactCloseImage, label: Closing image, widget: image, required: false }
+
+      - name: stories
+        label: 'Muse Stories page — images'
+        file: astro-photographer/src/content/settings/stories.json
+        fields:
+          - { name: storiesHeroImage, label: Hero image, widget: image, required: false }
+          - { name: lookAgainImage, label: '“Look again” band image', widget: image, required: false }
+          - { name: motionImage, label: '“In motion” poster image', widget: image, required: false }
+          - { name: storiesCtaImage, label: Closing CTA image, widget: image, required: false }
+
+      - name: home
+        label: 'Home page — images'
+        file: astro-photographer/src/content/settings/home.json
+        fields:
+          - { name: homeHeroImage, label: Hero image, widget: image, required: false }
+          - { name: homePortraitImage, label: '“Look again” portrait', widget: image, required: false }
+          - { name: homeClosingImage, label: Closing image, widget: image, required: false }
+
+      - name: portfolio
+        label: 'Portfolio page — images'
+        file: astro-photographer/src/content/settings/portfolio.json
+        fields:
+          - { name: portfolioHeroImage, label: Hero image, widget: image, required: false }
+          - { name: portfolioBannerImage, label: Manifesto banner image, widget: image, required: false }
+          - { name: portfolioFilmImage, label: Experience film still, widget: image, required: false }
+          - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
+
   - name: muses
     label: Muses
-    folder: src/content/muses
+    folder: astro-photographer/src/content/muses
     create: true
     slug: '{{slug}}'              # filename-based: the entry's own slug == entry.id
     fields:

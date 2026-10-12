@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 // Codex home styles (shared Codex primitives + home sections). global.css is
 // imported by Base.astro; this adds the Codex-aliased home look on top.
 import '../styles/codex-base.css';
@@ -12,11 +12,13 @@ import '../styles/codex-base.css';
 // Stories teaser: first 3 muses by `order`, each card links to /stories/{id}.
 const muses = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
 
-// Fixed_Media home rasters routed through Pic (astro:assets -> AVIF/WebP).
-// Stable source filenames; no bare <img src=".webp">.
-import hero from '../assets/images/hero.webp';
-import portrait from '../assets/images/portrait.webp';
-import closing from '../assets/images/closing.webp';
+// Home images are CMS-editable via settings/home.json; each falls back to its
+// own /images/* default. These are string paths (passthrough <img>), so the
+// CMS can swap them per page — the heroes are no longer a shared placeholder.
+const home = await getEntry('settings', 'home');
+const hero = home?.data.homeHeroImage ?? '/images/home-hero.webp';
+const portrait = home?.data.homePortraitImage ?? '/images/home-portrait.webp';
+const closing = home?.data.homeClosingImage ?? '/images/home-closing.webp';
 ---
 <Base>
   <main id="main-content">

@@ -6,8 +6,15 @@ import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
-import { getCollection } from 'astro:content';
-import hero from '../assets/images/hero.webp';
+import { getCollection, getEntry } from 'astro:content';
+
+// Hero + band images (look-again / in-motion / closing CTA) are CMS-editable
+// via settings/stories.json; each falls back to its own /images/* default.
+const st = await getEntry('settings', 'stories');
+const hero = st?.data.storiesHeroImage ?? '/images/stories-hero.webp';
+const lookAgainImage = st?.data.lookAgainImage ?? '/images/ms-look-again.webp';
+const motionImage = st?.data.motionImage ?? '/images/ms-motion.webp';
+const storiesCtaImage = st?.data.storiesCtaImage ?? '/images/ms-cta.webp';
 
 const entries = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order);
 const muses = entries.map(e => ({
@@ -137,7 +144,7 @@ const featuredIndex = featured
           <span class="short-rule" aria-hidden="true"></span>
         </div>
         <figure class="ms2-look__photo image-frame" data-parallax>
-          <Pic src="/images/ms-look-again.webp" alt="An editorial portrait inviting a fresh perspective." sizes="(max-width: 768px) 100vw, 440px" />
+          <Pic src={lookAgainImage} alt="An editorial portrait inviting a fresh perspective." sizes="(max-width: 768px) 100vw, 440px" />
         </figure>
         <p class="ms2-look__para">Every woman carries a story — shaped by where she's been, who she is now, and what she's still becoming.</p>
       </div>
@@ -148,7 +155,7 @@ const featuredIndex = featured
     <section class="ms2-motion" aria-labelledby="ms-motion-title">
       <div class="content-container ms2-motion__row">
         <a class="ms2-video" href="#stories" aria-label="Press play">
-          <Pic src="/images/ms-motion.webp" alt="A video poster frame from the muse stories." sizes="(max-width: 768px) 100vw, 66vw" />
+          <Pic src={motionImage} alt="A video poster frame from the muse stories." sizes="(max-width: 768px) 100vw, 66vw" />
           <span class="ms2-play" aria-hidden="true"></span>
           <span class="ms2-video__caption">Press play</span>
         </a>
@@ -165,7 +172,7 @@ const featuredIndex = featured
     <!-- CLOSING CTA: Codex closing treatment with a .button link to /contact. -->
     <section class="ms2-cta" id="contact" aria-labelledby="ms-cta-title">
       <div class="ms2-cta__image" data-parallax>
-        <Pic src="/images/ms-cta.webp" alt="A soft editorial portrait inviting you to imagine your own story." sizes="100vw" />
+        <Pic src={storiesCtaImage} alt="A soft editorial portrait inviting you to imagine your own story." sizes="100vw" />
       </div>
       <div class="ms2-cta__veil" aria-hidden="true"></div>
       <div class="content-container ms2-cta__content" data-reveal>

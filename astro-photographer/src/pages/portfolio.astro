@@ -7,12 +7,18 @@ import Pic from '../components/Pic.astro';
 import '../styles/codex-base.css';
 import '../styles/codex-portfolio.css';
 import type { ImageMetadata } from 'astro';
+import { getEntry } from 'astro:content';
 
-// Fixed-media rasters (page-local, not CMS). Stable source filenames; astro:assets
-// emits content-hashed <picture> output via Pic.
-import hero from '../assets/images/hero.webp';
-import banner from '../assets/images/portfolio/banner.webp';
-import filmPortrait from '../assets/images/story-portrait.webp';
+// Portfolio hero / banner / film-still / closing images are CMS-editable via
+// settings/portfolio.json (string paths → passthrough <img>). The 9 grid
+// portraits below stay optimized src/assets imports (<picture>).
+const pf = await getEntry('settings', 'portfolio');
+const hero = pf?.data.portfolioHeroImage ?? '/images/portfolio-hero.webp';
+const banner = pf?.data.portfolioBannerImage ?? '/images/portfolio-banner.webp';
+const filmPortrait = pf?.data.portfolioFilmImage ?? '/images/portfolio-film.webp';
+const closingImage = pf?.data.portfolioClosingImage ?? '/images/portfolio-closing.webp';
+
+// Grid portraits — optimized astro:assets imports (content-hashed <picture>).
 import portrait01 from '../assets/images/portfolio/portrait-01.webp';
 import portrait02 from '../assets/images/portfolio/portrait-02.webp';
 import portrait03 from '../assets/images/portfolio/portrait-03.webp';
@@ -230,7 +236,7 @@ const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
     <section class="portfolio-closing" id="contact" aria-labelledby="portfolio-closing-title">
       <div class="portfolio-closing__image" data-parallax>
         <Pic
-          src={hero}
+          src={closingImage}
           alt="A softly lit brunette woman in an ivory dress looks toward the camera."
           sizes="100vw"
         />

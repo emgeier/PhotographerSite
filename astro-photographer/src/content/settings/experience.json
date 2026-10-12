@@ -1,0 +1,15 @@
+{
+  "heroImage": "/images/ex-hero.png",
+  "processImages": [
+    "/images/ex-process-1.webp",
+    "/images/ex-process-2.png",
+    "/images/ex-process-3.webp"
+  ],
+  "insideImages": [
+    "/images/ex-inside-1.png",
+    "/images/ex-inside-2.png",
+    "/images/ex-inside-3.png",
+    "/images/ex-inside-4.png"
+  ],
+  "ctaImage": "/images/ex-hero.png"
+}

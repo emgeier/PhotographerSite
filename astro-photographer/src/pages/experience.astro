@@ -4,23 +4,31 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
 
-// Content carried forward verbatim from the previous bespoke experience page.
-// Image sources stay string /images/* paths, so Pic emits passthrough <img>
-// (task 6.2 formally covers Pic routing; this keeps the build intact).
-const steps = [
-  { src: '/images/ex-process-1.webp', n: '01', t: 'CONSULTATION', p: 'We\u2019ll connect to learn about you\u2014 your vision, your style, and what you want from this experience.' },
-  { src: '/images/ex-process-2.png', n: '02', t: 'SESSION', p: 'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot.' },
-  { src: '/images/ex-process-3.webp', n: '03', t: 'REVEAL', p: 'See your images the same day in a private reveal\u2014 a time to celebrate you.' },
+// Page images are CMS-editable via settings/experience.json; each falls back to
+// its original /images/* path when the entry (or a field) is absent. All are
+// string paths, so Pic emits a passthrough <img> the CMS can swap freely.
+const ex = await getEntry('settings', 'experience');
+const heroImage = ex?.data.heroImage ?? '/images/ex-hero.png';
+const ctaImage = ex?.data.ctaImage ?? '/images/ex-cta.png';
+const processImages = ex?.data.processImages ?? [
+  '/images/ex-process-1.webp', '/images/ex-process-2.png', '/images/ex-process-3.webp',
 ];
-const inside = [
-  '/images/ex-inside-1.png',
-  '/images/ex-inside-2.png',
-  '/images/ex-inside-3.png',
-  '/images/ex-inside-4.png',
+const insideImages = ex?.data.insideImages ?? [
+  '/images/ex-inside-1.png', '/images/ex-inside-2.png', '/images/ex-inside-3.png', '/images/ex-inside-4.png',
 ];
+
+// Step copy stays in-page; the image for each step comes from processImages[i].
+const stepCopy = [
+  { n: '01', t: 'CONSULTATION', p: 'We\u2019ll connect to learn about you\u2014 your vision, your style, and what you want from this experience.' },
+  { n: '02', t: 'SESSION', p: 'Professional hair and makeup, full direction, and a relaxed, empowering photoshoot.' },
+  { n: '03', t: 'REVEAL', p: 'See your images the same day in a private reveal\u2014 a time to celebrate you.' },
+];
+const steps = stepCopy.map((s, i) => ({ ...s, src: processImages[i] ?? '' }));
+const inside = insideImages;
 ---
 <Base
   title="The Experience — The Glam Muse Series"
@@ -33,7 +41,7 @@ const inside = [
       <Header />
       <div class="hero__image" data-hero-image data-parallax>
         <Pic
-          src="/images/ex-hero.png"
+          src={heroImage}
           alt="A softly lit editorial portrait from The Glam Muse Series experience."
           priority
           sizes="100vw"
@@ -103,7 +111,7 @@ const inside = [
     <section class="ex2-cta" id="contact" aria-labelledby="ex-cta-title">
       <div class="ex2-cta__image" data-parallax>
         <Pic
-          src="/images/ex-hero.png"
+          src={ctaImage}
           alt="A soft, editorial portrait inviting you to begin your own experience."
           sizes="100vw"
         />
