@@ -45,35 +45,25 @@ const featuredIndex = featured
          hero__content), parallax on the hero image, line-mask title lines.
          Mirrors experience.astro / portfolio.astro so the pages stay consistent. -->
       
-        <section class="ms-hero" id="portfolio" aria-labelledby="portfolio-title">
+    <section class="ms2-hero hero" id="stories" aria-labelledby="stories-hero-title">
       <Header />
-      <div class="ms-hero__image hero__image" data-hero-image data-parallax>
+      <div class="hero__image" data-hero-image data-parallax>
         <Pic
           src={hero}
-          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+          alt="A softly lit editorial portrait introducing the muse stories."
           priority
           sizes="100vw"
         />
       </div>
-      <div class="ms-hero__veil" aria-hidden="true"></div>
-<div class="wrap ms-hero-copy">
-                <h1 class="display ms-hero-title" data-hero-line>
-                    MUSE
-                    <br>
-                    STORIES
-                </h1>
-                <p class="eyebrow ms-hero-sub">
-                    EVERY WOMAN.
-                    <br>
-                    A STORY WORTH TELLING.
-                </p>
-                <span class="ms-rule"></span>
-                <p class="ms-hero-lede">
-                    Portraits are only part of the story.
-                    <br>
-                    
-                </p>
-            </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <h1 id="stories-hero-title" class="hero__title ms2-hero__title">
+          <span class="line-mask"><span data-hero-line>Muse</span></span>
+          <span class="line-mask"><span data-hero-line>Stories</span></span>
+        </h1>
+        <p class="hero__subtitle" data-hero-item>Every woman. A story worth telling.</p>
+        <a class="button" href="#stories-featured" data-hero-item>Meet the muses</a>
+      </div>
     </section>
 
     <!-- FEATURED MUSE: editorial two-column band. The rotator script at the
