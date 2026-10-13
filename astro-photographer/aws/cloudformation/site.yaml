@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
-  The Glam Muse Series — static Astro site (private S3 + CloudFront via OAC),
+  The Glam Muse Experience — static Astro site (private S3 + CloudFront via OAC),
   an S3 media bucket, and the ActiveCampaign lead-capture proxy (API Gateway
   HTTP API + Lambda) with the AC API key held in Secrets Manager. Static output
   only; no SSR, no runtime database. See aws/README.md for the deploy runbook.

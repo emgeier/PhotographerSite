@@ -2,7 +2,7 @@
 
 ## Overview
 
-This feature finishes unifying The Glam Muse Series site to the Codex design
+This feature finishes unifying The Glam Muse Experience site to the Codex design
 system. Home (`index.astro`) and Portfolio (`portfolio.astro`) already run the
 Codex look — the shared primitives, tokens and motion live in
 `src/styles/codex-base.css`, `src/styles/codex-portfolio.css`,

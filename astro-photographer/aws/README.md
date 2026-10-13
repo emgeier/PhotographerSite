@@ -1,4 +1,4 @@
-# AWS deploy runbook — The Glam Muse Series
+# AWS deploy runbook — The Glam Muse Experience
 
 This deploys the static Astro site and the ActiveCampaign lead-capture proxy with
 a single CloudFormation template, `aws/cloudformation/site.yaml`:
@@ -55,16 +55,17 @@ aws cloudformation deploy \
   --stack-name glam-muse \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
-    AcApiUrl='https://acct.api-us1.com' \
-    AcListId='7' \
+    AcApiUrl='https://luisquintanastudio.api-us1.com' \
+    AcListId='53' \
     AcTags='' \
     AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
     AllowedOrigin='*' \
     ContactSuccessUrl='' \
     AcmCertificateArn='arn:aws:acm:us-east-1:<acct>:certificate/<id>' \
-    CmsRepo='TODO-owner/TODO-repo' \
+    CmsRepo='emgeier/PhotographerSite' \
     CmsBranch='main' \
-    DomainName=''
+    DomainName='muse.luisquintanastudio.com'
+    CreateGitHubOidcProvider
 ```
 
 > `AllowedOrigin='*'` is a bring-up default only. **TODO: restrict `AllowedOrigin` to the

@@ -306,7 +306,7 @@ export function initLightbox(): void {
       alt,
       title: card.dataset.title ?? alt,
       caption:
-        card.dataset.caption ?? 'The Glam Muse Series · Editorial preview',
+        card.dataset.caption ?? 'The Glam Muse Experience · Editorial preview',
     };
   });
   const len = GALLERY.length;

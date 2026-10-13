@@ -14,8 +14,9 @@ const links = [
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/experience', label: 'The experience' },
   { href: '/stories', label: 'Muse stories' },
-  {href: 'https://luisquintanastudio.com', label: 'Weddings'}
+  {href: 'https://weddings.luisquintanastudio.com', label: 'Weddings'}
 ] as const;
+
 
 
 // Mark the active route so the header renders correctly on every page.
@@ -25,10 +26,13 @@ const isActive = (href: string) =>
 ---
 
 <header class="site-header">
-  <a class="brand" href="/" aria-label="The Glam Muse Series, home">
+
+
+  <a class="brand" href="/" aria-label="The Glam Muse Experience, home">
+
     <span class="brand__top">THE</span>
     <span class="brand__name">GLAM MUSE</span>
-    <span class="brand__bottom">SERIES</span>
+    <span class="brand__bottom">EXPERIENCE</span>
   </a>
   <button
     class="menu-toggle"
@@ -46,4 +50,5 @@ const isActive = (href: string) =>
     ))}
     <a class="nav-contact" href="/contact" aria-current={isActive('/contact') ? 'page' : undefined}>Contact</a>
   </nav>
+
 </header>

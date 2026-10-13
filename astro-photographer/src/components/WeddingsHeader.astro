@@ -1,0 +1,41 @@
+---
+// Weddings site masthead — its own brand ("Luis Quintana Studio") and nav,
+// distinct from the Glam Muse Header. Mirrors the mobile-menu contract that
+// motion.ts initNav() targets (#menu-toggle, #primary-nav, body.menu-open).
+const links = [
+  { href: '/weddings', label: 'Weddings & Engagements' },
+  { href: '/weddings/experience', label: 'The Experience' },
+  { href: '/weddings/stories', label: 'Love Stories' },
+  { href: '/weddings/about', label: 'About' },
+] as const;
+const LQSWImage = '/images/LQSW.png'; 
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  path === href || path.startsWith(href + '/');
+---
+<header class="wd-header">
+  <a class="wd-brand" href="/weddings" aria-label="Luis Quintana Studio, weddings home">
+  <img class="wd-brand_image" src={LQSWImage} alt="" aria-hidden="true" />
+
+    <span class="wd-brand__name">LUIS QUINTANA</span>
+    <span class="wd-brand__sub">STUDIO</span>
+
+  </a>
+  <button
+    class="menu-toggle wd-menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-controls="primary-nav"
+    aria-expanded="false"
+    aria-label="Open navigation"
+  >
+    <span></span><span></span>
+  </button>
+  <nav class="wd-nav primary-nav" id="primary-nav" aria-label="Main navigation">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+    ))}
+    <a class="wd-nav__inquire" href="/weddings/inquire">Inquire</a>
+  </nav>
+</header>

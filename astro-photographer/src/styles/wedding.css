@@ -1,0 +1,267 @@
+/* ============================================================= *
+ * WEDDINGS SITE (luisquintanastudio weddings) — its own warm, editorial
+ * design system, distinct from the Glam Muse Codex look. Imported only by
+ * /weddings/* pages. Reuses the global :root tokens (champagne/ivory/ink) but
+ * sets its own type rhythm and warmer palette.
+ * ============================================================= */
+
+.wd {
+  --wd-cream: #f4f0e7;
+  --wd-ink: #211c15;
+  --wd-body: #5a5247;
+  --wd-gold: #b08d57;
+  --wd-serif: var(--serif);
+  --wd-sans: var(--sans);
+}
+
+.wd-page { background: var(--wd-cream, #f4f0e7); color: var(--wd-ink, #211c15); font-family: var(--sans); }
+.wd-container { width: min(1240px, calc(100% - 120px)); margin-inline: auto; }
+.wd-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--wd-gold, #b08d57); display: inline-flex; align-items: center; gap: 14px; }
+.wd-eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
+.wd-rule { display: block; width: 54px; height: 1px; background: var(--wd-gold, #b08d57); }
+
+/* Serif display headings. Italic accent via <em>. */
+.wd-display { font-family: var(--serif); font-weight: 100; line-height: 1; letter-spacing: -1px; color: var(--wd-ink, #211c15); }
+.wd-display em { font-style: italic; }
+
+/* Buttons */
+.wd-btn { display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; background: var(--wd-gold, #b08d57); color: #fff; font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; transition: background 250ms ease, transform 350ms var(--ease); }
+.wd-btn:hover { background: #9a784a; transform: translateY(-1px); }
+.wd-btn__arrow { font-size: 15px; }
+.wd-textlink { display: inline-flex; align-items: center; gap: 12px; font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: var(--wd-ink, #211c15); }
+.wd-textlink::after { content: "→"; color: var(--wd-gold, #b08d57); transition: transform 350ms var(--ease); }
+.wd-textlink:hover::after { transform: translateX(5px); }
+
+/* --------------------------------------------------------------- *
+ * Header
+ * --------------------------------------------------------------- */
+.wd-header { position: absolute; z-index: 5; top: 0; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: space-between; width: min(1240px, calc(100% - 120px)); height: 104px; }
+.wd-brand { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; color: inherit; }
+.wd-brand__name { font-family: var(--serif); font-weight: 100; font-size: 23px; letter-spacing: 3px; }
+.wd-brand__sub { margin-top: 5px; font: 600 9px/1 var(--sans); letter-spacing: 6px; }
+.wd-nav { display: flex; align-items: center; gap: 34px; font: 600 11px/1 var(--sans); letter-spacing: 1.6px; text-transform: uppercase; }
+.wd-nav a { position: relative; }
+.wd-nav__inquire { padding: 12px 24px; border: 1px solid currentColor; }
+.wd-nav__inquire:hover { color: #fff; background: var(--wd-gold, #b08d57); border-color: var(--wd-gold, #b08d57); }
+.wd-menu-toggle { display: none; }
+/* Light header when it sits over the dark hero image. */
+.wd-hero .wd-header, .wd-hero .wd-header a { color: var(--ivory); }
+.wd-hero .wd-nav__inquire { border-color: rgba(244, 240, 232, 0.55); }
+.wd-hero .wd-menu-toggle span { background: var(--ivory); }
+.wd-brand_image {height: 85px;}
+/* --------------------------------------------------------------- *
+ * HOME — Hero
+ * --------------------------------------------------------------- */
+.wd-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
+.wd-hero__image { position: absolute; inset: 0; }
+.wd-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.wd-hero__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(16, 12, 8, 0.86) 0%, rgba(16, 12, 8, 0.66) 34%, rgba(16, 12, 8, 0.34) 60%, rgba(16, 12, 8, 0.1) 82%, transparent 100%), linear-gradient(0deg, rgba(16, 12, 8, 0.4), transparent 42%); }
+.wd-hero__content { position: relative; z-index: 1; }
+.wd-hero__eyebrow { color: #e6d4b8; }
+.wd-hero__title { margin-top: 20px; font-size: clamp(56px, 6.4vw, 104px); letter-spacing: -1.5px; }
+.wd-hero__lede { margin-top: 24px; max-width: 360px; color: #efe8dd; font-size: 15px; line-height: 1.7; }
+.wd-hero__content .wd-btn { margin-top: 30px; }
+
+/* --------------------------------------------------------------- *
+ * Philosophy — photo left + copy right
+ * --------------------------------------------------------------- */
+.wd-philo { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.wd-philo__photo { height: 100%; min-height: 460px; background: #e3ded5; }
+.wd-philo__photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+.wd-philo__copy { padding: 70px clamp(40px, 6vw, 120px); }
+.wd-philo__title { margin-top: 18px; font-size: clamp(40px, 4vw, 60px); }
+.wd-philo__para { margin: 26px 0 28px; max-width: 400px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.75; }
+
+/* --------------------------------------------------------------- *
+ * Two feature cards — Weddings / Engagements
+ * --------------------------------------------------------------- */
+.wd-cards { display: grid; grid-template-columns: 1fr 1fr; }
+.wd-card { position: relative; min-height: 460px; overflow: hidden; display: flex; align-items: flex-end; color: var(--ivory); }
+.wd-card__image { position: absolute; inset: 0; }
+.wd-card__image img { width: 100%; height: 100%; object-fit: cover; }
+.wd-card__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(20, 15, 10, 0.78) 0%, rgba(20, 15, 10, 0.3) 46%, transparent 72%); }
+.wd-card__content { position: relative; z-index: 1; padding: 46px clamp(36px, 4vw, 60px); }
+.wd-card__eyebrow { color: #e6d4b8; }
+.wd-card__title { margin: 14px 0 16px; font-size: clamp(38px, 3.4vw, 50px); color: var(--ivory); }
+.wd-card__para { max-width: 340px; margin-bottom: 22px; color: #efe8dd; font-size: 14.5px; line-height: 1.7; }
+.wd-card .wd-textlink { color: var(--ivory); }
+
+/* --------------------------------------------------------------- *
+ * The Experience — intro + 3 steps
+ * --------------------------------------------------------------- */
+.wd-exp { padding-block: 76px; background: #ebe4d7; }
+.wd-exp__head { display: grid; grid-template-columns: 1.4fr 1fr; gap: 60px; align-items: start; margin-bottom: 50px; }
+.wd-exp__title { margin-top: 18px; font-size: clamp(40px, 4.2vw, 60px); max-width: 540px; }
+.wd-exp__intro { align-self: center; max-width: 320px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.7; }
+.wd-exp__intro .wd-textlink { margin-top: 22px; }
+.wd-exp__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 46px; margin: 0; padding: 0; list-style: none; }
+.wd-step { list-style: none; }
+.wd-exp__photo { aspect-ratio: 1.7; overflow: hidden; background: #ddd6c9; margin-bottom: 24px; }
+.wd-exp__photo img { width: 100%; height: 100%; object-fit: cover; }
+.wd-step__row { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
+.wd-step__num { font-family: var(--serif); font-weight: 100; font-size: 40px; line-height: 1; color: var(--wd-gold, #b08d57); }
+.wd-step__h { margin-bottom: 8px; font: 600 11px/1 var(--sans); letter-spacing: 2px; text-transform: uppercase; }
+.wd-step__p { color: var(--wd-body, #5a5247); font-size: 13.5px; line-height: 1.65; }
+
+/* --------------------------------------------------------------- *
+ * About — portrait left + copy right
+ * --------------------------------------------------------------- */
+.wd-about { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+.wd-about__photo { height: 100%; min-height: 460px; background: #d8d2c7; }
+.wd-about__photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+.wd-about__copy { padding: 70px clamp(40px, 6vw, 120px); }
+.wd-about__title { margin-top: 16px; font-size: clamp(40px, 4vw, 58px); }
+.wd-about__para { margin: 24px 0 26px; max-width: 400px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.75; }
+
+/* --------------------------------------------------------------- *
+ * Love Stories — heading + 3 thumbs
+ * --------------------------------------------------------------- */
+.wd-stories { padding-block: 70px; }
+.wd-stories__head { display: flex; align-items: baseline; justify-content: space-between; gap: 30px; margin-bottom: 36px; }
+.wd-stories__title { font-size: clamp(34px, 3.4vw, 48px); }
+.wd-stories__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.wd-storycard__image { aspect-ratio: 1.55; overflow: hidden; background: #ddd6c9; }
+.wd-storycard__image img { width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--ease); }
+.wd-storycard:hover .wd-storycard__image img { scale: 1.04; }
+.wd-storycard__name { margin-top: 16px; text-align: center; font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: var(--wd-body, #5a5247); }
+
+/* --------------------------------------------------------------- *
+ * Closing CTA
+ * --------------------------------------------------------------- */
+.wd-cta { position: relative; min-height: 440px; overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
+.wd-cta__image { position: absolute; inset: 0; }
+.wd-cta__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+.wd-cta__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(20, 15, 10, 0.6) 0%, rgba(20, 15, 10, 0.32) 46%, transparent 82%); }
+.wd-cta__content { position: relative; z-index: 1; }
+.wd-cta__eyebrow { color: #e6d4b8; }
+.wd-cta__title { margin-top: 18px; max-width: 560px; font-size: clamp(40px, 4.4vw, 60px); color: var(--ivory); }
+.wd-cta__content .wd-btn { margin-top: 28px; }
+
+/* --------------------------------------------------------------- *
+ * SUB-PAGE HERO (The Experience etc.) — "THE / EXPERIENCE" lockup
+ * --------------------------------------------------------------- */
+.wd-subhero { min-height: 560px; height: min(640px, 48vw); }
+.wd-subhero__kicker { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; color: #e6d4b8; }
+.wd-subhero__title { margin-top: 6px; font-size: clamp(64px, 8vw, 128px); letter-spacing: 1px; text-transform: uppercase; color: var(--ivory); }
+.wd-subhero__rule { margin: 24px 0; background: rgba(244, 240, 232, 0.7); }
+.wd-subhero__scroll { margin-top: 26px; }
+
+/* Beautifully, naturally you — photo + copy */
+.wd-ease { padding-block: 80px; }
+.wd-ease__row { display: grid; grid-template-columns: 46% 1fr; align-items: center; gap: 70px; }
+.wd-ease__photo { aspect-ratio: 1.05; overflow: hidden; background: #e3ded5; }
+.wd-ease__photo img { width: 100%; height: 100%; object-fit: cover; }
+.wd-ease__title { margin-top: 16px; font-size: clamp(44px, 5vw, 74px); line-height: 1.02; }
+.wd-ease__para { margin-top: 20px; max-width: 440px; color: var(--wd-body, #5a5247); font-size: 15.5px; line-height: 1.7; }
+
+/* Our approach — centered head + 3 cards */
+.wd-approach { padding-block: 72px; background: #ebe4d7; text-align: center; }
+.wd-approach__head { max-width: 760px; margin: 0 auto 50px; }
+.wd-approach__eyebrow { justify-content: center; }
+.wd-approach__eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
+.wd-approach__title { margin-top: 16px; font-size: clamp(36px, 4.4vw, 60px); letter-spacing: -0.5px; text-transform: uppercase; }
+.wd-approach__intro { margin-top: 22px; color: var(--wd-body, #5a5247); font-size: 15.5px; line-height: 1.7; }
+.wd-approach__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin: 0; padding: 0; list-style: none; text-align: left; }
+.wd-acard { list-style: none; }
+.wd-acard__photo { aspect-ratio: 1.4; overflow: hidden; background: #ddd6c9; margin-bottom: 22px; }
+.wd-acard__photo img { width: 100%; height: 100%; object-fit: cover; }
+.wd-acard__num { display: flex; align-items: center; gap: 16px; font-family: var(--serif); font-weight: 100; font-size: 34px; color: var(--wd-ink, #211c15); }
+.wd-acard__dash { width: 40px; height: 1px; background: var(--wd-gold, #b08d57); }
+.wd-acard__h { margin: 10px 0 12px; font: 600 13px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; }
+.wd-acard__p { color: var(--wd-body, #5a5247); font-size: 14px; line-height: 1.65; }
+
+/* CTA paragraph (legacy/experience closing band) */
+.wd-cta__para { margin-top: 18px; max-width: 420px; color: #efe8dd; font-size: 14.5px; line-height: 1.7; }
+.wd-cta--legacy .wd-cta__image img { object-position: center 46%; }
+
+/* Stacked sub-hero title ("LOVE / STORIES") */
+.wd-subhero__title--stack { font-size: clamp(56px, 7vw, 108px); line-height: 0.98; }
+
+/* Outline button + featured/journal (Love Stories page) */
+.wd-outline-btn { display: inline-flex; align-items: center; justify-content: center; padding: 15px 34px; border: 1px solid rgba(33, 28, 21, 0.4); font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: var(--wd-ink, #211c15); transition: color 250ms ease, background 250ms ease, border-color 250ms ease; }
+.wd-outline-btn:hover { color: #fff; background: var(--wd-gold, #b08d57); border-color: var(--wd-gold, #b08d57); }
+
+.wd-featured { padding-block: 80px; }
+.wd-featured__row { display: grid; grid-template-columns: 48% 1fr; align-items: center; gap: 70px; }
+.wd-featured__photo { aspect-ratio: 1.02; overflow: hidden; background: #e3ded5; }
+.wd-featured__photo img { width: 100%; height: 100%; object-fit: cover; }
+.wd-featured__title { margin-top: 16px; font-size: clamp(40px, 4.4vw, 62px); line-height: 1.02; text-transform: uppercase; letter-spacing: -0.5px; }
+.wd-featured__names { margin-top: 22px; font: 600 13px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; }
+.wd-featured__place { margin-top: 8px; font: 600 11px/1 var(--sans); letter-spacing: 2px; text-transform: uppercase; color: var(--wd-gold, #b08d57); }
+.wd-featured__para { margin: 22px 0 24px; max-width: 440px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.7; }
+
+.wd-journal { padding-block: 72px; background: #ebe4d7; }
+.wd-journal__head { max-width: 760px; margin: 0 auto 44px; text-align: center; }
+.wd-journal__eyebrow { justify-content: center; }
+.wd-journal__eyebrow::before { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
+.wd-journal__title { margin-top: 14px; font-size: clamp(36px, 4.4vw, 58px); text-transform: uppercase; letter-spacing: -0.5px; }
+.wd-journal__intro { margin-top: 20px; color: var(--wd-body, #5a5247); font-size: 15.5px; line-height: 1.7; }
+.wd-journal__tabs { display: inline-flex; gap: 34px; margin-top: 30px; font: 600 11px/1 var(--sans); letter-spacing: 2px; text-transform: uppercase; color: var(--wd-body, #5a5247); }
+.wd-journal__tab { padding-bottom: 6px; cursor: default; }
+.wd-journal__tab.is-active { color: var(--wd-ink, #211c15); border-bottom: 1px solid var(--wd-gold, #b08d57); }
+.wd-journal__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 26px; }
+.wd-jcard__image { display: block; aspect-ratio: 1.2; overflow: hidden; background: #ddd6c9; margin-bottom: 16px; }
+.wd-jcard__image img { width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--ease); }
+.wd-jcard__image:hover img { scale: 1.04; }
+.wd-jcard__type { font: 600 10px/1 var(--sans); letter-spacing: 2px; text-transform: uppercase; color: var(--wd-body, #5a5247); }
+.wd-jcard__names { margin: 10px 0 5px; font-family: var(--serif); font-weight: 100; font-size: 24px; letter-spacing: -0.3px; text-transform: uppercase; }
+.wd-jcard__place { margin-bottom: 14px; color: var(--wd-body, #5a5247); font-size: 14px; }
+.wd-jcard__link { font-size: 10px; }
+.wd-journal__more { margin-top: 44px; text-align: center; }
+
+/* --------------------------------------------------------------- *
+ * Footer
+ * --------------------------------------------------------------- */
+.wd-footer { padding: 40px 0 34px; color: var(--ivory); background: #1b1710; }
+.wd-footer__inner { width: min(1240px, calc(100% - 120px)); margin-inline: auto; }
+.wd-footer__inner .wd-brand { align-items: flex-start; }
+.wd-footer__nav { display: flex; flex-wrap: wrap; gap: 24px; margin: 26px 0; font: 600 10px/1 var(--sans); letter-spacing: 1.6px; text-transform: uppercase; }
+.wd-footer__nav a:hover, .wd-footer__social a:hover { color: var(--wd-gold, #b08d57); }
+.wd-footer__social { display: flex; gap: 18px; margin: 0 0 24px; padding: 0; list-style: none; }
+.wd-footer__social a { color: var(--ivory); transition: color 250ms ease; }
+.wd-footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 22px; border-top: 1px solid rgba(244, 240, 232, 0.18); font: 400 10px/1.6 var(--sans); letter-spacing: 1px; text-transform: uppercase; color: #b7afa0; }
+
+/* --------------------------------------------------------------- *
+ * Responsive
+ * --------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .wd-container, .wd-header, .wd-footer__inner { width: calc(100% - 80px); }
+  .wd-exp__head { grid-template-columns: 1fr; gap: 24px; }
+}
+
+@media (max-width: 860px) {
+  .wd-nav { display: none; }
+  .wd-menu-toggle { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 44px; height: 44px; background: transparent; z-index: 6; }
+  .wd-menu-toggle span { width: 25px; height: 1px; background: var(--wd-ink, #211c15); }
+  .wd-nav.is-open { display: flex; position: absolute; top: 86px; right: 0; left: 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 18px 24px; background: rgba(244, 240, 232, 0.98); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+  .wd-nav.is-open a { padding: 13px 0; color: var(--wd-ink, #211c15); }
+
+  .wd-philo, .wd-cards, .wd-about { grid-template-columns: 1fr; }
+  .wd-philo__photo, .wd-about__photo { min-height: 0; aspect-ratio: 1.1; }
+  .wd-philo__copy, .wd-about__copy { padding: 44px 32px; }
+  .wd-exp__steps { grid-template-columns: 1fr; gap: 34px; }
+  .wd-ease__row { grid-template-columns: 1fr; gap: 30px; }
+  .wd-ease__photo { width: min(460px, 100%); }
+  .wd-approach__steps { grid-template-columns: 1fr; gap: 36px; width: min(460px, 100%); margin-inline: auto; }
+  .wd-featured__row { grid-template-columns: 1fr; gap: 30px; }
+  .wd-featured__photo { width: min(460px, 100%); }
+  .wd-journal__grid { grid-template-columns: 1fr 1fr; gap: 24px 18px; }
+}
+
+@media (max-width: 620px) {
+  .wd-journal__grid { grid-template-columns: 1fr; width: min(420px, 100%); margin-inline: auto; }
+  .wd-journal__tabs { gap: 22px; flex-wrap: wrap; justify-content: center; }
+  .wd-stories__head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .wd-stories__grid { grid-template-columns: 1fr; gap: 18px; width: min(420px, 100%); }
+}
+
+@media (max-width: 560px) {
+  .wd-container, .wd-header, .wd-footer__inner { width: calc(100% - 40px); }
+  .wd-hero { min-height: 0; height: auto; padding: 150px 0 54px; }
+  .wd-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wd-btn, .wd-textlink::after, .wd-storycard__image img { transition: none; }
+  .wd-storycard:hover .wd-storycard__image img { scale: 1; }
+}

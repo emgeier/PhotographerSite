@@ -181,7 +181,6 @@
 .ms-rule{display:block;width:52px;height:1px;background:var(--taupe);margin:0 0 24px}
 .ms-hero-lede{font-family:var(--display);font-weight:300;font-size:1rem;line-height:1.5;color:#3a362f;margin:0;max-width:320px}
 .ms-hero-photo{position:absolute;right:0;top:var(--header-h);width:62%;height:calc(100% - var(--header-h));object-fit:cover;object-position:right top;z-index:0;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.15) 24%,rgba(0,0,0,.5) 44%,rgba(0,0,0,.85) 66%,#000 88%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.15) 24%,rgba(0,0,0,.5) 44%,rgba(0,0,0,.85) 66%,#000 88%)}
-
 .ms-featured{background:var(--ivory);padding:0 0 36px;position:relative}
 .ms-featured-row{display:grid;grid-template-columns:48% 1fr auto;gap:60px;align-items:center;padding-top:0}
 .ms-featured-photo{width:100%;height:420px;object-fit:cover;object-position:center top}

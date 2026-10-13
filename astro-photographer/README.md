@@ -1,4 +1,4 @@
-# The Glam Muse Series — Astro homepage prototype
+# The Glam Muse Experience — Astro homepage prototype
 
 Static Astro implementation of the supplied homepage design, prepared for GitHub + Cloudflare Pages.
 

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This feature completes the unification of The Glam Muse Series site to the Codex
+This feature completes the unification of The Glam Muse Experience site to the Codex
 design system and interaction model. It is derived from the approved design
 document for `codex-experience-stories-contact` and formalizes that design into
 testable requirements.
@@ -20,7 +20,7 @@ The work is delivered in two coordinated parts:
 - **Part B — Sitewide contact dialog.** Contact becomes a sitewide popup built
   on the native `<dialog>` element and the Codex `.dialog` /
   `.consultation-dialog` styles. The popup matches the ivory-modal mockup at
-  `Website/02 Glam Muse Series/05 Contact/contact_popup.png` but submits to the
+  `Website/02 Glam Muse Experience/05 Contact/contact_popup.png` but submits to the
   real ActiveCampaign Lambda (there is no mailto). The standalone `/contact`
   page is kept as the no-JS fallback and `?sent=` redirect target.
 
