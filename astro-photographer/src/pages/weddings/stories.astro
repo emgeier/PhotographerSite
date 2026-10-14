@@ -1,0 +1,105 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import { weddingStories, getStory } from '../../data/weddingStories';
+import '../../styles/wedding.css';
+
+const featured = getStory('alex-and-taylor')!;
+const heroImage = '/images/home-hero.webp';
+const featuredPhoto = featured.cardImage;
+
+// Grid: all non-featured stories, driven by the shared data module so every
+// card links to a real /weddings/stories/<slug>.
+const stories = weddingStories
+  .filter((s) => !s.featured)
+  .map((s) => ({ type: s.type, names: s.names, place: s.place, img: s.cardImage, slug: s.slug }));
+const ctaImage = '/images/portfolio-banner.webp';
+---
+<Base
+  title="Love Stories — Luis Quintana Studio"
+  description="Every love has a story. These are some of the ones I’ve had the honor of telling."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple at a lakeside villa at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>Love<br />Stories</h1>
+        <p class="wd-hero__lede" data-hero-item>Every love has a story. These are some of the ones I’ve had the honor of telling.</p>
+        <a class="wd-textlink wd-subhero__scroll" href="#wd-journal" data-hero-item style="color: var(--ivory);">Scroll to explore</a>
+      </div>
+    </section>
+
+    <!-- FEATURED LOVE STORY -->
+    <section class="wd-featured" aria-labelledby="wd-featured-title">
+      <div class="wd-container wd-featured__row">
+        <figure class="wd-featured__photo" data-reveal>
+          <Pic src={featuredPhoto} alt="Alex and Taylor at Lake Como." sizes="(max-width: 900px) 100vw, 48vw" />
+        </figure>
+        <div class="wd-featured__copy" data-reveal>
+          <p class="wd-eyebrow">Featured love story</p>
+          <h2 id="wd-featured-title" class="wd-display wd-featured__title">A love story,<br />beautifully told.</h2>
+          <p class="wd-featured__names">Alex &amp; Taylor</p>
+          <p class="wd-featured__place">Lake Como, Italy</p>
+          <p class="wd-featured__para">A celebration filled with heartfelt moments, breathtaking views, and a love that brought together family and friends from around the world. Their wedding day was a perfect reflection of who they are — elegant, joyful, and deeply meaningful.</p>
+          <a class="wd-textlink" href={`/weddings/stories/${featured.slug}`}>View their story</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE JOURNAL -->
+    <section class="wd-journal" id="wd-journal" aria-labelledby="wd-journal-title">
+      <div class="wd-container">
+        <div class="wd-journal__head" data-reveal>
+          <p class="wd-eyebrow wd-journal__eyebrow">The journal</p>
+          <h2 id="wd-journal-title" class="wd-display wd-journal__title">Stories worth remembering.</h2>
+          <p class="wd-journal__intro">From quiet, intimate moments to unforgettable celebrations, explore the stories of couples whose love I’ve had the privilege to document.</p>
+          <div class="wd-journal__tabs" role="tablist" aria-label="Filter stories">
+            <span class="wd-journal__tab is-active">All Stories</span>
+            <span class="wd-journal__tab">Weddings</span>
+            <span class="wd-journal__tab">Engagements</span>
+          </div>
+        </div>
+        <div class="wd-journal__grid">
+          {stories.map((s) => (
+            <article class="wd-jcard" data-reveal>
+              <a class="wd-jcard__image" href={`/weddings/stories/${s.slug}`} aria-label={`View ${s.names}'s story`}>
+                <Pic src={s.img} alt={`${s.names} — ${s.place}`} sizes="(max-width: 900px) 100vw, 33vw" />
+              </a>
+              <p class="wd-jcard__type">{s.type}</p>
+              <h3 class="wd-jcard__names">{s.names}</h3>
+              <p class="wd-jcard__place">{s.place}</p>
+              <a class="wd-textlink wd-jcard__link" href={`/weddings/stories/${s.slug}`}>View story</a>
+            </article>
+          ))}
+        </div>
+        <div class="wd-journal__more" data-reveal>
+          <a class="wd-outline-btn" href="/weddings/stories">Load more stories</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING BAND -->
+    <section class="wd-cta wd-cta--legacy" aria-labelledby="wd-next-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple overlooking the lake at sunset." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story is next</p>
+        <h2 id="wd-next-title" class="wd-display wd-cta__title">Every love deserves to be remembered.</h2>
+        <p class="wd-cta__para">Your story is unlike anyone else’s. Let’s create photographs that preserve the beauty of how it felt.</p>
+        <a class="wd-btn" href="/weddings/inquire">Inquire <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

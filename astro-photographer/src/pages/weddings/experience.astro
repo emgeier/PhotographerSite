@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/portfolio-banner.webp';
+const easePhoto = '/images/story-portrait.webp';
+const steps = [
+  { n: '01', t: 'Consultation', p: 'We get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: '/images/muses/portrait-01.webp' },
+  { n: '02', t: 'Planning', p: 'We plan together with intention, creating a seamless photography experience that fits your day. From timelines to key moments, we handle the details so you can feel confident and at ease.', img: '/images/muses/portrait-02.webp' },
+  { n: '03', t: 'Your Day', p: 'You get to be fully present while we document it all — the big moments, the quiet ones, and everything in between. We’ll be there with a calm, thoughtful approach, letting your day unfold naturally.', img: '/images/muses/portrait-03.webp' },
+];
+const ctaImage = '/images/portfolio-closing.webp';
+---
+<Base
+  title="The Experience — Luis Quintana Studio"
+  description="An experience designed around you, where genuine moments unfold naturally and every meaningful memory is beautifully preserved."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple sharing a tender moment overlooking a lake." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-subhero__kicker" data-hero-item>The</p>
+        <h1 class="wd-display wd-subhero__title" data-hero-item>Experience</h1>
+        <span class="wd-rule wd-subhero__rule" aria-hidden="true" data-hero-item></span>
+        <p class="wd-hero__lede" data-hero-item>An experience designed around you, where genuine moments unfold naturally and every meaningful memory is beautifully preserved.</p>
+        <a class="wd-textlink wd-subhero__scroll" href="#wd-ease" data-hero-item style="color: var(--ivory);">Scroll to explore</a>
+      </div>
+    </section>
+
+    <!-- BEAUTIFULLY, NATURALLY YOU -->
+    <section class="wd-ease" id="wd-ease" aria-labelledby="wd-ease-title">
+      <div class="wd-container wd-ease__row">
+        <figure class="wd-ease__photo" data-reveal>
+          <Pic src={easePhoto} alt="A couple laughing together, foreheads touching." sizes="(max-width: 900px) 100vw, 46vw" />
+        </figure>
+        <div class="wd-ease__copy" data-reveal>
+          <p class="wd-eyebrow">Feeling at ease</p>
+          <h2 id="wd-ease-title" class="wd-display wd-ease__title">Beautifully,<br />naturally you.</h2>
+          <p class="wd-ease__para">You don’t need to know how to pose or be comfortable in front of a camera.</p>
+          <p class="wd-ease__para">You simply need to be yourselves.</p>
+          <p class="wd-ease__para">With gentle direction, genuine connection, and an understanding of what makes your relationship unique, we create photographs that feel effortless, intimate, and unmistakably yours.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- OUR APPROACH -->
+    <section class="wd-approach" aria-labelledby="wd-approach-title">
+      <div class="wd-container">
+        <div class="wd-approach__head" data-reveal>
+          <p class="wd-eyebrow wd-approach__eyebrow">Our approach</p>
+          <h2 id="wd-approach-title" class="wd-display wd-approach__title">A thoughtful approach,<br />from the very beginning.</h2>
+          <p class="wd-approach__intro">Your wedding experience is more than just a day of photographs. It’s a journey we take together — built on connection, thoughtful planning, and a shared vision, so you can be fully present while we preserve it all beautifully.</p>
+        </div>
+        <ol class="wd-approach__steps">
+          {steps.map((s) => (
+            <li class="wd-acard" data-reveal>
+              <figure class="wd-acard__photo"><Pic src={s.img} alt={`${s.t} — part of the experience.`} sizes="(max-width: 900px) 100vw, 33vw" /></figure>
+              <p class="wd-acard__num"><span>{s.n}</span><span class="wd-acard__dash" aria-hidden="true"></span></p>
+              <h3 class="wd-acard__h">{s.t}</h3>
+              <p class="wd-acard__p">{s.p}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- CLOSING BAND -->
+    <section class="wd-cta wd-cta--legacy" aria-labelledby="wd-legacy-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple at a stone balustrade at golden hour." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Beyond the wedding day</p>
+        <h2 id="wd-legacy-title" class="wd-display wd-cta__title">The story<br />you can hold.</h2>
+        <p class="wd-cta__para">Your photographs are more than images — they’re a legacy. A tangible reminder of how it all felt, preserved with intention so you can relive these moments for years to come.</p>
+        <a class="wd-btn" href="/weddings/inquire">Inquire <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

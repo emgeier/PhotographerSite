@@ -1,0 +1,230 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/portfolio-banner.webp';
+const formImage = '/images/portfolio-hero.webp';
+const noteImage = '/images/portrait.webp';
+const ctaImage = '/images/portfolio-closing.webp';
+
+const steps = [
+  { n: '01', t: 'Consultation', p: 'We’ll get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: '/images/muses/portrait-01.webp' },
+  { n: '02', t: 'Planning', p: 'We’ll create a thoughtful plan for your day, discuss timelines, locations, and the details that will make your experience seamless and enjoyable.', img: '/images/muses/portrait-02.webp' },
+  { n: '03', t: 'Your Day', p: 'You get to be fully present while we document it all — the big moments, the quiet ones, and everything in between. We’ll be there with a calm, thoughtful approach, letting your day unfold naturally.', img: '/images/muses/portrait-03.webp' },
+];
+---
+<Base
+  title="Inquire — Luis Quintana Studio"
+  description="Let’s begin your story. Share a few details about your celebration and I’ll personally reach out to learn more."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple on a lakeside terrace at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item>The beginning of something beautiful</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item>Let’s begin<br />your story.</h1>
+        <p class="wd-hero__lede" data-hero-item style="max-width: 440px;">Your wedding day is more than a celebration. It’s a collection of moments, emotions, and connections that deserve to be remembered just as they felt. I’d love to hear what you’re dreaming of.</p>
+      </div>
+    </section>
+
+    <!-- FORM BAND -->
+    <section class="wd-inquire" aria-labelledby="wd-form-title">
+      <div class="wd-inquire__aside">
+        <Pic src={formImage} alt="A bride in soft natural light." sizes="(max-width: 860px) 100vw, 42vw" />
+        <div class="wd-inquire__aside-veil" aria-hidden="true"></div>
+        <div class="wd-inquire__aside-copy">
+          <p class="wd-eyebrow wd-card__eyebrow">Inquire</p>
+          <h2 id="wd-form-title" class="wd-display wd-inquire__aside-title">Tell me<br />about<br />your day.</h2>
+          <p class="wd-inquire__aside-para">Share a few details about your celebration, and I’ll personally reach out to learn more about what matters most to you and how you want the day to feel.</p>
+        </div>
+      </div>
+      <form class="wd-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
+        <div class="wd-form__grid">
+          <div class="wd-form__field">
+            <label for="wd-name">Your Full Name *</label>
+            <input id="wd-name" name="name" type="text" placeholder="Your full name" required />
+          </div>
+          <div class="wd-form__field">
+            <label for="wd-partner">Partner’s Full Name *</label>
+            <input id="wd-partner" name="partner" type="text" placeholder="Partner’s full name" required />
+          </div>
+          <div class="wd-form__field">
+            <label for="wd-email">Email Address *</label>
+            <input id="wd-email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+          <div class="wd-form__field">
+            <label for="wd-phone">Phone Number *</label>
+            <input id="wd-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+          </div>
+          <div class="wd-form__field">
+            <label for="wd-date">Wedding Date *</label>
+            <input id="wd-date" name="date" type="date" required />
+          </div>
+          <div class="wd-form__field">
+            <label for="wd-venue">Wedding Location / Venue *</label>
+            <input id="wd-venue" name="venue" type="text" placeholder="City or venue" required />
+          </div>
+          <div class="wd-form__field wd-form__field--full">
+            <label for="wd-hear">How did you hear about us? *</label>
+            <select id="wd-hear" name="hear" required>
+              <option value="" disabled selected>Select an option</option>
+              <option>Instagram</option>
+              <option>Pinterest</option>
+              <option>A referral</option>
+              <option>Google search</option>
+              <option>Wedding planner</option>
+            </select>
+          </div>
+          <div class="wd-form__field wd-form__field--full">
+            <label for="wd-why">Why are you interested in Luis Quintana Studio? *</label>
+            <select id="wd-why" name="why" required>
+              <option value="" disabled selected>Select an option</option>
+              <option>The storytelling style</option>
+              <option>The editorial look</option>
+              <option>A friend’s recommendation</option>
+              <option>The overall experience</option>
+            </select>
+          </div>
+          <div class="wd-form__field wd-form__field--full">
+            <label for="wd-vision">Share your vision for your celebration. *</label>
+            <textarea id="wd-vision" name="vision" placeholder="I’d love to hear about your plans, what’s most important to you, and any details you’d like to share…" required></textarea>
+          </div>
+          <button class="wd-btn wd-form__submit" type="submit">Send your inquiry <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
+          <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
+        </div>
+      </form>
+    </section>
+
+    <!-- THE EXPERIENCE STEPS -->
+    <section class="wd-approach" aria-labelledby="wd-exp-title">
+      <div class="wd-container">
+        <div class="wd-approach__head" data-reveal>
+          <p class="wd-eyebrow wd-approach__eyebrow">The experience</p>
+          <h2 id="wd-exp-title" class="wd-display wd-approach__title">From our first conversation to the day itself.</h2>
+        </div>
+        <ol class="wd-approach__steps">
+          {steps.map((s) => (
+            <li class="wd-acard" data-reveal>
+              <figure class="wd-acard__photo"><Pic src={s.img} alt={`${s.t} — part of the experience.`} sizes="(max-width: 900px) 100vw, 33vw" /></figure>
+              <p class="wd-acard__num"><span>{s.n}</span><span class="wd-acard__dash" aria-hidden="true"></span></p>
+              <h3 class="wd-acard__h">{s.t}</h3>
+              <p class="wd-acard__p">{s.p}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- A NOTE FROM LUIS -->
+    <section class="wd-note wd-featured" aria-labelledby="wd-note-title">
+      <div class="wd-container wd-featured__row">
+        <figure class="wd-featured__photo" data-reveal>
+          <Pic src={noteImage} alt="A portrait of Luis in soft daylight." sizes="(max-width: 900px) 100vw, 48vw" />
+        </figure>
+        <div class="wd-featured__copy" data-reveal>
+          <p class="wd-eyebrow">A note from Luis</p>
+          <h2 id="wd-note-title" class="wd-display wd-featured__title">The connection matters.</h2>
+          <p class="wd-featured__para">For me, wedding photography is about so much more than beautiful images. It’s about getting to know the people, understanding what matters to them, and being present for the moments that make their story entirely their own. I want you to feel comfortable, seen, genuinely excited about the experience, and truly connected throughout the journey.</p>
+          <p class="wd-note__signature">Luis Quintana</p>
+          <p class="wd-note__role">Photographer &amp; Storyteller</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING BAND -->
+    <section class="wd-cta wd-cta--legacy" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple overlooking the valley at sunset." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal style="text-align: center; margin-inline: auto;">
+        <p class="wd-eyebrow wd-cta__eyebrow" style="justify-content: center;">The day, as it felt.</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title" style="margin-inline: auto;">Some stories deserve to be remembered forever.</h2>
+        <p class="wd-cta__para" style="margin-inline: auto;">I’d love to hear yours.</p>
+        <a class="wd-btn" href="#wd-form-title">Send your inquiry <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>
+
+<script is:inline>
+  (function () {
+    var form = document.querySelector('.wd-form');
+    if (!form) return;
+    var status = form.querySelector('.wd-form__status');
+
+    function show(state, message) {
+      if (!status) return;
+      status.hidden = false;
+      status.setAttribute('data-state', state);
+      status.textContent = message;
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('sent') === '1') {
+        show('success', 'Thank you — your inquiry is on its way.');
+      } else if (params.get('sent') === '0') {
+        show('error', 'Something went wrong sending your inquiry. Please try again.');
+      }
+    } catch (e) {}
+
+    var endpoint = form.getAttribute('action');
+    if (!endpoint) return;
+
+    form.addEventListener('submit', function (ev) {
+      if (typeof form.reportValidity === 'function' && !form.reportValidity()) return;
+      ev.preventDefault();
+
+      var button = form.querySelector('.wd-form__submit');
+      var originalLabel = button ? button.textContent : null;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Sending…';
+      }
+      show('sending', 'Sending your inquiry…');
+
+      var payload = {};
+      new FormData(form).forEach(function (value, key) {
+        payload[key] = value;
+      });
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: res.ok }; });
+        })
+        .then(function (data) {
+          if (data && data.ok) {
+            show('success', 'Thank you — your inquiry is on its way.');
+            form.reset();
+          } else {
+            show('error', 'Something went wrong sending your inquiry. Please try again.');
+          }
+        })
+        .catch(function () {
+          show('error', 'Something went wrong sending your inquiry. Please try again.');
+        })
+        .then(function () {
+          if (button) {
+            button.disabled = false;
+            button.textContent = originalLabel;
+          }
+        });
+    });
+  })();
+</script>

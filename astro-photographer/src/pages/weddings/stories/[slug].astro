@@ -1,0 +1,135 @@
+---
+import Base from '../../../layouts/Base.astro';
+import WeddingsHeader from '../../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../../components/WeddingsFooter.astro';
+import SiteMotion from '../../../components/SiteMotion.astro';
+import Pic from '../../../components/Pic.astro';
+import { weddingStories, otherStories } from '../../../data/weddingStories';
+import '../../../styles/wedding.css';
+
+export function getStaticPaths() {
+  return weddingStories.map((story) => ({
+    params: { slug: story.slug },
+    props: { story },
+  }));
+}
+
+const { story } = Astro.props;
+const others = otherStories(story.slug, 3);
+const introPhoto = story.gallery[0] ?? story.cardImage;
+const quotePhoto = story.gallery[1] ?? story.cardImage;
+const ctaImage = '/images/portfolio-banner.webp';
+---
+<Base
+  title={`${story.names} — Love Stories — Luis Quintana Studio`}
+  description={`${story.names} in ${story.place}. ${story.intro.title}`}
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={story.heroImage} alt={`${story.names} in ${story.place}.`} priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item>A love story</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item style="text-transform: uppercase;">{story.names}</h1>
+        <p class="wd-featured__place" data-hero-item style="color: #e6d4b8;">{story.place}</p>
+        <a class="wd-textlink wd-subhero__scroll" href="#wd-story" data-hero-item style="color: var(--ivory);">Scroll to explore</a>
+      </div>
+    </section>
+
+    <!-- THE LOVE STORY (intro) -->
+    <section class="wd-featured" id="wd-story" aria-labelledby="wd-intro-title">
+      <div class="wd-container wd-featured__row">
+        <figure class="wd-featured__photo" data-reveal>
+          <Pic src={introPhoto} alt={`${story.names} — a tender moment.`} sizes="(max-width: 900px) 100vw, 48vw" />
+        </figure>
+        <div class="wd-featured__copy" data-reveal>
+          <p class="wd-eyebrow">The love story</p>
+          <h2 id="wd-intro-title" class="wd-display wd-featured__title">{story.intro.title}</h2>
+          {story.intro.paras.map((p) => (
+            <p class="wd-featured__para">{p}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- THE GALLERY -->
+    {story.gallery.length > 0 && (
+      <section class="wd-gallery" aria-labelledby="wd-gal-title">
+        <div class="wd-container">
+          <div class="wd-collhead" data-reveal>
+            <p class="wd-eyebrow wd-collhead__eyebrow">The gallery</p>
+            <h2 id="wd-gal-title" class="wd-display wd-collhead__title">Highlights from their day.</h2>
+            <p class="wd-collhead__intro">A collection of moments, details, and emotions that tell the story of {story.names}’s celebration in {story.place}.</p>
+          </div>
+          <div class="wd-gallery__grid" style="margin-top: 46px;">
+            {story.gallery.map((src, i) => (
+              <figure class="wd-gallery__item" data-reveal>
+                <Pic src={src} alt={`${story.names} gallery image ${i + 1}.`} sizes="(max-width: 620px) 50vw, 33vw" />
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- PULL-QUOTE BAND -->
+    <section class="wd-videoquote" aria-labelledby="wd-pq-title">
+      <div class="wd-videoquote__media">
+        <Pic src={quotePhoto} alt={`${story.names} — a quiet moment.`} sizes="(max-width: 860px) 100vw, 50vw" />
+      </div>
+      <div class="wd-videoquote__copy" data-reveal>
+        <p class="wd-eyebrow">A moment to remember</p>
+        <p id="wd-pq-title" class="wd-videoquote__quote">{story.quote.text}</p>
+        <p class="wd-videoquote__para">Every moment felt effortless, and somehow Luis captured it all with so much heart. Looking through our photos brings us right back to how it felt.</p>
+        <p class="wd-videoquote__attr">— {story.quote.attribution}</p>
+      </div>
+    </section>
+
+    <!-- MORE LOVE STORIES -->
+    {others.length > 0 && (
+      <section class="wd-journal" aria-labelledby="wd-more-title">
+        <div class="wd-container">
+          <div class="wd-journal__head" data-reveal>
+            <p class="wd-eyebrow wd-journal__eyebrow">More love stories</p>
+            <h2 id="wd-more-title" class="wd-display wd-journal__title">Other stories you’ll love.</h2>
+          </div>
+          <div class="wd-journal__grid">
+            {others.map((o) => (
+              <article class="wd-jcard" data-reveal>
+                <a class="wd-jcard__image" href={`/weddings/stories/${o.slug}`} aria-label={`View ${o.names}'s story`}>
+                  <Pic src={o.cardImage} alt={`${o.names} — ${o.place}`} sizes="(max-width: 900px) 100vw, 33vw" />
+                </a>
+                <p class="wd-jcard__type">{o.type}</p>
+                <h3 class="wd-jcard__names">{o.names}</h3>
+                <p class="wd-jcard__place">{o.place}</p>
+              </article>
+            ))}
+          </div>
+          <div class="wd-journal__more" data-reveal>
+            <a class="wd-outline-btn" href="/weddings/stories">View all love stories</a>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CLOSING BAND -->
+    <section class="wd-cta wd-cta--legacy" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple overlooking the lake at sunset." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story is next</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Every love deserves to be remembered.</h2>
+        <p class="wd-cta__para">Your story is unlike anyone else’s. Let’s create photographs that preserve the beauty of how it felt.</p>
+        <a class="wd-btn" href="/weddings/inquire">Inquire <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

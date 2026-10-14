@@ -1,80 +1,167 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-import '../../styles/codex-base.css';
-import '../../styles/codex-content.css';
+import { weddingStories } from '../../data/weddingStories';
+import '../../styles/wedding.css';
 
-// Weddings home — served at weddings.luisquintanastudio.com/ via a CloudFront
-// Function host rewrite (weddings host root -> /weddings/index.html). Also
-// directly reachable at /weddings. Content/images are defaults for now.
-const heroImage = '/images/portfolio-banner.webp';
-const heroEyebrow = 'Weddings & Engagements';
-const heroTitle = 'The day, as it felt.';
-const heroLede = 'Timeless, editorial wedding photography for couples who want to remember how the day felt — not just how it looked.';
-
-const introEyebrow = 'The approach';
-const introHeading = 'Quietly cinematic. Unmistakably yours.';
-const introPara = 'From the first look to the last dance, every frame is made to feel honest and alive — the glances, the laughter, the moments between the moments.';
-const introImage = '/images/story-portrait.webp';
-
-const ctaTitle = 'Let’s tell your story.';
-const ctaCopy = 'Every beautiful day begins with a conversation. Tell me about yours.';
-const ctaButton = 'Book your consultation';
+// Weddings home — its own brand/look (Luis Quintana Studio). Served at
+// weddings.luisquintanastudio.com/ via the CloudFront host rewrite, and at
+// /weddings. Placeholder images for now; swap via CMS later.
+const heroImage = '/images/home-hero.webp';
+const philoImage = '/images/story-portrait.webp';
+const weddingsCardImage = '/images/portfolio-closing.webp';
+const engagementsCardImage = '/images/ms-muse-2.webp';
+const aboutImage = '/images/portrait.webp';
 const ctaImage = '/images/home-closing.webp';
+
+const steps = [
+  { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: '/images/muses/portrait-01.webp' },
+  { n: '02', t: 'Planning', p: 'We’ll plan the details, location and timeline so everything feels seamless.', img: '/images/muses/portrait-02.webp' },
+  { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: '/images/muses/portrait-03.webp' },
+];
+
+const loveStories = weddingStories
+  .filter((s) => !s.featured)
+  .slice(0, 3)
+  .map((s) => ({ name: s.names, img: s.cardImage, slug: s.slug }));
 ---
 <Base
   title="Weddings & Engagements — Luis Quintana Studio"
-  description="Timeless, editorial wedding and engagement photography. The day, as it felt."
+  description="Honest moments, meaningful connections, and a story told with intention. Wedding and engagement photography by Luis Quintana Studio."
 >
-  <main id="main-content">
+  <main class="wd wd-page" id="main-content">
     <!-- HERO -->
-    <section class="wd-hero hero" aria-labelledby="wd-hero-title">
-      <Header />
-      <div class="hero__image" data-hero-image data-parallax>
-        <Pic src={heroImage} alt="An editorial wedding portrait at golden hour." priority sizes="100vw" />
+    <section class="wd-hero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple at golden hour overlooking a lake and mountains." priority sizes="100vw" />
       </div>
-      <div class="hero__veil wd-hero__veil" aria-hidden="true"></div>
-      <div class="container hero__content wd-hero__content">
-        <p class="eyebrow wd-hero__eyebrow" data-hero-item>{heroEyebrow}</p>
-        <h1 id="wd-hero-title" class="hero__title wd-hero__title">
-          <span class="line-mask"><span data-hero-line>{heroTitle}</span></span>
-        </h1>
-        <p class="wd-hero__lede" data-hero-item>{heroLede}</p>
-        <a class="button" href="/contact" data-hero-item>{ctaButton}</a>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item>Weddings &amp; Engagements</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item>The day,<br /><em>as it felt.</em></h1>
+        <p class="wd-hero__lede" data-hero-item>Honest moments, meaningful connections and a story told with intention.</p>
+        <a class="wd-btn" href="/weddings/inquire" data-hero-item>Inquire <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
 
-    <!-- INTRO: editorial two-column -->
-    <section class="wd-intro" aria-labelledby="wd-intro-title">
-      <div class="content-container wd-intro__row">
-        <figure class="wd-intro__photo image-frame" data-parallax>
-          <Pic src={introImage} alt="A couple in a quiet, candid moment." sizes="(max-width: 768px) 100vw, 50vw" />
-        </figure>
-        <div class="wd-intro__copy" data-reveal>
-          <p class="eyebrow">{introEyebrow}</p>
-          <h2 id="wd-intro-title" class="display-title wd-intro__title">{introHeading}</h2>
-          <span class="short-rule" aria-hidden="true"></span>
-          <p class="wd-intro__para">{introPara}</p>
+    <!-- PHILOSOPHY -->
+    <section class="wd-philo" aria-labelledby="wd-philo-title">
+      <figure class="wd-philo__photo" data-reveal>
+        <Pic src={philoImage} alt="A couple in a close, candid black-and-white moment." sizes="(max-width: 860px) 100vw, 50vw" />
+      </figure>
+      <div class="wd-philo__copy" data-reveal>
+        <p class="wd-eyebrow">Our philosophy</p>
+        <h2 id="wd-philo-title" class="wd-display wd-philo__title">Some moments<br />stay <em>forever.</em></h2>
+        <p class="wd-philo__para">Photographs are more than images — they are a way to relive what matters most. My approach is guided by connection, intention, and the beauty of real moments.</p>
+        <a class="wd-textlink" href="/weddings/experience">Learn more</a>
+      </div>
+    </section>
+
+    <!-- TWO FEATURE CARDS -->
+    <section class="wd-cards" aria-label="Weddings and engagements">
+      <article class="wd-card" data-reveal>
+        <div class="wd-card__image"><Pic src={weddingsCardImage} alt="A bride on grand stone steps framed by florals." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="wd-card__veil" aria-hidden="true"></div>
+        <div class="wd-card__content">
+          <p class="wd-eyebrow wd-card__eyebrow">Weddings</p>
+          <h2 class="wd-display wd-card__title">A day<br />unlike any other.</h2>
+          <p class="wd-card__para">A celebration of love, surrounded by the people who matter most. I capture the moments, the emotions and the details that make your wedding day truly yours.</p>
+          <a class="wd-textlink" href="/weddings/portfolio">Explore weddings</a>
+        </div>
+      </article>
+      <article class="wd-card" data-reveal>
+        <div class="wd-card__image"><Pic src={engagementsCardImage} alt="A couple embracing with a city skyline behind them." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="wd-card__veil" aria-hidden="true"></div>
+        <div class="wd-card__content">
+          <p class="wd-eyebrow wd-card__eyebrow">Engagements</p>
+          <h2 class="wd-display wd-card__title">Before<br />the vows.</h2>
+          <p class="wd-card__para">A time to slow down, be present and celebrate this chapter together. Engagement sessions are a chance to create beautiful, relaxed images in a meaningful setting.</p>
+          <a class="wd-textlink" href="/weddings/engagements">Explore engagements</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- THE EXPERIENCE -->
+    <section class="wd-exp" aria-labelledby="wd-exp-title">
+      <div class="wd-container">
+        <div class="wd-exp__head" data-reveal>
+          <div>
+            <p class="wd-eyebrow">The experience</p>
+            <h2 id="wd-exp-title" class="wd-display wd-exp__title">From first conversation to the <em>day itself.</em></h2>
+          </div>
+          <div class="wd-exp__intro">
+            <p>A simple, thoughtful process designed to make your experience effortless and meaningful.</p>
+            <a class="wd-textlink" href="/weddings/experience">View the experience</a>
+          </div>
+        </div>
+        <ol class="wd-exp__steps">
+          {steps.map((s) => (
+            <li class="wd-step" data-reveal>
+              <figure class="wd-exp__photo"><Pic src={s.img} alt={`${s.t} — a moment from the process.`} sizes="(max-width: 860px) 100vw, 33vw" /></figure>
+              <div class="wd-step__row">
+                <span class="wd-step__num" aria-hidden="true">{s.n}</span>
+                <div>
+                  <h3 class="wd-step__h">{s.t}</h3>
+                  <p class="wd-step__p">{s.p}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="wd-about" aria-labelledby="wd-about-title">
+      <figure class="wd-about__photo" data-reveal>
+        <Pic src={aboutImage} alt="A portrait of Luis." sizes="(max-width: 860px) 100vw, 50vw" />
+      </figure>
+      <div class="wd-about__copy" data-reveal>
+        <p class="wd-eyebrow">About</p>
+        <h2 id="wd-about-title" class="wd-display wd-about__title">About Luis.</h2>
+        <p class="wd-about__para">I’m Luis, a wedding and engagement photographer with a deep appreciation for meaningful moments, beautiful places and genuine connections. My approach is calm, intentional and focused on telling your story authentically.</p>
+        <a class="wd-textlink" href="/weddings/about">Meet Luis</a>
+      </div>
+    </section>
+
+    <!-- LOVE STORIES -->
+    <section class="wd-stories" aria-labelledby="wd-stories-title">
+      <div class="wd-container">
+        <div class="wd-stories__head" data-reveal>
+          <div>
+            <p class="wd-eyebrow">Love stories</p>
+            <h2 id="wd-stories-title" class="wd-display wd-stories__title">Real people. <em>Real connections.</em></h2>
+          </div>
+          <a class="wd-textlink" href="/weddings/stories">View more love stories</a>
+        </div>
+        <div class="wd-stories__grid">
+          {loveStories.map((s) => (
+            <a class="wd-storycard" href={`/weddings/stories/${s.slug}`} data-reveal>
+              <span class="wd-storycard__image"><Pic src={s.img} alt={s.name} sizes="(max-width: 860px) 100vw, 33vw" /></span>
+              <span class="wd-storycard__name">{s.name}</span>
+            </a>
+          ))}
         </div>
       </div>
     </section>
 
     <!-- CLOSING CTA -->
-    <section class="wd-cta" id="contact" aria-labelledby="wd-cta-title">
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
       <div class="wd-cta__image" data-parallax>
-        <Pic src={ctaImage} alt="A soft, golden closing frame." sizes="100vw" />
+        <Pic src={ctaImage} alt="A couple walking together at golden hour." sizes="100vw" />
       </div>
       <div class="wd-cta__veil" aria-hidden="true"></div>
-      <div class="content-container wd-cta__content" data-reveal>
-        <h2 id="wd-cta-title" class="display-title wd-cta__title">{ctaTitle}</h2>
-        <p class="wd-cta__copy">{ctaCopy}</p>
-        <a class="button" href="/contact">{ctaButton}</a>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story starts here</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Let’s create something meaningful together.</h2>
+        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
-  <Footer />
+  <WeddingsFooter />
   <SiteMotion />
 </Base>

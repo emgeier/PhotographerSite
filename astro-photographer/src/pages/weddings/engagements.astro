@@ -1,0 +1,97 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/ms-muse-2.webp';
+const videoImage = '/images/story-portrait.webp';
+const ctaImage = '/images/portfolio-closing.webp';
+
+const P = (n) => `/images/muses/portrait-0${n}.webp`;
+const gallery = [
+  { src: P(5), alt: 'A couple sharing a quiet moment at golden hour.' },
+  { src: '/images/ms-muse-2.webp', alt: 'A couple walking through a colonnade.' },
+  { src: P(6), alt: 'A black-and-white embrace.' },
+  { src: P(7), alt: 'A couple seated on stone steps.' },
+  { src: '/images/story-portrait.webp', alt: 'A couple with a city skyline behind them.' },
+  { src: P(4), alt: 'A couple nose-to-nose in soft light.' },
+  { src: '/images/ms-muse-5.webp', alt: 'A couple walking a city street.' },
+  { src: P(2), alt: 'An engagement ring detail.' },
+  { src: P(8), alt: 'A couple embracing at sunset.' },
+  { src: '/images/ms-muse-6.webp', alt: 'A joyful lift at golden hour.' },
+  { src: P(9), alt: 'A black-and-white tender moment.' },
+  { src: '/images/portfolio-film.webp', alt: 'A couple in a field at dusk.' },
+];
+---
+<Base
+  title="The Engagement Portfolio — Luis Quintana Studio"
+  description="A collection of real love stories, from quiet moments to grand adventures — all about your story."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple embracing with a city skyline at sunset." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-subhero__kicker" data-hero-item>The</p>
+        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>Engagement<br />Portfolio</h1>
+        <p class="wd-hero__lede" data-hero-item>A collection of real love stories, from quiet moments to grand adventures, all about your story.</p>
+      </div>
+    </section>
+
+    <!-- COLLECTION HEAD + GALLERY -->
+    <section class="wd-gallery" id="wd-collection" aria-labelledby="wd-coll-title">
+      <div class="wd-container">
+        <div class="wd-collhead" data-reveal>
+          <p class="wd-eyebrow wd-collhead__eyebrow">A collection</p>
+          <h2 id="wd-coll-title" class="wd-display wd-collhead__title">Of beginnings</h2>
+          <span class="wd-rule wd-collhead__rule" aria-hidden="true"></span>
+          <p class="wd-collhead__intro">A look into a collection of real engagement sessions, each one unique, each one a true reflection of the couples I have the honor to photograph. Real moments. Real people. Real love.</p>
+        </div>
+        <div class="wd-gallery__grid" style="margin-top: 46px;">
+          {gallery.map((g) => (
+            <figure class="wd-gallery__item" data-reveal>
+              <Pic src={g.src} alt={g.alt} sizes="(max-width: 620px) 50vw, 33vw" />
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED SESSION VIDEO BAND -->
+    <section class="wd-videoquote" aria-labelledby="wd-vq-title">
+      <div class="wd-videoquote__media">
+        <Pic src={videoImage} alt="A couple nose-to-nose in warm evening light." sizes="(max-width: 860px) 100vw, 50vw" />
+        <span class="wd-videoquote__play" aria-hidden="true"></span>
+      </div>
+      <div class="wd-videoquote__copy" data-reveal>
+        <p class="wd-eyebrow">Featured session</p>
+        <p id="wd-vq-title" class="wd-videoquote__quote">It felt effortless, natural, and completely us.</p>
+        <p class="wd-videoquote__para">This engagement session is a perfect example of how real moments and beautiful light create images you can feel every time you see them.</p>
+        <a class="wd-textlink" href="/weddings/testimonials">Watch the film</a>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple embracing against a sunset skyline." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story starts here</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Your story starts here.</h2>
+        <p class="wd-cta__para">Engagement sessions are a chance to celebrate your connection, create beautiful memories together, and get comfortable in front of the camera before the big day.</p>
+        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

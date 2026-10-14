@@ -1,0 +1,134 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/stories-hero.webp';
+const featuredPhoto = '/images/portfolio-hero.webp';
+const videoImage = '/images/portfolio-closing.webp';
+const ctaImage = '/images/portfolio-film.webp';
+
+const shortQuotes = [
+  { text: 'Luis captured our day exactly as it felt — real, emotional, and incredibly beautiful.', attribution: 'Taylor & Andrew' },
+  { text: 'Working with Luis was one of the best decisions we made for our wedding.', attribution: 'Melissa & Jonathan' },
+  { text: 'Every photo feels like a piece of our story. We will cherish them forever.', attribution: 'Sarah & Michael' },
+];
+
+const cards = [
+  { text: 'Luis was an absolute dream to work with. He made the entire process feel effortless and fun, and the photos are stunning!', attribution: 'Jenna & Marcus', img: '/images/muses/portrait-04.webp' },
+  { text: 'He has a gift for capturing real moments. When we look at our photos, we feel all the emotions of that day all over again.', attribution: 'Olivia & Daniel', img: '/images/muses/portrait-05.webp' },
+  { text: 'Every detail, every emotion, every moment was captured beautifully. We couldn’t be happier with our photos!', attribution: 'Ashley & Ryan', img: '/images/muses/portrait-06.webp' },
+  { text: 'Luis exceeded all our expectations. The photos are timeless, elegant, and so us.', attribution: 'Natalie & James', img: '/images/muses/portrait-07.webp' },
+];
+---
+<Base
+  title="Testimonials — Luis Quintana Studio"
+  description="Kind words and lasting memories from couples who trusted us to tell their story."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple at a lakeside villa framed by roses." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <h1 class="wd-display wd-hero__title" data-hero-item>Kind words.<br /><em>Lasting Memories.</em></h1>
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item style="margin-top: 22px;">Real love stories from couples who trusted us to tell theirs</p>
+      </div>
+    </section>
+
+    <!-- 3-UP SHORT QUOTES -->
+    <section class="wd-quotes" aria-labelledby="wd-best-title">
+      <div class="wd-container">
+        <div class="wd-collhead" data-reveal>
+          <p class="wd-eyebrow wd-collhead__eyebrow">The best of</p>
+          <h2 id="wd-best-title" class="wd-display wd-collhead__title">What our couples say</h2>
+          <span class="wd-rule wd-collhead__rule" aria-hidden="true"></span>
+        </div>
+        <div class="wd-quotes__grid">
+          {shortQuotes.map((q) => (
+            <blockquote class="wd-quote" data-reveal>
+              <span class="wd-quote__mark" aria-hidden="true">“</span>
+              <p class="wd-quote__text">{q.text}</p>
+              <footer class="wd-quote__attr">{q.attribution}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED PULL-QUOTE -->
+    <section class="wd-featured" aria-labelledby="wd-feat-title">
+      <div class="wd-container wd-featured__row">
+        <figure class="wd-featured__photo" data-reveal>
+          <Pic src={featuredPhoto} alt="A bride and groom on garden steps surrounded by florals." sizes="(max-width: 900px) 100vw, 48vw" />
+        </figure>
+        <div class="wd-featured__copy" data-reveal>
+          <p class="wd-eyebrow">A love story in their words</p>
+          <blockquote>
+            <p id="wd-feat-title" class="wd-display wd-featured__title" style="font-style: italic; text-transform: none;">“Luis made us feel so comfortable and truly understood our vision.”</p>
+            <p class="wd-featured__para">From our engagement session to the wedding day, Luis was professional, kind, and incredibly talented. The photos are beyond anything we could have imagined — so natural, emotional, and timeless. He captured not just how everything looked, but how it felt.</p>
+            <footer class="wd-featured__names">Crystal &amp; Kevin</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- DARK VIDEO TESTIMONIAL -->
+    <section class="wd-videoquote wd-videoquote--dark" aria-labelledby="wd-vt-title">
+      <div class="wd-videoquote__media">
+        <Pic src={videoImage} alt="A couple backlit by warm evening light." sizes="(max-width: 860px) 100vw, 50vw" />
+        <span class="wd-videoquote__play" aria-hidden="true"></span>
+      </div>
+      <div class="wd-videoquote__copy" data-reveal>
+        <p class="wd-eyebrow" style="color: #e6d4b8;">Video testimonial</p>
+        <p id="wd-vt-title" class="wd-videoquote__quote">Their Experience in Their Own Words.</p>
+        <p class="wd-videoquote__attr">Crystal &amp; Kevin — Wedding testimonial</p>
+      </div>
+    </section>
+
+    <!-- 2x2 QUOTE CARDS -->
+    <section class="wd-quotecards" aria-labelledby="wd-more-title">
+      <div class="wd-container">
+        <div class="wd-collhead" data-reveal>
+          <p class="wd-eyebrow wd-collhead__eyebrow">More beautiful words</p>
+          <h2 id="wd-more-title" class="wd-display wd-collhead__title">From our couples</h2>
+          <span class="wd-rule wd-collhead__rule" aria-hidden="true"></span>
+        </div>
+        <div class="wd-quotecards__grid">
+          {cards.map((c) => (
+            <figure class="wd-quotecard" data-reveal>
+              <span class="wd-quotecard__photo"><Pic src={c.img} alt={`${c.attribution} on their wedding day.`} sizes="(max-width: 620px) 110px, 150px" /></span>
+              <blockquote>
+                <span class="wd-quotecard__mark" aria-hidden="true">“</span>
+                <p class="wd-quotecard__text">{c.text}</p>
+                <figcaption class="wd-quotecard__attr">{c.attribution}</figcaption>
+              </blockquote>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple at a lakeside villa at sunset." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story is next</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Your story deserves to be remembered</h2>
+        <p class="wd-cta__para">Let’s create images that feel like you.</p>
+        <a class="wd-btn" href="/weddings/inquire">Inquire now <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

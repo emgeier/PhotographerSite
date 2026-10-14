@@ -1,0 +1,65 @@
+---
+// Weddings site masthead — its own brand ("Luis Quintana Studio") and nav,
+// distinct from the Glam Muse Header. Mirrors the mobile-menu contract that
+// motion.ts initNav() targets (#menu-toggle, #primary-nav, body.menu-open).
+const links = [
+  { href: '/weddings', label: 'Weddings' },
+  { href: '/weddings/engagements', label: 'Engagements' },
+  { href: '/weddings/experience', label: 'The Experience' },
+  { href: '/weddings/testimonials', label: 'Testimonials' },
+  { href: '/weddings/stories', label: 'Love Stories' },
+] as const;
+
+const discover = [
+  { href: '/weddings/about', label: 'About' },
+  { href: '/weddings/faq', label: 'FAQ' },
+] as const;
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  path === href || path.startsWith(href + '/');
+const discoverActive = discover.some((d) => isActive(d.href));
+---
+<header class="wd-header">
+  <a class="wd-brand" href="/weddings" aria-label="Luis Quintana Studio, weddings home">
+    <span class="wd-brand__mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.1">
+        <rect x="7.5" y="7.5" width="25" height="25" transform="rotate(45 20 20)" />
+        <text x="20" y="24" text-anchor="middle" font-family="var(--serif)" font-size="11" fill="currentColor" stroke="none" letter-spacing="0.5">LQ</text>
+      </svg>
+    </span>
+    <span class="wd-brand__words">
+      <span class="wd-brand__name">LUIS QUINTANA</span>
+      <span class="wd-brand__sub">STUDIO</span>
+    </span>
+  </a>
+  <button
+    class="menu-toggle wd-menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-controls="primary-nav"
+    aria-expanded="false"
+    aria-label="Open navigation"
+  >
+    <span></span><span></span>
+  </button>
+  <nav class="wd-nav primary-nav" id="primary-nav" aria-label="Main navigation">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+    ))}
+    <div class="wd-nav__discover">
+      <button
+        type="button"
+        class="wd-nav__discover-toggle"
+        aria-expanded="false"
+        aria-current={discoverActive ? 'page' : undefined}
+      >Discover <span class="wd-nav__caret" aria-hidden="true">▾</span></button>
+      <div class="wd-nav__menu">
+        {discover.map(({ href, label }) => (
+          <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+        ))}
+      </div>
+    </div>
+    <a class="wd-nav__inquire" href="/weddings/inquire">Inquire</a>
+  </nav>
+</header>
