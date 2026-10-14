@@ -59,7 +59,7 @@
  * --------------------------------------------------------------- */
 .lq-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
 .lq-hero__image { position: absolute; inset: 0; }
-.lq-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.lq-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .lq-hero__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(16, 12, 8, 0.82) 0%, rgba(16, 12, 8, 0.58) 30%, rgba(16, 12, 8, 0.2) 56%, rgba(16, 12, 8, 0.05) 80%, transparent 100%), linear-gradient(0deg, rgba(16, 12, 8, 0.4), transparent 38%); }
 .lq-hero__content { position: relative; z-index: 1; }
 .lq-hero__eyebrow { color: #e6d4b8; }
@@ -92,7 +92,7 @@
 .lq-cards { display: grid; grid-template-columns: 1fr 1fr; }
 .lq-card { position: relative; min-height: 520px; overflow: hidden; display: flex; align-items: flex-end; color: var(--ivory); }
 .lq-card__image { position: absolute; inset: 0; }
-.lq-card__image img { width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--ease); }
+.lq-card__image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: scale 900ms var(--ease); }
 .lq-card:hover .lq-card__image img { scale: 1.03; }
 .lq-card__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(18, 13, 9, 0.82) 0%, rgba(18, 13, 9, 0.34) 42%, transparent 70%); }
 .lq-card__content { position: relative; z-index: 1; padding: 48px clamp(36px, 4vw, 60px); }
@@ -106,19 +106,19 @@
  * --------------------------------------------------------------- */
 .lq-beauty { background: var(--lq-cream); display: grid; grid-template-columns: 54% 1fr; align-items: center; gap: clamp(40px, 5vw, 90px); padding: 64px 0; }
 .lq-beauty__media { position: relative; }
-.lq-beauty__media img { width: 100%; height: 640px; object-fit: cover; display: block; }
+.lq-beauty__media img { width: 100%; height: 640px; object-fit: cover; object-position: center top; display: block; }
 .lq-beauty__copy { padding-right: max(48px, calc((100% - 1240px) / 2)); }
 .lq-beauty__eyebrow { color: var(--lq-gold); }
 .lq-beauty__title { margin: 18px 0 24px; font-size: clamp(44px, 4.6vw, 68px); line-height: 0.98; }
 .lq-beauty__para { max-width: 340px; color: var(--lq-body); font-size: 15px; line-height: 1.7; margin: 0 0 30px; }
 .lq-beauty__inset { max-width: 320px; }
-.lq-beauty__inset img { width: 100%; height: 240px; object-fit: cover; display: block; filter: grayscale(1); }
+.lq-beauty__inset img { width: 100%; height: 240px; object-fit: cover; object-position: center top; display: block; filter: grayscale(1); }
 
 /* --------------------------------------------------------------- *
  * 6. Meet Luis (B&W photo left, bio right)
  * --------------------------------------------------------------- */
 .lq-meet { background: var(--lq-cream); display: grid; grid-template-columns: 46% 1fr; align-items: center; gap: clamp(40px, 5vw, 90px); padding: 20px 0 76px; }
-.lq-meet__media img { width: 100%; height: 560px; object-fit: cover; object-position: center 30%; display: block; filter: grayscale(1); }
+.lq-meet__media img { width: 100%; height: 560px; object-fit: cover; object-position: center top; display: block; filter: grayscale(1); }
 .lq-meet__copy { padding-right: max(48px, calc((100% - 1240px) / 2)); }
 .lq-meet__eyebrow { color: var(--lq-gold); }
 .lq-meet__title { margin: 18px 0 24px; font-size: clamp(44px, 4.6vw, 66px); line-height: 1; text-transform: uppercase; }
