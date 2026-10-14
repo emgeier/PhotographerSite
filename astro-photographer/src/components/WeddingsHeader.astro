@@ -3,14 +3,6 @@
 // distinct from the Glam Muse Header. Mirrors the mobile-menu contract that
 // motion.ts initNav() targets (#menu-toggle, #primary-nav, body.menu-open).
 const links = [
-<<<<<<< HEAD
-  { href: '/weddings', label: 'Weddings & Engagements' },
-  { href: '/weddings/experience', label: 'The Experience' },
-  { href: '/weddings/stories', label: 'Love Stories' },
-  { href: '/weddings/about', label: 'About' },
-] as const;
-//const LQSWImage = '/images/LQSW.png'; 
-=======
   { href: '/weddings', label: 'Weddings' },
   { href: '/weddings/engagements', label: 'Engagements' },
   { href: '/weddings/experience', label: 'The Experience' },
@@ -22,19 +14,10 @@ const discover = [
   { href: '/weddings/about', label: 'About' },
   { href: '/weddings/faq', label: 'FAQ' },
 ] as const;
->>>>>>> weddings-pages
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) =>
   path === href || path.startsWith(href + '/');
-<<<<<<< HEAD
----
-<header class="wd-header">
-  <a class="wd-brand" href="/weddings" aria-label="Luis Quintana Studio, weddings home">
-    <span class="wd-brand__name">LUIS QUINTANA</span>
-    <span class="wd-brand__sub">STUDIO</span>
-
-=======
 const discoverActive = discover.some((d) => isActive(d.href));
 ---
 <header class="wd-header">
@@ -49,7 +32,6 @@ const discoverActive = discover.some((d) => isActive(d.href));
       <span class="wd-brand__name">LUIS QUINTANA</span>
       <span class="wd-brand__sub">STUDIO</span>
     </span>
->>>>>>> weddings-pages
   </a>
   <button
     class="menu-toggle wd-menu-toggle"
@@ -65,8 +47,6 @@ const discoverActive = discover.some((d) => isActive(d.href));
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-<<<<<<< HEAD
-=======
     <div class="wd-nav__discover">
       <button
         type="button"
@@ -80,7 +60,6 @@ const discoverActive = discover.some((d) => isActive(d.href));
         ))}
       </div>
     </div>
->>>>>>> weddings-pages
     <a class="wd-nav__inquire" href="/weddings/inquire">Inquire</a>
   </nav>
 </header>

@@ -4,21 +4,6 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-<<<<<<< HEAD
-import '../../styles/wedding.css';
-
-const heroImage = '/images/portfolio-banner.webp';
-const featuredPhoto = '/images/portfolio-closing.webp';
-
-const stories = [
-  { type: 'Wedding', names: 'Olivia & James', place: 'Lake Como, Italy', img: '/images/muses/portrait-04.webp' },
-  { type: 'Engagement', names: 'Sophia & Daniel', place: 'Nashville, Tennessee', img: '/images/muses/portrait-05.webp' },
-  { type: 'Wedding', names: 'Isabelle & Marcus', place: 'Amalfi Coast, Italy', img: '/images/muses/portrait-06.webp' },
-  { type: 'Engagement', names: 'Emma & Noah', place: 'Franklin, Tennessee', img: '/images/muses/portrait-07.webp' },
-  { type: 'Wedding', names: 'Charlotte & Benjamin', place: 'Tuscany, Italy', img: '/images/muses/portrait-08.webp' },
-  { type: 'Wedding', names: 'Madison & Christopher', place: 'Nashville, Tennessee', img: '/images/muses/portrait-09.webp' },
-];
-=======
 import { weddingStories, getStory } from '../../data/weddingStories';
 import '../../styles/wedding.css';
 
@@ -31,7 +16,6 @@ const featuredPhoto = featured.cardImage;
 const stories = weddingStories
   .filter((s) => !s.featured)
   .map((s) => ({ type: s.type, names: s.names, place: s.place, img: s.cardImage, slug: s.slug }));
->>>>>>> weddings-pages
 const ctaImage = '/images/portfolio-banner.webp';
 ---
 <Base
@@ -65,11 +49,7 @@ const ctaImage = '/images/portfolio-banner.webp';
           <p class="wd-featured__names">Alex &amp; Taylor</p>
           <p class="wd-featured__place">Lake Como, Italy</p>
           <p class="wd-featured__para">A celebration filled with heartfelt moments, breathtaking views, and a love that brought together family and friends from around the world. Their wedding day was a perfect reflection of who they are — elegant, joyful, and deeply meaningful.</p>
-<<<<<<< HEAD
-          <a class="wd-textlink" href="/weddings/stories">View their story</a>
-=======
           <a class="wd-textlink" href={`/weddings/stories/${featured.slug}`}>View their story</a>
->>>>>>> weddings-pages
         </div>
       </div>
     </section>
@@ -90,21 +70,13 @@ const ctaImage = '/images/portfolio-banner.webp';
         <div class="wd-journal__grid">
           {stories.map((s) => (
             <article class="wd-jcard" data-reveal>
-<<<<<<< HEAD
-              <a class="wd-jcard__image" href="/weddings/stories" aria-label={`View ${s.names}'s story`}>
-=======
               <a class="wd-jcard__image" href={`/weddings/stories/${s.slug}`} aria-label={`View ${s.names}'s story`}>
->>>>>>> weddings-pages
                 <Pic src={s.img} alt={`${s.names} — ${s.place}`} sizes="(max-width: 900px) 100vw, 33vw" />
               </a>
               <p class="wd-jcard__type">{s.type}</p>
               <h3 class="wd-jcard__names">{s.names}</h3>
               <p class="wd-jcard__place">{s.place}</p>
-<<<<<<< HEAD
-              <a class="wd-textlink wd-jcard__link" href="/weddings/stories">View story</a>
-=======
               <a class="wd-textlink wd-jcard__link" href={`/weddings/stories/${s.slug}`}>View story</a>
->>>>>>> weddings-pages
             </article>
           ))}
         </div>

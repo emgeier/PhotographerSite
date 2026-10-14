@@ -48,7 +48,6 @@
 .wd-hero .wd-header, .wd-hero .wd-header a { color: var(--ivory); }
 .wd-hero .wd-nav__inquire { border-color: rgba(244, 240, 232, 0.55); }
 .wd-hero .wd-menu-toggle span { background: var(--ivory); }
-.wd-brand_image {height: 85px;} */
 .wd-brand { display: inline-flex; align-items: center; gap: 14px; line-height: 1; color: inherit; }
 .wd-brand__mark { display: inline-flex; }
 .wd-brand__words { display: inline-flex; flex-direction: column; }
