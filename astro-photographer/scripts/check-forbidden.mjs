@@ -8,9 +8,11 @@
  *
  *   - `use.typekit.net/dis2zlj`  — the Codex Typekit kit must stay dropped
  *                                  (we keep only kit `mdr5myc`).
- *   - `mailto:`                  — no mailto contact flow; contact goes through
- *                                  the ActiveCampaign Lambda endpoint only.
  *   - `assets/vendor/gsap`       — gsap is an npm dependency, never vendored.
+ *
+ * NOTE: the former `mailto:` ban was removed — a mailto contact flow is now an
+ * accepted part of this project (e.g. the /link email button), so it is no
+ * longer a forbidden artifact.
  *
  * Zero-false-positive scoping
  * ---------------------------
@@ -55,12 +57,6 @@ const CHECKS = [
     // Match the full host+kit path so a prose mention of "dis2zlj" alone is fine.
     pattern: /use\.typekit\.net\/dis2zlj/,
     roots: [SRC, DIST],
-  },
-  {
-    label: 'mailto: contact flow',
-    // dist-only: built HTML has no source comments, so this is a real href usage.
-    pattern: /mailto:/,
-    roots: [DIST],
   },
   {
     label: 'vendored gsap (assets/vendor/gsap)',
