@@ -1,0 +1,140 @@
+---
+// APEX STUDIO HUB — the top-level home for luisquintanastudio.com. This page is
+// built at /home for now; it is DESTINED TO BECOME the root `/` index.astro when
+// the paths-restructure runs (see astro-photographer/.agents/tasks/
+// paths-restructure-plan.md). Do NOT overwrite src/pages/index.astro (the muse
+// home) — this file is additive. It unites the Weddings and Glam Muse sections
+// under one brand and matches Website/LQhomepage.png.
+import Base from '../layouts/Base.astro';
+import ApexHeader from '../components/ApexHeader.astro';
+import ApexFooter from '../components/ApexFooter.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import '../styles/apex.css';
+
+// Reused existing imagery from public/images/ (no new binaries). Closest match
+// per section; see .agents/tasks/apex-home-plan.md image table for the
+// compromises (no wedding-couple / male-photographer / golden-hour assets exist).
+const heroImage = '/images/ms-hero.webp';          // warm glam beauty portrait
+const weddingsCardImage = '/images/ms-featured.webp'; // ivory bridal portrait (closest "weddings")
+const glamCardImage = '/images/ms-muse-2.webp';    // black-top glam portrait
+const beautyImage = '/images/portfolio-banner.webp'; // woman in golden-hour landscape
+const beautyInset = '/images/story-portrait.webp'; // intimate B&W inset
+const meetImage = '/images/muses/portrait-04.webp'; // stand-in for B&W photographer portrait
+const ctaImage = '/images/portfolio-banner.webp';  // warm golden-hour landscape
+---
+<Base
+  title="Luis Quintana Studio — Photography"
+  description="Life as stories. Wedding, engagement and glam portrait photography by Luis Quintana Studio — honest, artful imagery that captures the people and moments that matter."
+>
+  <main class="lq lq-page" id="main-content">
+    <!-- 1 + 2. HEADER OVER HERO (single static slide) -->
+    <section class="lq-hero">
+      <ApexHeader />
+      <div class="lq-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A woman in a flowing gown bathed in warm golden light." priority sizes="100vw" />
+      </div>
+      <div class="lq-hero__veil" aria-hidden="true"></div>
+      <div class="lq-container lq-hero__content">
+        <p class="lq-eyebrow lq-hero__eyebrow" data-hero-item>Luis Quintana Studio</p>
+        <span class="lq-rule lq-hero__rule" data-hero-item aria-hidden="true"></span>
+        <h1 class="lq-display lq-hero__title" data-hero-item>LIFE<br />AS<br />STORIES.</h1>
+      </div>
+      <!-- Static/decorative carousel indicator — no JS carousel (single slide). -->
+      <div class="lq-hero__indicator" aria-hidden="true">
+        <span class="lq-hero__count">01 &mdash; 03</span>
+        <div class="lq-hero__dots">
+          <span class="lq-hero__dot is-active"></span>
+          <span class="lq-hero__dot"></span>
+          <span class="lq-hero__dot"></span>
+        </div>
+      </div>
+      <div class="lq-hero__keywords" aria-hidden="true">
+        <span>People</span>
+        <span>Places</span>
+        <span>Emotions</span>
+        <span>Beauty</span>
+        <span>Forever</span>
+        <span class="lq-rule"></span>
+      </div>
+    </section>
+
+    <!-- 3. INTRO BAND -->
+    <section class="lq-intro" aria-labelledby="lq-intro-line">
+      <div class="lq-container" data-reveal>
+        <p class="lq-eyebrow lq-eyebrow--center lq-intro__eyebrow">Life as stories.</p>
+        <h2 id="lq-intro-line" class="lq-display lq-intro__line">Every Life Is <em>a Story</em> Worth Telling.</h2>
+        <span class="lq-rule lq-intro__rule" aria-hidden="true"></span>
+      </div>
+    </section>
+
+    <!-- 4. TWO BRAND CARDS -->
+    <section class="lq-cards" aria-label="Explore the studio">
+      <article class="lq-card" data-reveal>
+        <div class="lq-card__image"><Pic src={weddingsCardImage} alt="A couple together on their wedding day." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="lq-card__veil" aria-hidden="true"></div>
+        <div class="lq-card__content">
+          <h2 class="lq-display lq-card__title">Weddings &amp;<br />Engagements</h2>
+          <p class="lq-card__sub">The day, as it felt.</p>
+          <a class="lq-textlink" href="/weddings">Explore the experience</a>
+        </div>
+      </article>
+      <article class="lq-card" data-reveal>
+        <div class="lq-card__image"><Pic src={glamCardImage} alt="A woman in a dramatic black gown." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="lq-card__veil" aria-hidden="true"></div>
+        <div class="lq-card__content">
+          <h2 class="lq-display lq-card__title">The Glam<br />Muse Series</h2>
+          <p class="lq-card__sub">Your beauty, rediscovered.</p>
+          <!-- /muse does not exist yet; it arrives with the paths-restructure. -->
+          <a class="lq-textlink" href="/muse">Explore the experience</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- 5. BEAUTY IN REAL MOMENTS -->
+    <section class="lq-beauty" aria-labelledby="lq-beauty-title">
+      <figure class="lq-beauty__media" data-reveal>
+        <Pic src={beautyImage} alt="A bride in a sweeping gown overlooking a lake and mountains." sizes="(max-width: 860px) 100vw, 54vw" />
+      </figure>
+      <div class="lq-beauty__copy" data-reveal>
+        <p class="lq-eyebrow lq-beauty__eyebrow">Authentic emotions</p>
+        <h2 id="lq-beauty-title" class="lq-display lq-beauty__title">Beauty<br />In Real<br />Moments.</h2>
+        <p class="lq-beauty__para">The fleeting, the intimate, the in-between. It’s in these moments that your story truly comes to life.</p>
+        <figure class="lq-beauty__inset">
+          <Pic src={beautyInset} alt="An intimate black-and-white moment between two people." sizes="(max-width: 860px) 100vw, 320px" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- 6. MEET LUIS -->
+    <section class="lq-meet" aria-labelledby="lq-meet-title">
+      <figure class="lq-meet__media" data-reveal>
+        <Pic src={meetImage} alt="A black-and-white portrait of Luis holding a camera." sizes="(max-width: 860px) 100vw, 46vw" />
+      </figure>
+      <div class="lq-meet__copy" data-reveal>
+        <p class="lq-eyebrow lq-meet__eyebrow">The person behind the lens</p>
+        <h2 id="lq-meet-title" class="lq-display lq-meet__title">Meet Luis.</h2>
+        <p class="lq-meet__para">I’m a storyteller at heart, drawn to beauty, human connection, and the quiet moments that often mean the most. Through my lens, I strive to create images that feel honest, artful, and enduring — a reflection of the people and stories that inspire me.</p>
+        <!-- /about may not exist yet on this branch; forward-looking link. -->
+        <a class="lq-textlink" href="/about">Get to know me</a>
+      </div>
+    </section>
+
+    <!-- 7. CLOSING CTA -->
+    <section class="lq-cta" aria-labelledby="lq-cta-eyebrow">
+      <div class="lq-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A warm golden-hour landscape at sunset." sizes="100vw" />
+      </div>
+      <div class="lq-cta__veil" aria-hidden="true"></div>
+      <div class="lq-container lq-cta__content" data-reveal>
+        <p id="lq-cta-eyebrow" class="lq-eyebrow lq-cta__eyebrow">Your story begins here.</p>
+        <span class="lq-rule lq-cta__rule" aria-hidden="true"></span>
+        <!-- Mockup labels this "Inquire"; /contact resolves today (/inquire
+             arrives with the paths-restructure). -->
+        <a class="lq-outline-btn" href="/contact">Let’s connect</a>
+      </div>
+    </section>
+  </main>
+  <ApexFooter />
+  <SiteMotion />
+</Base>

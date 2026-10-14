@@ -1,0 +1,192 @@
+/* ============================================================= *
+ * APEX STUDIO HUB (luisquintanastudio.com) — the top-level home that
+ * unites the Weddings and Glam Muse sections. Its own isolated design
+ * system under the `.lq-*` prefix so it never restyles the weddings/muse
+ * pages. Reuses the global :root tokens (--serif/ivypresto-display,
+ * --sans/Manrope, --ivory, --ink, --gold, --taupe, --stone) from
+ * global.css; defines only `.lq-*` rules plus a small `.lq`-scoped token
+ * block, mirroring how wedding.css adds `--wd-*` under `.wd`.
+ * ============================================================= */
+
+.lq {
+  --lq-cream: #f4f0e7;
+  --lq-ink: #211c15;
+  --lq-body: #5a5247;
+  --lq-gold: #b08d57;
+}
+
+.lq-page { background: var(--lq-cream); color: var(--lq-ink); font-family: var(--sans); }
+.lq-container { width: min(1240px, calc(100% - 120px)); margin-inline: auto; }
+
+/* Shared primitives --------------------------------------------------- */
+.lq-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--lq-gold); display: inline-flex; align-items: center; gap: 14px; }
+.lq-eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
+.lq-eyebrow--center { justify-content: center; }
+.lq-eyebrow--center::before { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
+.lq-rule { display: block; width: 54px; height: 1px; background: var(--lq-gold); }
+
+/* All display headings use the ivypresto-display serif; italic accent via <em>. */
+.lq-display { font-family: var(--serif); font-weight: 100; line-height: 1; letter-spacing: -1px; color: var(--lq-ink); }
+.lq-display em { font-style: italic; }
+
+.lq-textlink { display: inline-flex; align-items: center; gap: 12px; font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: var(--lq-ink); }
+.lq-textlink::after { content: "→"; color: var(--lq-gold); transition: transform 350ms var(--ease); }
+.lq-textlink:hover::after { transform: translateX(5px); }
+
+.lq-outline-btn { display: inline-flex; align-items: center; justify-content: center; padding: 17px 40px; border: 1px solid rgba(33, 28, 21, 0.45); font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: var(--lq-ink); transition: color 250ms ease, background 250ms ease, border-color 250ms ease; }
+.lq-outline-btn:hover { color: #fff; background: var(--lq-gold); border-color: var(--lq-gold); }
+
+/* --------------------------------------------------------------- *
+ * Header (light over the dark hero)
+ * --------------------------------------------------------------- */
+.lq-header { position: absolute; z-index: 5; top: 0; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: space-between; width: min(1240px, calc(100% - 120px)); height: 96px; }
+.lq-brand { color: inherit; line-height: 1; }
+.lq-brand__name { font-family: var(--serif); font-weight: 100; font-size: 20px; letter-spacing: 4px; }
+.lq-nav { display: flex; align-items: center; gap: 34px; font: 600 10px/1 var(--sans); letter-spacing: 1.6px; text-transform: uppercase; }
+.lq-nav a { position: relative; white-space: nowrap; }
+.lq-nav a[aria-current="page"] { color: var(--lq-gold); }
+.lq-nav__inquire { padding: 12px 24px; border: 1px solid currentColor; }
+.lq-nav__inquire:hover { color: #fff; background: var(--lq-gold); border-color: var(--lq-gold); }
+.lq-menu-toggle { display: none; }
+/* Light treatment when the header sits over the dark hero. */
+.lq-hero .lq-header, .lq-hero .lq-header a { color: var(--ivory); }
+.lq-hero .lq-nav a[aria-current="page"] { color: #e6d4b8; }
+.lq-hero .lq-nav__inquire { border-color: rgba(244, 240, 232, 0.55); }
+.lq-hero .lq-menu-toggle span { background: var(--ivory); }
+
+/* --------------------------------------------------------------- *
+ * 1 + 2. Hero (single static slide; portrait right, copy left)
+ * --------------------------------------------------------------- */
+.lq-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
+.lq-hero__image { position: absolute; inset: 0; }
+.lq-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.lq-hero__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(16, 12, 8, 0.82) 0%, rgba(16, 12, 8, 0.58) 30%, rgba(16, 12, 8, 0.2) 56%, rgba(16, 12, 8, 0.05) 80%, transparent 100%), linear-gradient(0deg, rgba(16, 12, 8, 0.4), transparent 38%); }
+.lq-hero__content { position: relative; z-index: 1; }
+.lq-hero__eyebrow { color: #e6d4b8; }
+.lq-hero__eyebrow::after { display: none; }
+.lq-hero__rule { margin: 16px 0 30px; background: rgba(244, 240, 232, 0.7); }
+.lq-hero__title { font-size: clamp(68px, 9vw, 150px); line-height: 0.9; letter-spacing: -2px; color: var(--ivory); }
+
+/* 01 — 03 carousel indicator (static/decorative — no JS carousel). */
+.lq-hero__indicator { position: absolute; left: 0; bottom: 54px; z-index: 2; width: min(1240px, calc(100% - 120px)); left: 50%; transform: translateX(-50%); }
+.lq-hero__count { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3px; color: #efe8dd; display: inline-flex; align-items: center; gap: 10px; }
+.lq-hero__dots { display: flex; gap: 10px; margin-top: 14px; }
+.lq-hero__dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid rgba(244, 240, 232, 0.7); }
+.lq-hero__dot.is-active { background: var(--ivory); border-color: var(--ivory); }
+
+/* Right-edge vertical keyword stack. */
+.lq-hero__keywords { position: absolute; right: max(48px, calc((100% - 1240px) / 2)); top: 50%; transform: translateY(-50%); z-index: 2; display: flex; flex-direction: column; gap: 10px; text-align: right; font: 600 10px/1 var(--sans); letter-spacing: 3px; text-transform: uppercase; color: #efe8dd; }
+.lq-hero__keywords .lq-rule { margin: 8px 0 0 auto; background: rgba(244, 240, 232, 0.7); }
+
+/* --------------------------------------------------------------- *
+ * 3. Intro band (ivory)
+ * --------------------------------------------------------------- */
+.lq-intro { background: var(--lq-cream); text-align: center; padding: 86px 0 78px; }
+.lq-intro__eyebrow { justify-content: center; color: var(--lq-gold); }
+.lq-intro__line { margin: 26px auto 0; font-size: clamp(34px, 4vw, 58px); line-height: 1.1; max-width: 16ch; }
+.lq-intro__rule { margin: 24px auto 0; }
+
+/* --------------------------------------------------------------- *
+ * 4. Two brand cards (full-bleed photo, dark bottom gradient)
+ * --------------------------------------------------------------- */
+.lq-cards { display: grid; grid-template-columns: 1fr 1fr; }
+.lq-card { position: relative; min-height: 520px; overflow: hidden; display: flex; align-items: flex-end; color: var(--ivory); }
+.lq-card__image { position: absolute; inset: 0; }
+.lq-card__image img { width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--ease); }
+.lq-card:hover .lq-card__image img { scale: 1.03; }
+.lq-card__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg, rgba(18, 13, 9, 0.82) 0%, rgba(18, 13, 9, 0.34) 42%, transparent 70%); }
+.lq-card__content { position: relative; z-index: 1; padding: 48px clamp(36px, 4vw, 60px); }
+.lq-card__title { margin: 0 0 14px; font-size: clamp(34px, 3.2vw, 46px); line-height: 1.02; color: var(--ivory); text-transform: uppercase; letter-spacing: -0.5px; }
+.lq-card__sub { margin: 0 0 20px; font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: #efe8dd; }
+.lq-card .lq-textlink { color: var(--ivory); }
+.lq-card .lq-textlink::after { color: #e6d4b8; }
+
+/* --------------------------------------------------------------- *
+ * 5. Beauty in Real Moments (large photo left, copy + inset right)
+ * --------------------------------------------------------------- */
+.lq-beauty { background: var(--lq-cream); display: grid; grid-template-columns: 54% 1fr; align-items: center; gap: clamp(40px, 5vw, 90px); padding: 64px 0; }
+.lq-beauty__media { position: relative; }
+.lq-beauty__media img { width: 100%; height: 640px; object-fit: cover; display: block; }
+.lq-beauty__copy { padding-right: max(48px, calc((100% - 1240px) / 2)); }
+.lq-beauty__eyebrow { color: var(--lq-gold); }
+.lq-beauty__title { margin: 18px 0 24px; font-size: clamp(44px, 4.6vw, 68px); line-height: 0.98; }
+.lq-beauty__para { max-width: 340px; color: var(--lq-body); font-size: 15px; line-height: 1.7; margin: 0 0 30px; }
+.lq-beauty__inset { max-width: 320px; }
+.lq-beauty__inset img { width: 100%; height: 240px; object-fit: cover; display: block; filter: grayscale(1); }
+
+/* --------------------------------------------------------------- *
+ * 6. Meet Luis (B&W photo left, bio right)
+ * --------------------------------------------------------------- */
+.lq-meet { background: var(--lq-cream); display: grid; grid-template-columns: 46% 1fr; align-items: center; gap: clamp(40px, 5vw, 90px); padding: 20px 0 76px; }
+.lq-meet__media img { width: 100%; height: 560px; object-fit: cover; object-position: center 30%; display: block; filter: grayscale(1); }
+.lq-meet__copy { padding-right: max(48px, calc((100% - 1240px) / 2)); }
+.lq-meet__eyebrow { color: var(--lq-gold); }
+.lq-meet__title { margin: 18px 0 24px; font-size: clamp(44px, 4.6vw, 66px); line-height: 1; text-transform: uppercase; }
+.lq-meet__para { max-width: 400px; color: var(--lq-body); font-size: 15px; line-height: 1.75; margin: 0 0 30px; }
+
+/* --------------------------------------------------------------- *
+ * 7. Closing CTA (full-bleed warm golden-hour landscape)
+ * --------------------------------------------------------------- */
+.lq-cta { position: relative; min-height: 420px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ivory); }
+.lq-cta__image { position: absolute; inset: 0; }
+.lq-cta__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+.lq-cta__veil { position: absolute; inset: 0; pointer-events: none; background: rgba(22, 16, 10, 0.3); }
+.lq-cta__content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+.lq-cta__eyebrow { color: #f1e7d6; letter-spacing: 4px; }
+.lq-cta__eyebrow::after { display: none; }
+.lq-cta__rule { margin: 16px 0 28px; background: rgba(244, 240, 232, 0.7); }
+.lq-cta .lq-outline-btn { color: var(--ivory); border-color: rgba(244, 240, 232, 0.7); }
+.lq-cta .lq-outline-btn:hover { color: var(--lq-ink); background: var(--ivory); border-color: var(--ivory); }
+
+/* --------------------------------------------------------------- *
+ * 8. Footer
+ * --------------------------------------------------------------- */
+.lq-footer { padding: 34px 0 30px; color: var(--ivory); background: #1b1710; }
+.lq-footer__inner { width: min(1240px, calc(100% - 120px)); margin-inline: auto; }
+.lq-footer__top { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 40px; padding-bottom: 24px; }
+.lq-footer .lq-brand__name { font-size: 17px; letter-spacing: 3px; }
+.lq-footer__nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 26px; font: 600 10px/1 var(--sans); letter-spacing: 1.6px; text-transform: uppercase; }
+.lq-footer__nav a:hover, .lq-footer__social a:hover { color: var(--lq-gold); }
+.lq-footer__social { display: flex; gap: 18px; margin: 0; padding: 0; list-style: none; }
+.lq-footer__social a { color: var(--ivory); transition: color 250ms ease; }
+.lq-footer__bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 22px; border-top: 1px solid rgba(244, 240, 232, 0.18); font: 400 10px/1.6 var(--sans); letter-spacing: 1px; text-transform: uppercase; color: #b7afa0; }
+
+/* --------------------------------------------------------------- *
+ * Responsive
+ * --------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .lq-container, .lq-header, .lq-footer__inner { width: calc(100% - 80px); }
+  .lq-hero__keywords { right: 40px; }
+}
+
+@media (max-width: 860px) {
+  .lq-nav { display: none; }
+  .lq-menu-toggle { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 44px; height: 44px; background: transparent; z-index: 6; }
+  .lq-menu-toggle span { width: 25px; height: 1px; background: var(--lq-ink); }
+  .lq-nav.is-open { display: flex; position: absolute; top: 86px; right: 0; left: 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 18px 24px; background: rgba(244, 240, 232, 0.98); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+  .lq-nav.is-open a { padding: 13px 0; color: var(--lq-ink); }
+  .lq-nav.is-open .lq-nav__inquire { border: none; padding: 13px 0; }
+
+  .lq-hero__keywords { display: none; }
+  .lq-cards { grid-template-columns: 1fr; }
+  .lq-beauty, .lq-meet { grid-template-columns: 1fr; gap: 32px; padding: 56px 0; }
+  .lq-beauty__copy, .lq-meet__copy { padding: 0 clamp(32px, 6vw, 80px); }
+  .lq-beauty__media img { height: 460px; }
+  .lq-meet__media img { height: 420px; }
+  .lq-beauty__inset { max-width: 100%; }
+  .lq-footer__top { grid-template-columns: 1fr; justify-items: center; gap: 24px; text-align: center; }
+}
+
+@media (max-width: 560px) {
+  .lq-container, .lq-header, .lq-footer__inner { width: calc(100% - 40px); }
+  .lq-hero { min-height: 0; height: auto; padding: 150px 0 90px; }
+  .lq-hero__title { font-size: clamp(54px, 18vw, 76px); }
+  .lq-hero__indicator { bottom: 32px; }
+  .lq-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .lq-footer__nav { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lq-textlink::after, .lq-outline-btn, .lq-card__image img { transition: none; }
+  .lq-card:hover .lq-card__image img { scale: 1; }
+}

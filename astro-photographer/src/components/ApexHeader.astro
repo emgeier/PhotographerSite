@@ -1,0 +1,42 @@
+---
+// Apex studio hub masthead — the top-level "Luis Quintana Studio" brand that
+// unites the Weddings and Glam Muse sections. Mirrors WeddingsHeader structure
+// and the mobile-menu contract that motion.ts initNav() targets
+// (#menu-toggle, #primary-nav, body.menu-open). Rendered light over the dark hero.
+const links = [
+  { href: '/home', label: 'Home' },
+  { href: '/weddings', label: 'Weddings & Engagements' },
+  // /muse does not exist yet — the Glam Muse section moves to this path when the
+  // paths-restructure runs (see .agents/tasks/paths-restructure-plan.md). Linked
+  // anyway as the intended final path; it may 404 in preview today.
+  { href: '/muse', label: 'The Glam Muse Series' },
+  // /about may not exist yet on this branch; linked anyway per the mockup nav.
+  { href: '/about', label: 'About' },
+] as const;
+
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="lq-header">
+  <a class="lq-brand" href="/home" aria-label="Luis Quintana Studio, home">
+    <span class="lq-brand__name">LUIS QUINTANA STUDIO</span>
+  </a>
+  <button
+    class="menu-toggle lq-menu-toggle"
+    id="menu-toggle"
+    type="button"
+    aria-controls="primary-nav"
+    aria-expanded="false"
+    aria-label="Open navigation"
+  >
+    <span></span><span></span>
+  </button>
+  <nav class="lq-nav primary-nav" id="primary-nav" aria-label="Main navigation">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
+    ))}
+    <!-- Mockup nav labels this "Inquire"; it points at /contact so the link
+         resolves today (/inquire arrives with the paths-restructure). -->
+    <a class="lq-nav__inquire" href="/contact">Inquire</a>
+  </nav>
+</header>
