@@ -1,0 +1,99 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/portfolio-banner.webp';
+const videoImage = '/images/portfolio-closing.webp';
+const ctaImage = '/images/portfolio-hero.webp';
+
+// Reuse the existing image pool with repetition — the comparison targets
+// layout/proportion, not exact imagery (brief forbids new binaries).
+const P = (n) => `/images/muses/portrait-0${n}.webp`;
+const gallery = [
+  { src: P(4), alt: 'A bride in soft portrait light.' },
+  { src: '/images/portfolio-film.webp', alt: 'A couple on a lakeside terrace.' },
+  { src: P(1), alt: 'Floral details on a reception table.' },
+  { src: P(5), alt: 'A couple sharing a close moment.' },
+  { src: '/images/portfolio-hero.webp', alt: 'A bride descending a grand staircase.' },
+  { src: P(6), alt: 'A veiled bride in natural light.' },
+  { src: '/images/portfolio-closing.webp', alt: 'A couple at a garden arch by the lake.' },
+  { src: P(2), alt: 'A ring detail resting on a hand.' },
+  { src: P(7), alt: 'A black-and-white moment on the dance floor.' },
+  { src: '/images/portfolio-banner.webp', alt: 'A bride overlooking the lake at golden hour.' },
+  { src: P(8), alt: 'A bride with a bouquet of white roses.' },
+  { src: P(3), alt: 'A candlelit reception at dusk.' },
+];
+---
+<Base
+  title="The Wedding Portfolio — Luis Quintana Studio"
+  description="A collection of unforgettable celebrations, meaningful connections, and moments that stay with you."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple on a lakeside terrace at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>The Wedding<br />Portfolio</h1>
+        <p class="wd-hero__lede" data-hero-item>A collection of unforgettable celebrations, meaningful connections, and moments that stay with you.</p>
+        <a class="wd-textlink wd-subhero__scroll" href="#wd-collection" data-hero-item style="color: var(--ivory);">Scroll to explore</a>
+      </div>
+    </section>
+
+    <!-- COLLECTION HEAD + GALLERY -->
+    <section class="wd-gallery" id="wd-collection" aria-labelledby="wd-coll-title">
+      <div class="wd-container">
+        <div class="wd-collhead" data-reveal>
+          <p class="wd-eyebrow wd-collhead__eyebrow">A collection</p>
+          <h2 id="wd-coll-title" class="wd-display wd-collhead__title">Of forever moments</h2>
+          <span class="wd-rule wd-collhead__rule" aria-hidden="true"></span>
+          <p class="wd-collhead__intro">A curated selection of weddings and celebrations from around the world. Each story is a unique expression of love, beauty, and connection.</p>
+        </div>
+        <div class="wd-gallery__grid" style="margin-top: 46px;">
+          {gallery.map((g, i) => (
+            <figure class={`wd-gallery__item${i === 0 ? ' wd-gallery__item--tall' : ''}`} data-reveal>
+              <Pic src={g.src} alt={g.alt} sizes="(max-width: 620px) 50vw, 33vw" />
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO TESTIMONIAL BAND -->
+    <section class="wd-videoquote" aria-labelledby="wd-vq-title">
+      <div class="wd-videoquote__media">
+        <Pic src={videoImage} alt="A couple in a tender embrace, veil catching the light." sizes="(max-width: 860px) 100vw, 50vw" />
+        <span class="wd-videoquote__play" aria-hidden="true"></span>
+      </div>
+      <div class="wd-videoquote__copy" data-reveal>
+        <p class="wd-eyebrow">In their own words</p>
+        <p id="wd-vq-title" class="wd-videoquote__quote">It feels like we can relive our wedding day all over again.</p>
+        <p class="wd-videoquote__para">They captured everything we felt — the big moments, the quiet ones, and so many we didn’t even see happening.</p>
+        <a class="wd-textlink" href="/weddings/testimonials">Watch more testimonials</a>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple embracing at sunset over the lake." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Your story starts here</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Your story starts here.</h2>
+        <p class="wd-cta__para">Every beautiful celebration begins with a conversation. Let’s meet and talk about your vision for your wedding day.</p>
+        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

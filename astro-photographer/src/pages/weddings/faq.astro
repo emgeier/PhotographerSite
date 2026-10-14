@@ -1,0 +1,114 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/wedding.css';
+
+const heroImage = '/images/home-closing.webp';
+const ctaImage = '/images/portfolio-closing.webp';
+
+const categories = [
+  {
+    n: '01',
+    label: 'The Experience',
+    photo: '/images/portfolio-hero.webp',
+    items: [
+      { q: 'What is your approach to photographing weddings?', a: 'My approach blends authentic storytelling with an editorial eye. I document genuine emotions and the beautiful, unscripted moments while offering thoughtful direction when it’s needed.' },
+      { q: 'Will you help us feel comfortable in front of the camera?', a: 'Always. Most couples feel unsure at first, so I guide you gently and keep things relaxed. Within a few minutes it starts to feel natural, and we simply focus on each other.' },
+      { q: 'Do you photograph weddings outside Nashville?', a: 'Yes. I travel for weddings and engagement sessions worldwide, and destination celebrations are some of my favorite stories to tell.' },
+    ],
+  },
+  {
+    n: '02',
+    label: 'Collections & Booking',
+    photo: '/images/muses/portrait-01.webp',
+    items: [
+      { q: 'How far in advance should we book?', a: 'Most couples reach out nine to eighteen months before their date. Because I take a limited number of weddings each year, earlier is always better to secure your day.' },
+      { q: 'Do you offer different wedding collections?', a: 'Yes. Each collection is built around coverage, albums, and keepsakes so you can choose the experience that fits your day and your vision.' },
+      { q: 'How do we reserve our wedding date?', a: 'A signed agreement and a retainer reserve your date. Once both are received, the day is officially yours.' },
+      { q: 'Do you offer engagement sessions?', a: 'Absolutely. Engagement sessions are a wonderful way to get comfortable together and are included in most wedding collections.' },
+    ],
+  },
+  {
+    n: '03',
+    label: 'Your Wedding Day',
+    photo: '/images/portfolio-film.webp',
+    items: [
+      { q: 'Will you help us plan our photography timeline?', a: 'Yes. We plan your timeline together so everything flows beautifully and you have time to be present for the moments that matter most.' },
+      { q: 'Do you work with a second photographer?', a: 'A second photographer is available and recommended for larger celebrations, giving us more angles and fuller coverage of your day.' },
+      { q: 'What happens if it rains on our wedding day?', a: 'Soft, overcast light is some of the most flattering there is. We adapt gracefully and often find that unexpected weather creates the most memorable images.' },
+    ],
+  },
+  {
+    n: '04',
+    label: 'Your Photographs',
+    photo: '/images/portfolio-closing.webp',
+    items: [
+      { q: 'When will we receive our wedding photos?', a: 'You’ll receive a sneak peek within a week, with your full gallery delivered within six to eight weeks of your wedding day.' },
+      { q: 'Will our photographs be professionally edited?', a: 'Every image in your gallery is carefully hand-edited in my signature timeless style — natural, warm, and true to how your day felt.' },
+      { q: 'Do you offer wedding albums and wall art?', a: 'Yes. Heirloom albums and fine-art prints are available so your story lives beautifully beyond the screen.' },
+    ],
+  },
+];
+---
+<Base
+  title="Weddings & Engagements FAQ — Luis Quintana Studio"
+  description="The details, beautifully considered. Everything you may want to know before your day."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO (dark, centered) -->
+    <section class="wd-hero" style="min-height: 560px; height: min(620px, 46vw); text-align: center;">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple embracing beneath a veil at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true" style="background: linear-gradient(0deg, rgba(20,15,10,0.5), rgba(20,15,10,0.42) 50%, rgba(20,15,10,0.5)), radial-gradient(120% 90% at 50% 46%, rgba(20,15,10,0.28), rgba(20,15,10,0.52));"></div>
+      <div class="wd-container wd-hero__content" style="text-align: center; margin-inline: auto;">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item style="justify-content: center;">Weddings &amp; Engagements / FAQ</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item>The details,<br /><em>beautifully considered.</em></h1>
+        <span class="wd-rule" aria-hidden="true" data-hero-item style="margin: 22px auto; background: rgba(244,240,232,0.7);"></span>
+        <p class="wd-hero__lede" data-hero-item style="max-width: 560px; margin-inline: auto;">A little more clarity, a lot more confidence. Everything you may want to know before your day.</p>
+      </div>
+    </section>
+
+    <!-- FAQ CATEGORIES -->
+    <section class="wd-faq" aria-label="Frequently asked questions">
+      <div class="wd-container">
+        {categories.map((cat) => (
+          <div class="wd-faq__cat" data-reveal>
+            <div class="wd-faq__intro">
+              <p class="wd-faq__num">{cat.n}</p>
+              <h2 class="wd-faq__label">{cat.label}</h2>
+              <figure class="wd-faq__photo"><Pic src={cat.photo} alt={`${cat.label} — a scene from a wedding day.`} sizes="(max-width: 620px) 100vw, 300px" /></figure>
+            </div>
+            <div class="wd-faq__items">
+              {cat.items.map((item, i) => (
+                <details class="wd-faq__item" open={cat.n === '01' && i === 0}>
+                  <summary>{item.q}</summary>
+                  <p class="wd-faq__answer">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- CLOSING BAND -->
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple overlooking the valley at golden hour." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal style="text-align: center; margin-inline: auto;">
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title" style="margin-inline: auto;">Every great story begins with a conversation.</h2>
+        <p class="wd-cta__para" style="margin-inline: auto;">Still have questions? I’d love to hear about your celebration and the moments that matter to you.</p>
+        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

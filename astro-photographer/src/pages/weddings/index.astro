@@ -4,17 +4,29 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+<<<<<<< HEAD
+=======
+import { weddingStories } from '../../data/weddingStories';
+>>>>>>> weddings-pages
 import '../../styles/wedding.css';
 
 // Weddings home — its own brand/look (Luis Quintana Studio). Served at
 // weddings.luisquintanastudio.com/ via the CloudFront host rewrite, and at
 // /weddings. Placeholder images for now; swap via CMS later.
+<<<<<<< HEAD
 const heroImage = '/images/portfolio-banner.webp';
+=======
+const heroImage = '/images/home-hero.webp';
+>>>>>>> weddings-pages
 const philoImage = '/images/story-portrait.webp';
 const weddingsCardImage = '/images/portfolio-closing.webp';
 const engagementsCardImage = '/images/ms-muse-2.webp';
 const aboutImage = '/images/portrait.webp';
+<<<<<<< HEAD
 const ctaImage = '/images/portfolio-banner.webp';
+=======
+const ctaImage = '/images/home-closing.webp';
+>>>>>>> weddings-pages
 
 const steps = [
   { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: '/images/muses/portrait-01.webp' },
@@ -22,11 +34,18 @@ const steps = [
   { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: '/images/muses/portrait-03.webp' },
 ];
 
+<<<<<<< HEAD
 const loveStories = [
   { name: 'Jessica & Michael', img: '/images/muses/portrait-04.webp' },
   { name: 'Olivia & Daniel', img: '/images/muses/portrait-05.webp' },
   { name: 'Sophia & James', img: '/images/muses/portrait-06.webp' },
 ];
+=======
+const loveStories = weddingStories
+  .filter((s) => !s.featured)
+  .slice(0, 3)
+  .map((s) => ({ name: s.names, img: s.cardImage, slug: s.slug }));
+>>>>>>> weddings-pages
 ---
 <Base
   title="Weddings & Engagements — Luis Quintana Studio"
@@ -140,7 +159,11 @@ const loveStories = [
         </div>
         <div class="wd-stories__grid">
           {loveStories.map((s) => (
+<<<<<<< HEAD
             <a class="wd-storycard" href="/weddings/stories" data-reveal>
+=======
+            <a class="wd-storycard" href={`/weddings/stories/${s.slug}`} data-reveal>
+>>>>>>> weddings-pages
               <span class="wd-storycard__image"><Pic src={s.img} alt={s.name} sizes="(max-width: 860px) 100vw, 33vw" /></span>
               <span class="wd-storycard__name">{s.name}</span>
             </a>
