@@ -75,6 +75,18 @@ collections:
           - { name: homeClosingImage, label: Closing image, widget: image, required: false }
           - { name: homeExperienceImage, label: 'Experience section background', widget: image, required: false }
 
+      - name: apexhome
+        label: 'Studio hub (/home) — images'
+        file: astro-photographer/src/content/settings/apexhome.json
+        fields:
+          - { name: apexHeroImage, label: Hero image, widget: image, required: false }
+          - { name: apexWeddingsCardImage, label: Weddings card image, widget: image, required: false }
+          - { name: apexGlamCardImage, label: Glam Muse card image, widget: image, required: false }
+          - { name: apexBeautyImage, label: Beauty section image, widget: image, required: false }
+          - { name: apexBeautyInsetImage, label: 'Beauty inset (B&W)', widget: image, required: false }
+          - { name: apexMeetImage, label: Meet Luis portrait, widget: image, required: false }
+          - { name: apexCtaImage, label: Closing CTA background, widget: image, required: false }
+
       - name: portfolio
         label: 'Portfolio page — images'
         file: astro-photographer/src/content/settings/portfolio.json

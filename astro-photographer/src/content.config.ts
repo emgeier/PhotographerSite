@@ -132,6 +132,15 @@ const settings = defineCollection({
     homeClosingImage: optionalText,
     homeExperienceImage: optionalText,
 
+    // apexhome.json — Apex studio hub (/home) images.
+    apexHeroImage: optionalText,
+    apexWeddingsCardImage: optionalText,
+    apexGlamCardImage: optionalText,
+    apexBeautyImage: optionalText,
+    apexBeautyInsetImage: optionalText,
+    apexMeetImage: optionalText,
+    apexCtaImage: optionalText,
+
     // portfolio.json — Portfolio page non-grid images.
     portfolioHeroImage: optionalText,
     portfolioBannerImage: optionalText,

@@ -10,18 +10,22 @@ import ApexHeader from '../components/ApexHeader.astro';
 import ApexFooter from '../components/ApexFooter.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../styles/apex.css';
 
 // Reused existing imagery from public/images/ (no new binaries). Closest match
 // per section; see .agents/tasks/apex-home-plan.md image table for the
 // compromises (no wedding-couple / male-photographer / golden-hour assets exist).
-const heroImage = '/images/ms-hero.webp';          // warm glam beauty portrait
-const weddingsCardImage = '/images/ms-featured.webp'; // ivory bridal portrait (closest "weddings")
-const glamCardImage = '/images/ms-muse-2.webp';    // black-top glam portrait
-const beautyImage = '/images/portfolio-banner.webp'; // woman in golden-hour landscape
-const beautyInset = '/images/story-portrait.webp'; // intimate B&W inset
-const meetImage = '/images/muses/portrait-04.webp'; // stand-in for B&W photographer portrait
-const ctaImage = '/images/portfolio-banner.webp';  // warm golden-hour landscape
+// Images are CMS-editable via settings/apexhome.json; each falls back to its own
+// /images/* default below so /home renders identically when the entry is absent.
+const apex = await getEntry('settings', 'apexhome');
+const heroImage = apex?.data.apexHeroImage ?? '/images/ms-hero.webp';          // warm glam beauty portrait
+const weddingsCardImage = apex?.data.apexWeddingsCardImage ?? '/images/ms-featured.webp'; // ivory bridal portrait (closest "weddings")
+const glamCardImage = apex?.data.apexGlamCardImage ?? '/images/ms-muse-2.webp';    // black-top glam portrait
+const beautyImage = apex?.data.apexBeautyImage ?? '/images/portfolio-banner.webp'; // woman in golden-hour landscape
+const beautyInset = apex?.data.apexBeautyInsetImage ?? '/images/story-portrait.webp'; // intimate B&W inset
+const meetImage = apex?.data.apexMeetImage ?? '/images/muses/portrait-04.webp'; // stand-in for B&W photographer portrait
+const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  // warm golden-hour landscape
 ---
 <Base
   title="Luis Quintana Studio — Photography"
