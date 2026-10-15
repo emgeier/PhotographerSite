@@ -92,6 +92,42 @@ const muses = defineCollection({
   }),
 });
 
+// Wedding stories — a FOLDER collection (one Markdown file per story) modeled
+// on `muses`. The glob loader's `entry.id` is the filename stem, which is the
+// route slug for /weddings/stories/<slug>. Replaces the old hardcoded
+// src/data/weddingStories.ts module. All image fields default to existing
+// /images assets so a lightly-seeded story renders identically to today.
+const weddingStories = defineCollection({
+  loader: glob({ pattern: '*.md', base: './src/content/weddingStories' }),
+  schema: z.object({
+    order: z.number().int(),
+    type: z.enum(['Wedding', 'Engagement']).default('Wedding'),
+    names: z.string(),
+    place: z.string(),
+    featured: z.boolean().default(false),
+    cardImage: imageOr('/images/portfolio-closing.webp'),
+    heroImage: imageOr('/images/home-hero.webp'),
+    introTitle: z.string(),
+    introParas: z.array(z.string()),
+    gallery: z.array(z.string()).default([
+      '/images/muses/portrait-01.webp',
+      '/images/portfolio-closing.webp',
+      '/images/muses/portrait-02.webp',
+      '/images/muses/portrait-03.webp',
+      '/images/portfolio-banner.webp',
+      '/images/muses/portrait-04.webp',
+      '/images/portfolio-hero.webp',
+      '/images/muses/portrait-05.webp',
+      '/images/portfolio-film.webp',
+      '/images/muses/portrait-06.webp',
+      '/images/muses/portrait-07.webp',
+      '/images/muses/portrait-08.webp',
+    ]),
+    quoteText: z.string(),
+    quoteAttribution: z.string(),
+  }),
+});
+
 // Site settings — CMS-editable JSON singletons under src/content/settings.
 // Each page has its own entry (e.g. `experience.json`), plus the shared
 // `gallery.json` caption pool. ALL fields are optional so one permissive schema
@@ -195,4 +231,4 @@ const settings = defineCollection({
   }),
 });
 
-export const collections = { muses, settings };
+export const collections = { muses, settings, weddingStories };

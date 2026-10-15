@@ -4,18 +4,20 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-import { weddingStories, getStory } from '../../data/weddingStories';
+import { getCollection } from 'astro:content';
 import '../../styles/wedding.css';
 
-const featured = getStory('alex-and-taylor')!;
+const entries = await getCollection('weddingStories');
+const featured = entries.find((e) => e.data.featured)!;
 const heroImage = '/images/home-hero.webp';
-const featuredPhoto = featured.cardImage;
+const featuredPhoto = featured.data.cardImage;
 
-// Grid: all non-featured stories, driven by the shared data module so every
+// Grid: all non-featured stories, driven by the content collection so every
 // card links to a real /weddings/stories/<slug>.
-const stories = weddingStories
-  .filter((s) => !s.featured)
-  .map((s) => ({ type: s.type, names: s.names, place: s.place, img: s.cardImage, slug: s.slug }));
+const stories = entries
+  .filter((e) => !e.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((e) => ({ type: e.data.type, names: e.data.names, place: e.data.place, img: e.data.cardImage, slug: e.id }));
 const ctaImage = '/images/portfolio-banner.webp';
 ---
 <Base
@@ -49,7 +51,7 @@ const ctaImage = '/images/portfolio-banner.webp';
           <p class="wd-featured__names">Alex &amp; Taylor</p>
           <p class="wd-featured__place">Lake Como, Italy</p>
           <p class="wd-featured__para">A celebration filled with heartfelt moments, breathtaking views, and a love that brought together family and friends from around the world. Their wedding day was a perfect reflection of who they are — elegant, joyful, and deeply meaningful.</p>
-          <a class="wd-textlink" href={`/weddings/stories/${featured.slug}`}>View their story</a>
+          <a class="wd-textlink" href={`/weddings/stories/${featured.id}`}>View their story</a>
         </div>
       </div>
     </section>

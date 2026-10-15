@@ -4,25 +4,33 @@ import WeddingsHeader from '../../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../../components/WeddingsFooter.astro';
 import SiteMotion from '../../../components/SiteMotion.astro';
 import Pic from '../../../components/Pic.astro';
-import { weddingStories, otherStories } from '../../../data/weddingStories';
+import { getCollection } from 'astro:content';
 import '../../../styles/wedding.css';
 
-export function getStaticPaths() {
-  return weddingStories.map((story) => ({
-    params: { slug: story.slug },
-    props: { story },
+export async function getStaticPaths() {
+  const entries = await getCollection('weddingStories');
+  return entries.map((e) => ({
+    params: { slug: e.id },
+    props: {
+      story: e.data,
+      slug: e.id,
+      others: entries
+        .filter((o) => o.id !== e.id)
+        .sort((a, b) => a.data.order - b.data.order)
+        .slice(0, 3)
+        .map((o) => ({ ...o.data, slug: o.id })),
+    },
   }));
 }
 
-const { story } = Astro.props;
-const others = otherStories(story.slug, 3);
+const { story, slug, others } = Astro.props;
 const introPhoto = story.gallery[0] ?? story.cardImage;
 const quotePhoto = story.gallery[1] ?? story.cardImage;
 const ctaImage = '/images/portfolio-banner.webp';
 ---
 <Base
   title={`${story.names} — Love Stories — Luis Quintana Studio`}
-  description={`${story.names} in ${story.place}. ${story.intro.title}`}
+  description={`${story.names} in ${story.place}. ${story.introTitle}`}
 >
   <main class="wd wd-page" id="main-content">
     <!-- HERO -->
@@ -48,8 +56,8 @@ const ctaImage = '/images/portfolio-banner.webp';
         </figure>
         <div class="wd-featured__copy" data-reveal>
           <p class="wd-eyebrow">The love story</p>
-          <h2 id="wd-intro-title" class="wd-display wd-featured__title">{story.intro.title}</h2>
-          {story.intro.paras.map((p) => (
+          <h2 id="wd-intro-title" class="wd-display wd-featured__title">{story.introTitle}</h2>
+          {story.introParas.map((p) => (
             <p class="wd-featured__para">{p}</p>
           ))}
         </div>
@@ -83,9 +91,9 @@ const ctaImage = '/images/portfolio-banner.webp';
       </div>
       <div class="wd-videoquote__copy" data-reveal>
         <p class="wd-eyebrow">A moment to remember</p>
-        <p id="wd-pq-title" class="wd-videoquote__quote">{story.quote.text}</p>
+        <p id="wd-pq-title" class="wd-videoquote__quote">{story.quoteText}</p>
         <p class="wd-videoquote__para">Every moment felt effortless, and somehow Luis captured it all with so much heart. Looking through our photos brings us right back to how it felt.</p>
-        <p class="wd-videoquote__attr">— {story.quote.attribution}</p>
+        <p class="wd-videoquote__attr">— {story.quoteAttribution}</p>
       </div>
     </section>
 

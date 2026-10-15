@@ -4,7 +4,7 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-import { weddingStories } from '../../data/weddingStories';
+import { getCollection } from 'astro:content';
 import '../../styles/wedding.css';
 
 // Weddings home — its own brand/look (Luis Quintana Studio). Served at
@@ -23,10 +23,11 @@ const steps = [
   { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: '/images/muses/portrait-03.webp' },
 ];
 
-const loveStories = weddingStories
-  .filter((s) => !s.featured)
+const loveStories = (await getCollection('weddingStories'))
+  .filter((e) => !e.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 3)
-  .map((s) => ({ name: s.names, img: s.cardImage, slug: s.slug }));
+  .map((e) => ({ name: e.data.names, img: e.data.cardImage, slug: e.id }));
 ---
 <Base
   title="Weddings & Engagements — Luis Quintana Studio"

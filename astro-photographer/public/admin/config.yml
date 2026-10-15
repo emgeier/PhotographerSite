@@ -194,3 +194,28 @@ collections:
       # `body` is the implicit Content-Layer Markdown body (not a schema key);
       # not rendered by the pages yet, reserved for future free-form notes.
       - { name: body, label: Body (notes), widget: markdown, required: false }
+
+  - name: weddingStories
+    label: 'Wedding Stories'
+    folder: astro-photographer/src/content/weddingStories
+    create: true
+    slug: '{{slug}}'              # filename-based: the entry's own slug == entry.id
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int }
+      - { name: type, label: Type, widget: select, options: ['Wedding', 'Engagement'], default: 'Wedding' }
+      - { name: names, label: Names, widget: string }
+      - { name: place, label: Place, widget: string }
+      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: cardImage, label: Card image, widget: image, required: false }
+      - { name: heroImage, label: Hero image, widget: image, required: false }
+      - { name: introTitle, label: Intro title, widget: string }
+      - name: introParas
+        label: Intro paragraphs
+        widget: list
+        field: { name: paragraph, label: Paragraph, widget: text }
+      - name: gallery
+        label: Gallery
+        widget: list
+        field: { name: image, label: Image, widget: image }
+      - { name: quoteText, label: Quote text, widget: string }
+      - { name: quoteAttribution, label: Quote attribution, widget: string }
