@@ -228,6 +228,57 @@ const settings = defineCollection({
       )
       .optional(),
     linkFooter: optionalText,
+
+    // weddings-home.json — Weddings home (/weddings) section images.
+    wedHomeHeroImage: optionalText,
+    wedHomePhiloImage: optionalText,
+    wedHomeWeddingsCardImage: optionalText,
+    wedHomeEngagementsCardImage: optionalText,
+    wedHomeAboutImage: optionalText,
+    wedHomeCtaImage: optionalText,
+
+    // weddings-experience.json — The Experience (/weddings/experience) images.
+    wedExperienceHeroImage: optionalText,
+    wedExperienceEasePhoto: optionalText,
+    wedExperienceCtaImage: optionalText,
+
+    // weddings-portfolio.json — Wedding Portfolio (/weddings/portfolio) images.
+    wedPortfolioHeroImage: optionalText,
+    wedPortfolioVideoImage: optionalText,
+    wedPortfolioCtaImage: optionalText,
+
+    // weddings-faq.json — Weddings FAQ (/weddings/faq) images.
+    wedFaqHeroImage: optionalText,
+    wedFaqCtaImage: optionalText,
+
+    // weddings-engagements.json — Engagement Portfolio (/weddings/engagements) images.
+    wedEngagementsHeroImage: optionalText,
+    wedEngagementsVideoImage: optionalText,
+    wedEngagementsCtaImage: optionalText,
+
+    // weddings-inquire.json — Inquire (/weddings/inquire) images.
+    wedInquireHeroImage: optionalText,
+    wedInquireFormImage: optionalText,
+    wedInquireNoteImage: optionalText,
+    wedInquireCtaImage: optionalText,
+
+    // weddings-testimonials.json — Testimonials (/weddings/testimonials) images.
+    wedTestimonialsHeroImage: optionalText,
+    wedTestimonialsFeaturedPhoto: optionalText,
+    wedTestimonialsVideoImage: optionalText,
+    wedTestimonialsCtaImage: optionalText,
+
+    // weddings-about.json — About Luis (/weddings/about) images.
+    wedAboutHeroImage: optionalText,
+    wedAboutLifeImage: optionalText,
+    wedAboutPhiloImage: optionalText,
+    wedAboutVideoImage: optionalText,
+    wedAboutCtaImage: optionalText,
+
+    // weddings-stories.json — Love Stories listing + story detail (/weddings/stories[/<slug>]) images.
+    wedStoriesHeroImage: optionalText,
+    wedStoriesCtaImage: optionalText,
+    wedStoryDetailCtaImage: optionalText,
   }),
 });
 

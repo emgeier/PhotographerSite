@@ -4,11 +4,13 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
-const heroImage = '/images/ms-muse-2.webp';
-const videoImage = '/images/story-portrait.webp';
-const ctaImage = '/images/portfolio-closing.webp';
+const wed = await getEntry('settings', 'weddings-engagements');
+const heroImage = wed?.data.wedEngagementsHeroImage ?? '/images/ms-muse-2.webp';
+const videoImage = wed?.data.wedEngagementsVideoImage ?? '/images/story-portrait.webp';
+const ctaImage = wed?.data.wedEngagementsCtaImage ?? '/images/portfolio-closing.webp';
 
 const P = (n) => `/images/muses/portrait-0${n}.webp`;
 const gallery = [

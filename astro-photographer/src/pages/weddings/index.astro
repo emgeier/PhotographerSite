@@ -4,18 +4,20 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
 // Weddings home — its own brand/look (Luis Quintana Studio). Served at
 // weddings.luisquintanastudio.com/ via the CloudFront host rewrite, and at
-// /weddings. Placeholder images for now; swap via CMS later.
-const heroImage = '/images/home-hero.webp';
-const philoImage = '/images/story-portrait.webp';
-const weddingsCardImage = '/images/portfolio-closing.webp';
-const engagementsCardImage = '/images/ms-muse-2.webp';
-const aboutImage = '/images/portrait.webp';
-const ctaImage = '/images/home-closing.webp';
+// /weddings. Section images are CMS-editable via settings/weddings-home.json;
+// each falls back to its original path so the page renders identically absent.
+const wed = await getEntry('settings', 'weddings-home');
+const heroImage = wed?.data.wedHomeHeroImage ?? '/images/home-hero.webp';
+const philoImage = wed?.data.wedHomePhiloImage ?? '/images/story-portrait.webp';
+const weddingsCardImage = wed?.data.wedHomeWeddingsCardImage ?? '/images/portfolio-closing.webp';
+const engagementsCardImage = wed?.data.wedHomeEngagementsCardImage ?? '/images/ms-muse-2.webp';
+const aboutImage = wed?.data.wedHomeAboutImage ?? '/images/portrait.webp';
+const ctaImage = wed?.data.wedHomeCtaImage ?? '/images/home-closing.webp';
 
 const steps = [
   { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: '/images/muses/portrait-01.webp' },

@@ -4,12 +4,13 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
+const wed = await getEntry('settings', 'weddings-stories');
 const entries = await getCollection('weddingStories');
 const featured = entries.find((e) => e.data.featured)!;
-const heroImage = '/images/home-hero.webp';
+const heroImage = wed?.data.wedStoriesHeroImage ?? '/images/home-hero.webp';
 const featuredPhoto = featured.data.cardImage;
 
 // Grid: all non-featured stories, driven by the content collection so every
@@ -18,7 +19,7 @@ const stories = entries
   .filter((e) => !e.data.featured)
   .sort((a, b) => a.data.order - b.data.order)
   .map((e) => ({ type: e.data.type, names: e.data.names, place: e.data.place, img: e.data.cardImage, slug: e.id }));
-const ctaImage = '/images/portfolio-banner.webp';
+const ctaImage = wed?.data.wedStoriesCtaImage ?? '/images/portfolio-banner.webp';
 ---
 <Base
   title="Love Stories — Luis Quintana Studio"

@@ -4,11 +4,13 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
-const heroImage = '/images/portfolio-banner.webp';
-const videoImage = '/images/portfolio-closing.webp';
-const ctaImage = '/images/portfolio-hero.webp';
+const wed = await getEntry('settings', 'weddings-portfolio');
+const heroImage = wed?.data.wedPortfolioHeroImage ?? '/images/portfolio-banner.webp';
+const videoImage = wed?.data.wedPortfolioVideoImage ?? '/images/portfolio-closing.webp';
+const ctaImage = wed?.data.wedPortfolioCtaImage ?? '/images/portfolio-hero.webp';
 
 // Reuse the existing image pool with repetition — the comparison targets
 // layout/proportion, not exact imagery (brief forbids new binaries).

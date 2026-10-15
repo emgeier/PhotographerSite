@@ -4,7 +4,7 @@ import WeddingsHeader from '../../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../../components/WeddingsFooter.astro';
 import SiteMotion from '../../../components/SiteMotion.astro';
 import Pic from '../../../components/Pic.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import '../../../styles/wedding.css';
 
 export async function getStaticPaths() {
@@ -26,7 +26,8 @@ export async function getStaticPaths() {
 const { story, slug, others } = Astro.props;
 const introPhoto = story.gallery[0] ?? story.cardImage;
 const quotePhoto = story.gallery[1] ?? story.cardImage;
-const ctaImage = '/images/portfolio-banner.webp';
+const wed = await getEntry('settings', 'weddings-stories');
+const ctaImage = wed?.data.wedStoryDetailCtaImage ?? '/images/portfolio-banner.webp';
 ---
 <Base
   title={`${story.names} — Love Stories — Luis Quintana Studio`}

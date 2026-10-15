@@ -4,16 +4,18 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
-const heroImage = '/images/portfolio-banner.webp';
-const easePhoto = '/images/story-portrait.webp';
+const wed = await getEntry('settings', 'weddings-experience');
+const heroImage = wed?.data.wedExperienceHeroImage ?? '/images/portfolio-banner.webp';
+const easePhoto = wed?.data.wedExperienceEasePhoto ?? '/images/story-portrait.webp';
 const steps = [
   { n: '01', t: 'Consultation', p: 'We get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: '/images/muses/portrait-01.webp' },
   { n: '02', t: 'Planning', p: 'We plan together with intention, creating a seamless photography experience that fits your day. From timelines to key moments, we handle the details so you can feel confident and at ease.', img: '/images/muses/portrait-02.webp' },
   { n: '03', t: 'Your Day', p: 'You get to be fully present while we document it all — the big moments, the quiet ones, and everything in between. We’ll be there with a calm, thoughtful approach, letting your day unfold naturally.', img: '/images/muses/portrait-03.webp' },
 ];
-const ctaImage = '/images/portfolio-closing.webp';
+const ctaImage = wed?.data.wedExperienceCtaImage ?? '/images/portfolio-closing.webp';
 ---
 <Base
   title="The Experience — Luis Quintana Studio"

@@ -4,13 +4,15 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
-const heroImage = '/images/portrait.webp';
-const lifeImage = '/images/ms-muse-2.webp';
-const philoImage = '/images/portfolio-banner.webp';
-const videoImage = '/images/story-portrait.webp';
-const ctaImage = '/images/portfolio-closing.webp';
+const wed = await getEntry('settings', 'weddings-about');
+const heroImage = wed?.data.wedAboutHeroImage ?? '/images/portrait.webp';
+const lifeImage = wed?.data.wedAboutLifeImage ?? '/images/ms-muse-2.webp';
+const philoImage = wed?.data.wedAboutPhiloImage ?? '/images/portfolio-banner.webp';
+const videoImage = wed?.data.wedAboutVideoImage ?? '/images/story-portrait.webp';
+const ctaImage = wed?.data.wedAboutCtaImage ?? '/images/portfolio-closing.webp';
 
 const traits = [
   { h: 'Travel & Discovery', p: 'New places, new perspectives, endless inspiration.', icon: 'mountain' },

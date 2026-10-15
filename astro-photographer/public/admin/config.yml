@@ -151,6 +151,84 @@ collections:
               - { name: external, label: 'Opens in new tab (external)', widget: boolean, default: false, required: false }
           - { name: linkFooter, label: 'Footer line', widget: string, required: false }
 
+      - name: weddings-home
+        label: 'Weddings — Home images'
+        file: astro-photographer/src/content/settings/weddings-home.json
+        fields:
+          - { name: wedHomeHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedHomePhiloImage, label: Philosophy photo, widget: image, required: false }
+          - { name: wedHomeWeddingsCardImage, label: Weddings card image, widget: image, required: false }
+          - { name: wedHomeEngagementsCardImage, label: Engagements card image, widget: image, required: false }
+          - { name: wedHomeAboutImage, label: About portrait, widget: image, required: false }
+          - { name: wedHomeCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-experience
+        label: 'Weddings — Experience images'
+        file: astro-photographer/src/content/settings/weddings-experience.json
+        fields:
+          - { name: wedExperienceHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedExperienceEasePhoto, label: '“At ease” photo', widget: image, required: false }
+          - { name: wedExperienceCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-portfolio
+        label: 'Weddings — Portfolio images'
+        file: astro-photographer/src/content/settings/weddings-portfolio.json
+        fields:
+          - { name: wedPortfolioHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedPortfolioVideoImage, label: Video testimonial image, widget: image, required: false }
+          - { name: wedPortfolioCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-faq
+        label: 'Weddings — FAQ images'
+        file: astro-photographer/src/content/settings/weddings-faq.json
+        fields:
+          - { name: wedFaqHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedFaqCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-engagements
+        label: 'Weddings — Engagements images'
+        file: astro-photographer/src/content/settings/weddings-engagements.json
+        fields:
+          - { name: wedEngagementsHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedEngagementsVideoImage, label: Featured session image, widget: image, required: false }
+          - { name: wedEngagementsCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-inquire
+        label: 'Weddings — Inquire images'
+        file: astro-photographer/src/content/settings/weddings-inquire.json
+        fields:
+          - { name: wedInquireHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedInquireFormImage, label: Form aside image, widget: image, required: false }
+          - { name: wedInquireNoteImage, label: '“A note from Luis” portrait', widget: image, required: false }
+          - { name: wedInquireCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-testimonials
+        label: 'Weddings — Testimonials images'
+        file: astro-photographer/src/content/settings/weddings-testimonials.json
+        fields:
+          - { name: wedTestimonialsHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedTestimonialsFeaturedPhoto, label: Featured pull-quote photo, widget: image, required: false }
+          - { name: wedTestimonialsVideoImage, label: Video testimonial image, widget: image, required: false }
+          - { name: wedTestimonialsCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-about
+        label: 'Weddings — About images'
+        file: astro-photographer/src/content/settings/weddings-about.json
+        fields:
+          - { name: wedAboutHeroImage, label: Hero portrait, widget: image, required: false }
+          - { name: wedAboutLifeImage, label: '“A life inspired” photo', widget: image, required: false }
+          - { name: wedAboutPhiloImage, label: Philosophy band image, widget: image, required: false }
+          - { name: wedAboutVideoImage, label: '“A few words” video image', widget: image, required: false }
+          - { name: wedAboutCtaImage, label: Closing CTA background, widget: image, required: false }
+
+      - name: weddings-stories
+        label: 'Weddings — Love Stories images'
+        file: astro-photographer/src/content/settings/weddings-stories.json
+        fields:
+          - { name: wedStoriesHeroImage, label: Listing hero image, widget: image, required: false }
+          - { name: wedStoriesCtaImage, label: Listing closing CTA background, widget: image, required: false }
+          - { name: wedStoryDetailCtaImage, label: Story detail closing CTA background, widget: image, required: false }
+
   - name: muses
     label: Muses
     folder: astro-photographer/src/content/muses

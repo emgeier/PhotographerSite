@@ -4,12 +4,14 @@ import WeddingsHeader from '../../components/WeddingsHeader.astro';
 import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
+import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
-const heroImage = '/images/portfolio-banner.webp';
-const formImage = '/images/portfolio-hero.webp';
-const noteImage = '/images/portrait.webp';
-const ctaImage = '/images/portfolio-closing.webp';
+const wed = await getEntry('settings', 'weddings-inquire');
+const heroImage = wed?.data.wedInquireHeroImage ?? '/images/portfolio-banner.webp';
+const formImage = wed?.data.wedInquireFormImage ?? '/images/portfolio-hero.webp';
+const noteImage = wed?.data.wedInquireNoteImage ?? '/images/portrait.webp';
+const ctaImage = wed?.data.wedInquireCtaImage ?? '/images/portfolio-closing.webp';
 
 const steps = [
   { n: '01', t: 'Consultation', p: 'We’ll get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: '/images/muses/portrait-01.webp' },
