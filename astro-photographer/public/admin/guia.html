@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guía del Panel de Administración — Luis Quintana Studio</title>
+  <style>
+    :root {
+      --ink: #211c15;
+      --body: #4a443b;
+      --gold: #b08d57;
+      --cream: #f6f3ec;
+      --card: #ffffff;
+      --rule: #e4ddd0;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--body);
+      font: 16px/1.65 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 0 0 80px;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px; }
+    header.masthead {
+      background: var(--ink);
+      color: #f4f0e8;
+      padding: 40px 20px 34px;
+      text-align: center;
+    }
+    header.masthead .brand {
+      font-size: 13px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold);
+      margin: 0 0 10px;
+    }
+    header.masthead h1 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: 0.5px; }
+    header.masthead p { margin: 12px auto 0; max-width: 560px; color: #d8cfc0; font-size: 15px; }
+    a.back {
+      display: inline-block; margin-top: 20px; padding: 10px 22px;
+      background: var(--gold); color: #fff; text-decoration: none; border-radius: 999px;
+      font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
+    }
+    nav.toc {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 10px;
+      padding: 20px 24px; margin: 28px 0;
+    }
+    nav.toc h2 { margin: 0 0 10px; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+    nav.toc ol { margin: 0; padding-left: 20px; }
+    nav.toc li { margin: 5px 0; }
+    nav.toc a { color: var(--ink); text-decoration: none; }
+    nav.toc a:hover { color: var(--gold); text-decoration: underline; }
+    section {
+      background: var(--card); border: 1px solid var(--rule); border-radius: 10px;
+      padding: 24px 28px; margin: 20px 0;
+    }
+    h2 { color: var(--ink); font-size: 21px; margin: 0 0 14px; scroll-margin-top: 16px; }
+    h3 { color: var(--ink); font-size: 16px; margin: 22px 0 6px; }
+    p { margin: 0 0 12px; }
+    ol, ul { margin: 0 0 12px; padding-left: 22px; }
+    li { margin: 6px 0; }
+    code, kbd {
+      background: #f0ebe1; border: 1px solid var(--rule); border-radius: 4px;
+      padding: 1px 6px; font-size: 14px; font-family: "SF Mono", Menlo, Consolas, monospace;
+    }
+    .btn { font-weight: 600; color: var(--ink); }
+    .callout {
+      border-left: 4px solid var(--gold); background: #faf6ee;
+      padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0;
+    }
+    .callout strong { color: var(--ink); }
+    .field-list dt { font-weight: 600; color: var(--ink); margin-top: 10px; }
+    .field-list dd { margin: 2px 0 0; }
+    footer { text-align: center; color: #8a8172; font-size: 13px; margin-top: 34px; }
+    @media (max-width: 520px) {
+      section { padding: 20px 18px; }
+      header.masthead h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <p class="brand">Luis Quintana Studio</p>
+    <h1>Guía del Panel de Administración</h1>
+    <p>Cómo editar el contenido y las fotos de tu sitio web, paso a paso. No necesitas saber programación.</p>
+    <a class="back" href="/admin/">← Volver al panel</a>
+  </header>
+
+  <div class="wrap">
+    <div class="callout">
+      El panel está en inglés. Esta guía te dice qué significa cada sección y cada
+      campo, para que puedas ubicarte aunque los textos en pantalla estén en inglés.
+    </div>
+
+    <nav class="toc">
+      <h2>Contenido</h2>
+      <ol>
+        <li><a href="#entrar">Cómo entrar al panel</a></li>
+        <li><a href="#organizacion">Cómo está organizado</a></li>
+        <li><a href="#fotos">Cómo cambiar una foto</a></li>
+        <li><a href="#botones">Los botones clave</a></li>
+        <li><a href="#paginas">Las páginas y sus fotos</a></li>
+        <li><a href="#bodas">Crear o editar una Historia de Boda</a></li>
+        <li><a href="#musas">Crear o editar una Musa</a></li>
+        <li><a href="#faq">Preguntas frecuentes</a></li>
+      </ol>
+    </nav>
+
+    <section id="entrar">
+      <h2>1. Cómo entrar al panel</h2>
+      <ol>
+        <li>Abre el navegador (Chrome, Safari, etc.).</li>
+        <li>Ve a la dirección de tu sitio seguida de <code>/admin</code>. Por ejemplo: <code>https://luisquintanastudio.com/admin</code></li>
+        <li>Haz clic en <span class="btn">"Login with GitHub"</span> (Iniciar sesión con GitHub).</li>
+        <li>Inicia sesión con tu cuenta de GitHub y autoriza el acceso (solo la primera vez te pide autorizar).</li>
+        <li>La ventana se cierra sola y ya estás dentro.</li>
+      </ol>
+      <div class="callout">
+        Si el botón de GitHub da un error, avisa a tu desarrollador: suele ser un
+        ajuste de configuración, no algo que hiciste mal.
+      </div>
+    </section>
+
+    <section id="organizacion">
+      <h2>2. Cómo está organizado el panel</h2>
+      <p>En el menú de la izquierda hay dos tipos de secciones:</p>
+      <ul>
+        <li><strong>Settings (Configuración):</strong> aquí <strong>cambias las fotos</strong> (y algunos textos) de las páginas que ya existen. No se crean páginas nuevas aquí.</li>
+        <li><strong>Muses</strong> y <strong>Wedding Stories:</strong> colecciones de <strong>historias</strong>. Aquí sí puedes <strong>crear entradas nuevas</strong> o editar las existentes.</li>
+      </ul>
+    </section>
+
+    <section id="fotos">
+      <h2>3. Cómo cambiar una foto (lo más común)</h2>
+      <ol>
+        <li>En el menú izquierdo entra a <span class="btn">Settings</span> y elige la página a editar (ver la lista en la sección 5).</li>
+        <li>Verás campos con nombres como <span class="btn">Hero image</span> (imagen principal) o <span class="btn">Closing CTA background</span> (fondo de la sección final).</li>
+        <li>En el campo de la foto, haz clic en <span class="btn">"Choose an image"</span> o en la foto actual.</li>
+        <li>En la galería:
+          <ul>
+            <li>Para subir una foto nueva: <span class="btn">"Upload"</span> y elige el archivo.</li>
+            <li>Para reutilizar una ya subida: selecciónala de la galería.</li>
+          </ul>
+        </li>
+        <li>Confirma con <span class="btn">"Choose selected"</span>.</li>
+        <li>Arriba a la derecha, haz clic en <span class="btn">"Save"</span> (Guardar).</li>
+        <li>Luego <span class="btn">"Publish" → "Publish now"</span> para que salga en vivo.</li>
+      </ol>
+      <div class="callout">
+        <strong>Importante:</strong> <span class="btn">Save</span> solo guarda un borrador.
+        Tienes que hacer <span class="btn">Publish</span> para que el cambio aparezca en el sitio real.
+      </div>
+      <h3>Consejos para las fotos</h3>
+      <ul>
+        <li>Sube fotos de buena calidad pero no gigantes: lo ideal es alrededor de <strong>2000 px</strong> en el lado más largo. Las fotos sin reducir hacen el sitio lento.</li>
+        <li>Usa formato <strong>JPG</strong> o <strong>WebP</strong>.</li>
+        <li>Si dejas un campo de imagen <strong>vacío</strong>, el sitio usa la foto por defecto. No se rompe nada.</li>
+      </ul>
+    </section>
+
+    <section id="botones">
+      <h2>4. Los botones clave (arriba a la derecha)</h2>
+      <dl class="field-list">
+        <dt>Save</dt><dd>Guarda tu trabajo como borrador (aún no sale en vivo).</dd>
+        <dt>Publish → Publish now</dt><dd>Publica los cambios en el sitio real.</dd>
+        <dt>Delete entry</dt><dd>Borra la entrada (solo en Muses y Wedding Stories). Úsalo con cuidado.</dd>
+      </dl>
+    </section>
+
+    <section id="paginas">
+      <h2>5. Las páginas y qué foto es cada campo</h2>
+      <p>Dentro de <span class="btn">Settings</span>, cada campo dice en inglés dónde va la foto. Aquí la traducción:</p>
+
+      <h3>Studio hub (/home) — página de inicio del estudio</h3>
+      <dl class="field-list">
+        <dt>Hero image</dt><dd>Foto grande de arriba (la principal).</dd>
+        <dt>Weddings card image</dt><dd>Foto de la tarjeta de "Bodas y Compromisos".</dd>
+        <dt>Glam Muse card image</dt><dd>Foto de la tarjeta de "The Glam Muse Series".</dd>
+        <dt>Beauty section image</dt><dd>Foto de la sección "Beauty in Real Moments".</dd>
+        <dt>Beauty inset (B&amp;W)</dt><dd>Foto pequeña en blanco y negro de esa sección.</dd>
+        <dt>Meet Luis portrait</dt><dd>Tu retrato en la sección "Meet Luis".</dd>
+        <dt>Closing CTA background</dt><dd>Foto de fondo de la sección final.</dd>
+      </dl>
+
+      <h3>Weddings — Home (/weddings)</h3>
+      <dl class="field-list">
+        <dt>Hero image</dt><dd>Foto principal de arriba.</dd>
+        <dt>Philosophy photo</dt><dd>Foto de la sección de filosofía.</dd>
+        <dt>Weddings card image / Engagements card image</dt><dd>Tarjetas de Bodas y de Compromisos.</dd>
+        <dt>About portrait</dt><dd>Retrato de la sección "Sobre mí".</dd>
+        <dt>Closing CTA background</dt><dd>Fondo de la sección final.</dd>
+      </dl>
+
+      <h3>Resto de páginas de Bodas (Experience, Portfolio, Engagements, Testimonials, About, FAQ, Inquire, Love Stories)</h3>
+      <p>Funcionan igual: cada una tiene su <strong>Hero image</strong> (foto principal), fotos de secciones intermedias, y un <strong>Closing CTA background</strong> (fondo final). En <strong>Inquire</strong> está también el retrato "A note from Luis" y la foto junto al formulario. En <strong>Love Stories</strong> hay fotos del listado y de la sección final de cada historia.</p>
+
+      <h3>Lado Glam Muse (Home, Portfolio, Experience, Contact, Muse Stories, Landing, Instagram link)</h3>
+      <p>Igual: entra a la página en <span class="btn">Settings</span>, cambia los campos de imagen y publica. En <strong>Landing</strong> e <strong>Instagram link</strong> también hay campos de <strong>texto</strong> (títulos, descripciones) que editas escribiendo directamente.</p>
+    </section>
+
+    <section id="bodas">
+      <h2>6. Crear o editar una Historia de Boda</h2>
+      <ol>
+        <li>Entra a <span class="btn">Wedding Stories</span> en el menú izquierdo.</li>
+        <li>Para editar, haz clic en una existente. Para crear, <span class="btn">"New Wedding Stories"</span>.</li>
+        <li>Llena los campos:
+          <dl class="field-list">
+            <dt>Order</dt><dd>Número de orden (1, 2, 3…). Controla la posición. Usa uno que no esté repetido.</dd>
+            <dt>Type</dt><dd>Elige <strong>Wedding</strong> (Boda) o <strong>Engagement</strong> (Compromiso).</dd>
+            <dt>Names</dt><dd>Nombres de la pareja (ej. "Alex &amp; Taylor").</dd>
+            <dt>Place</dt><dd>Lugar (ej. "Lake Como, Italy").</dd>
+            <dt>Featured</dt><dd>Actívalo <strong>solo en UNA</strong> historia: esa aparece destacada arriba.</dd>
+            <dt>Card image / Hero image</dt><dd>Foto de la tarjeta y foto grande de la página.</dd>
+            <dt>Intro title / Intro paragraphs</dt><dd>Título y párrafos de la introducción (usa "Add" para añadir párrafos).</dd>
+            <dt>Gallery</dt><dd>Galería de fotos (usa "Add" por cada foto).</dd>
+            <dt>Quote text / Quote attribution</dt><dd>La cita de la pareja y de quién es.</dd>
+          </dl>
+        </li>
+        <li><span class="btn">Save</span> y luego <span class="btn">Publish → Publish now</span>.</li>
+      </ol>
+      <div class="callout">
+        La dirección web se crea sola a partir del nombre del archivo. Al crear una
+        entrada nueva, usa un identificador sencillo como <code>maria-y-juan</code>
+        (sin acentos, sin espacios, con guiones).
+      </div>
+    </section>
+
+    <section id="musas">
+      <h2>7. Crear o editar una Musa</h2>
+      <p>Igual que las bodas, pero para el lado Glam Muse. Campos principales:</p>
+      <dl class="field-list">
+        <dt>Number / Order</dt><dd>Texto del número (ej. "MUSE 001") y orden de aparición.</dd>
+        <dt>Name / Tagline</dt><dd>Nombre y frase corta.</dd>
+        <dt>Featured</dt><dd>Actívalo solo en UNA musa; si lo haces, llena también <strong>Featured paragraph</strong>.</dd>
+        <dt>Card image / Hero image / Gallery</dt><dd>Fotos de la tarjeta, de la página y galería.</dd>
+        <dt>Before / After</dt><dd>Fotos de antes y después.</dd>
+        <dt>In Motion — video link</dt><dd>Enlace del video (opcional). Déjalo vacío si no hay video.</dd>
+      </dl>
+      <p>Guarda y publica igual que siempre.</p>
+    </section>
+
+    <section id="faq">
+      <h2>8. Preguntas frecuentes</h2>
+      <h3>¿Cuánto tarda en verse mi cambio?</h3>
+      <p>Unos minutos después de <span class="btn">Publish</span>. Si no lo ves, espera un poco y recarga forzado (<kbd>Cmd+Shift+R</kbd> o <kbd>Ctrl+Shift+R</kbd>).</p>
+      <h3>Hice un cambio y no me gustó. ¿Cómo lo deshago?</h3>
+      <p>Vuelve a la página/entrada, pon el valor anterior (o reelige la foto anterior) y publica de nuevo. Nada se pierde para siempre; tu desarrollador puede recuperar una versión previa.</p>
+      <h3>Dejé un campo de foto vacío. ¿Se rompió algo?</h3>
+      <p>No. Si queda vacío, el sitio usa la foto por defecto. Nunca sale una imagen en blanco por eso.</p>
+      <h3>¿Puedo borrar una página?</h3>
+      <p>Las páginas (Settings) solo se editan, no se borran. Solo <strong>Muses</strong> y <strong>Wedding Stories</strong> se crean y se borran.</p>
+      <h3>Subí una foto muy pesada y el sitio va lento.</h3>
+      <p>Redúcela antes de subirla (≈2000 px en el lado largo) y vuelve a subirla.</p>
+      <h3>Error al iniciar sesión.</h3>
+      <p>No es culpa tuya. Avisa a tu desarrollador: suele ser un ajuste del acceso con GitHub.</p>
+    </section>
+
+    <footer>
+      <p>Luis Quintana Studio — El flujo siempre es el mismo: entrar → editar → Save → Publish.</p>
+      <a class="back" href="/admin/">← Volver al panel</a>
+    </footer>
+  </div>
+</body>
+</html>

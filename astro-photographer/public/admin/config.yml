@@ -79,7 +79,7 @@ collections:
         label: 'Studio hub (/home) — images'
         file: astro-photographer/src/content/settings/apexhome.json
         fields:
-          - { name: apexHeroImage, label: Hero image, widget: image, required: false }
+          - { name: apexHeroImage, label: Hero image, widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — Recuerda hacer Save y luego Publish.' }
           - { name: apexWeddingsCardImage, label: Weddings card image, widget: image, required: false }
           - { name: apexGlamCardImage, label: Glam Muse card image, widget: image, required: false }
           - { name: apexBeautyImage, label: Beauty section image, widget: image, required: false }
@@ -155,7 +155,7 @@ collections:
         label: 'Weddings — Home images'
         file: astro-photographer/src/content/settings/weddings-home.json
         fields:
-          - { name: wedHomeHeroImage, label: Hero image, widget: image, required: false }
+          - { name: wedHomeHeroImage, label: Hero image, widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — Recuerda hacer Save y luego Publish.' }
           - { name: wedHomePhiloImage, label: Philosophy photo, widget: image, required: false }
           - { name: wedHomeWeddingsCardImage, label: Weddings card image, widget: image, required: false }
           - { name: wedHomeEngagementsCardImage, label: Engagements card image, widget: image, required: false }
@@ -236,10 +236,10 @@ collections:
     slug: '{{slug}}'              # filename-based: the entry's own slug == entry.id
     fields:
       - { name: number, label: Number, widget: string }
-      - { name: order, label: Order, widget: number, value_type: int }
+      - { name: order, label: Order, widget: number, value_type: int, hint: 'Orden de aparición (1, 2, 3…). Usa un número que no se repita. Guía: /admin/guia.html' }
       - { name: name, label: Name, widget: string }
       - { name: tagline, label: Tagline, widget: string }
-      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: featured, label: Featured, widget: boolean, default: false, hint: 'Actívalo en SOLO UNA musa; si lo haces, llena también Featured paragraph.' }
       - { name: cardImage, label: Card image, widget: image, required: false }
       - { name: heroImage, label: Hero image, widget: image, required: false }
       - name: gallery
@@ -279,11 +279,11 @@ collections:
     create: true
     slug: '{{slug}}'              # filename-based: the entry's own slug == entry.id
     fields:
-      - { name: order, label: Order, widget: number, value_type: int }
+      - { name: order, label: Order, widget: number, value_type: int, hint: 'Orden de aparición (1, 2, 3…). Usa un número que no se repita. Guía: /admin/guia.html' }
       - { name: type, label: Type, widget: select, options: ['Wedding', 'Engagement'], default: 'Wedding' }
       - { name: names, label: Names, widget: string }
       - { name: place, label: Place, widget: string }
-      - { name: featured, label: Featured, widget: boolean, default: false }
+      - { name: featured, label: Featured, widget: boolean, default: false, hint: 'Actívalo en SOLO UNA historia: esa aparece destacada arriba.' }
       - { name: cardImage, label: Card image, widget: image, required: false }
       - { name: heroImage, label: Hero image, widget: image, required: false }
       - { name: introTitle, label: Intro title, widget: string }
