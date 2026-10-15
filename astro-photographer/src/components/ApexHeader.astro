@@ -4,20 +4,22 @@
 // and the mobile-menu contract that motion.ts initNav() targets
 // (#menu-toggle, #primary-nav, body.menu-open). Rendered light over the dark hero.
 const links = [
-  { href: '/home', label: 'Home' },
   { href: '/weddings', label: 'Weddings & Engagements' },
   // /muse does not exist yet — the Glam Muse section moves to this path when the
   // paths-restructure runs (see .agents/tasks/paths-restructure-plan.md). Linked
   // anyway as the intended final path; it may 404 in preview today.
   { href: '/muse', label: 'The Glam Muse Series' },
   // /about may not exist yet on this branch; linked anyway per the mockup nav.
-  { href: '/about', label: 'About' },
 ] as const;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(href + '/');
 ---
 <header class="lq-header">
+<a class="brand" href="/" aria-label="LQ, home">
+
+    <img class="brand-image" src={'/images/LW.png'} alt="" aria-hidden="true" />
+</a>
   <a class="lq-brand" href="/home" aria-label="Luis Quintana Studio, home">
     <span class="lq-brand__name">LUIS QUINTANA STUDIO</span>
   </a>

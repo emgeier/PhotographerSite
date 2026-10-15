@@ -10,11 +10,9 @@
 // These match what the Codex js/main.js used, so initNav() can target them unchanged.
 
 const links = [
-  { href: '/', label: 'Home' },
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/experience', label: 'The experience' },
-  { href: '/stories', label: 'Muse stories' },
-  {href: 'https://weddings.luisquintanastudio.com', label: 'Weddings'}
+  { href: '/stories', label: 'Muse stories' }
 ] as const;
 
 
@@ -34,6 +32,7 @@ const isActive = (href: string) =>
     <span class="brand__name">GLAM MUSE</span>
     <span class="brand__bottom">EXPERIENCE</span>
   </a>
+  
   <button
     class="menu-toggle"
     id="menu-toggle"
@@ -50,5 +49,8 @@ const isActive = (href: string) =>
     ))}
     <a class="nav-contact" href="/contact" aria-current={isActive('/contact') ? 'page' : undefined}>Contact</a>
   </nav>
+    <a class="brand" href="/home" aria-label="LQ, home">
 
+    <img class="brand-image" src={'/images/LB.png'} alt="" aria-hidden="true" />
+</a>
 </header>
