@@ -48,9 +48,9 @@ collections:
             field: { name: image, label: Image, widget: image }
           - { name: ctaImage, label: Closing CTA background image, widget: image, required: false }
 
-      - name: contact
-        label: 'Contact page — images'
-        file: astro-photographer/src/content/settings/contact.json
+      - name: inquire
+        label: 'Inquire page — images'
+        file: astro-photographer/src/content/settings/inquire.json
         fields:
           - { name: contactHeroImage, label: Hero image, widget: image, required: false }
           - { name: contactAboutImage, label: 'About (black-and-white portrait)', widget: image, required: false }
@@ -79,7 +79,9 @@ collections:
         label: 'Studio hub (/home) — images'
         file: astro-photographer/src/content/settings/apexhome.json
         fields:
-          - { name: apexHeroImage, label: Hero image, widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — Recuerda hacer Save y luego Publish.' }
+          - { name: apexHeroImage, label: 'Hero slide 1 (main)', widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — El hero rota entre 3 fotos. Recuerda Save y luego Publish.' }
+          - { name: apexHeroImage2, label: 'Hero slide 2', widget: image, required: false }
+          - { name: apexHeroImage3, label: 'Hero slide 3', widget: image, required: false }
           - { name: apexWeddingsCardImage, label: Weddings card image, widget: image, required: false }
           - { name: apexGlamCardImage, label: Glam Muse card image, widget: image, required: false }
           - { name: apexBeautyImage, label: Beauty section image, widget: image, required: false }

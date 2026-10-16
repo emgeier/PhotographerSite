@@ -2,7 +2,7 @@
 
 ## Overview
 
-Port the Codex static site's visual design (`index.html`, `portfolio.html` + their CSS/JS) into the existing Astro site as `.astro` components, so the Codex look wins for **home + portfolio only**, while every Astro platform capability — the muses content collection, Sveltia CMS, `Pic.astro`/`astro:assets` pipeline, the real ActiveCampaign contact Lambda, the CloudFormation stack, and the GitHub Actions deploy — survives untouched. `experience`, `stories`, and `contact` keep their current Astro design; a shared `Header`/`Footer`/token layer bridges the resulting visual-consistency gap.
+Port the Codex static site's visual design (`index.html`, `portfolio.html` + their CSS/JS) into the existing Astro site as `.astro` components, so the Codex look wins for **home + portfolio only**, while every Astro platform capability — the muses content collection, Sveltia CMS, `Pic.astro`/`astro:assets` pipeline, the real ActiveCampaign inquire Lambda, the CloudFormation stack, and the GitHub Actions deploy — survives untouched. `experience`, `stories`, and `inquire` keep their current Astro design; a shared `Header`/`Footer`/token layer bridges the resulting visual-consistency gap.
 
 This is Code-First. Every decision below is a concrete file, signature, or snippet grounded in the real source I read.
 
@@ -27,7 +27,7 @@ sequenceDiagram
     Note over GSAP: hydrate on load; respect prefers-reduced-motion
     GSAP->>GSAP: initMotion() reveal/parallax/hero
     GSAP->>GSAP: initPortfolio() lightbox + experience video
-    Dev->>AC: contact form POST (JSON) — real backend wins
+    Dev->>AC: inquire form POST (JSON) — real backend wins
     AC-->>Dev: {ok:true} ; no-JS native POST fallback (?sent=1)
 ```
 
@@ -38,14 +38,14 @@ sequenceDiagram
 | # | Topic | Decision |
 |---|-------|----------|
 | D1 | Strategy | Port Codex HTML→`.astro`, CSS→scoped page stylesheets, JS→client `.ts` modules. Do **not** replace Astro with static files. |
-| D2 | Scope | Only `index.astro` + `portfolio.astro` adopt the Codex look. `experience/stories/contact` unchanged. |
+| D2 | Scope | Only `index.astro` + `portfolio.astro` adopt the Codex look. `experience/stories/inquire` unchanged. |
 | D3 | Tokens | **One** token system: extend Astro `:root` with Codex aliases (`--black`→`--ink`, `--champagne`→`--gold`, add `--serif/--sans/--content-width`). Codex values win for home+portfolio surfaces. |
 | D4 | Fonts | Keep `@fontsource-variable/manrope` (npm, self-hosted) for `--sans`. Keep Astro's Typekit `mdr5myc` for ivypresto-display. Drop Codex kit `dis2zlj` and the local Cormorant fallback (redundant). |
 | D5 | Motion | Vendor-free: install `gsap` via npm, author `src/scripts/motion.ts` + `portfolio.ts`, load with Astro `<script>` (bundled, deferred). CONFIG preserved. |
 | D6 | Images | Route all Codex `.webp` through `Pic.astro`. Keep `picture{display:contents}`. Portfolio 9-up grid is **page-local data in the component** (not CMS) — it is marketing art direction, not muse content. |
-| D7 | Contact | **AC Lambda wins.** Codex consultation `<dialog>` + mailto is dropped. Home/portfolio "Book"/"Contact" CTAs link to `/contact`. |
+| D7 | Inquire | **AC Lambda wins.** Codex consultation `<dialog>` + mailto is dropped. Home/portfolio "Book"/"Inquire" CTAs link to `/inquire`. |
 | D8 | Muse stories | Codex home has a 3-card "Muse stories" teaser + story `<dialog>`s with hardcoded copy. Replace that hardcoded copy by reading the **existing muses collection**; link cards to `/stories/{id}` instead of opening dialogs. CMS/collection is the source of truth. |
-| D9 | Consistency gap | Shared `Header.astro`/`Footer.astro` + unified `:root` tokens bridge Codex (home/portfolio) and legacy (experience/stories/contact). Accept differing section layouts; keep brand, nav, type scale, color identical. |
+| D9 | Consistency gap | Shared `Header.astro`/`Footer.astro` + unified `:root` tokens bridge Codex (home/portfolio) and legacy (experience/stories/inquire). Accept differing section layouts; keep brand, nav, type scale, color identical. |
 
 ---
 
@@ -70,7 +70,7 @@ src/
     portfolio.astro       # REWRITE to Codex portfolio sections
     experience.astro      # UNCHANGED
     stories.astro         # UNCHANGED
-    contact.astro         # UNCHANGED (real AC backend)
+    inquire.astro         # UNCHANGED (real AC backend)
   assets/images/          # ADD Codex .webp (replace PNG placeholders)
     hero.webp, look-again≈portrait.webp, exp-band≈story/closing,
     story-1..3 ≈ story-softness/perspective/portrait.webp, your-turn≈closing.webp,
@@ -193,9 +193,9 @@ export function initExperienceVideo(): void
 - `autoplay=0` when reduced-motion matches, else `1`.
 - On dialog `close`, `iframe.src = 'about:blank'` (stops playback).
 
-### Contact reconciliation (D7) — **no new function**
+### Inquire reconciliation (D7) — **no new function**
 
-The Codex consultation `<dialog>` + `#consultation-form` mailto flow is **not ported**. The existing `contact.astro` (real AC Lambda, JSON POST, `?sent=1/0` no-JS fallback, `is:inline` enhancer) is authoritative and unchanged. Home/portfolio CTAs that said `data-open-consultation` become `<a href="/contact">`.
+The Codex consultation `<dialog>` + `#consultation-form` mailto flow is **not ported**. The existing `inquire.astro` (real AC Lambda, JSON POST, `?sent=1/0` no-JS fallback, `is:inline` enhancer) is authoritative and unchanged. Home/portfolio CTAs that said `data-open-consultation` become `<a href="/inquire">`.
 
 ---
 
@@ -208,7 +208,7 @@ The Codex consultation `<dialog>` + `#consultation-form` mailto flow is **not po
 | `.perspective` (Look Again) | `<section class="perspective">` | `portrait.webp` | "Preview a portrait" button → **link to `/portfolio`** (drop gallery dialog on home) or keep lightbox (open Q1) |
 | `.experience` steps | `<section class="experience">` | CSS texture (no image) | pure CSS gradient band, no download |
 | `.stories` (3 cards) | `<section class="stories">` | muse `cardImage` through Pic | **data from muses collection (D8)**; cards link `/stories/{id}` |
-| `.closing` (Your Turn) | `<section class="closing">` | `closing.webp` | CTA → `/contact` (D7) |
+| `.closing` (Your Turn) | `<section class="closing">` | `closing.webp` | CTA → `/inquire` (D7) |
 
 ### Portfolio (`portfolio.astro`) ← Codex `portfolio.html`
 | Codex section | Becomes | Images via Pic |
@@ -302,7 +302,7 @@ const teaser = (await getCollection('muses')).sort((a,b)=>a.data.order-b.data.or
         <h1 class="hero__title">
           <span class="line-mask"><span data-hero-line>A portrait</span></span>…
         </h1>
-        <a class="button" href="/contact" data-hero-item>Book your consultation</a>
+        <a class="button" href="/inquire" data-hero-item>Book your consultation</a>
       </div>
     </section>
     <!-- …perspective / experience… -->
@@ -356,9 +356,9 @@ const teaser = muses.slice(0,3); // card → href={`/stories/${m.id}`}
 
 `getCollection('muses')` still returns 6 entries; `stories.astro` + `[slug].astro` render unchanged.
 
-### Property 2: Contact uses the real AC backend
+### Property 2: Inquire uses the real AC backend
 
-`contact.astro` POSTs to `PUBLIC_AC_FORM_ENDPOINT`; `?sent=1/0` banner works; no mailto anywhere.
+`inquire.astro` POSTs to `PUBLIC_AC_FORM_ENDPOINT`; `?sent=1/0` banner works; no mailto anywhere.
 
 ### Property 3: Rasters go through astro:assets
 
@@ -401,7 +401,7 @@ npm build (`astro build`) succeeds; `dist/` emitted; no vendored gsap in bundle 
 | GSAP import fails / unsupported | `initMotion` returns early; static content visible (P4). |
 | `.webp` missing at build | `astro:assets` import throws at build → caught in CI before deploy (fail fast). |
 | Muse has no `cardImage` | schema default (`/images/ms-muse-1.svg`) renders through Pic string passthrough. |
-| AC endpoint unset | contact native POST still valid once set; JS enhancer no-ops (existing behavior). |
+| AC endpoint unset | inquire native POST still valid once set; JS enhancer no-ops (existing behavior). |
 | Lightbox opened with 0 cards | `initPortfolioGrid`/`initLightbox` guard `if(!cards.length) return;` (ported). |
 
 ---
@@ -421,7 +421,7 @@ npm build (`astro build`) succeeds; `dist/` emitted; no vendored gsap in bundle 
 **Manual**
 - Keyboard: tab to a portfolio card → Enter opens lightbox → arrows → Escape → focus returns (P6).
 - Lighthouse on home + portfolio (LCP = hero `priority`).
-- Visual consistency pass: Header/Footer/type/color identical across Codex pages and legacy experience/stories/contact (D9).
+- Visual consistency pass: Header/Footer/type/color identical across Codex pages and legacy experience/stories/inquire (D9).
 
 **PBT library:** `@fast-check/vitest`.
 

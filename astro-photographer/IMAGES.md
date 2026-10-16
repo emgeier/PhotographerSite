@@ -1,6 +1,6 @@
 # Image optimization (Track 1 — static site images)
 
-Static, non-CMS images (hero, portfolio, experience, contact — everything that
+Static, non-CMS images (hero, portfolio, experience, inquire — everything that
 is fixed and lives in the page markup, not the Muse content collection) are
 optimized at **build time** by Astro's `astro:assets` pipeline via the `Pic`
 component (`src/components/Pic.astro`).
@@ -65,7 +65,7 @@ AVIF/WebP out.
 
 Only `index.astro` is converted so far (reference implementation). The other
 pages still use raw `<img src="/images/*.svg">`. To convert each
-(`portfolio.astro`, `experience.astro`, `contact.astro`, `stories.astro`, and the
+(`portfolio.astro`, `experience.astro`, `inquire.astro`, `stories.astro`, and the
 non-CMS images in `stories/[slug].astro`):
 
 1. For each image, add a PNG/JPG to `src/assets/images/` (convert the existing

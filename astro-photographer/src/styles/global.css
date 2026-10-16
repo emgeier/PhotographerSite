@@ -425,7 +425,7 @@
   .st-cta-ask{text-align:left}
 }
 
-/* ===== Contact page ===== */
+/* ===== Inquire page ===== */
 .ct-hero{height:820px;background:var(--ivory);position:relative;overflow:hidden}
 .ct-hero-copy{position:relative;z-index:2;padding-top:calc(var(--header-h) + 24px);max-width:440px}
 .ct-hero .eyebrow{margin-bottom:26px}

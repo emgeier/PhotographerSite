@@ -150,7 +150,7 @@ const settings = defineCollection({
     insideImages: optionalList,
     ctaImage: optionalText,
 
-    // contact.json — Contact page images.
+    // inquire.json — Inquire page images.
     contactHeroImage: optionalText,
     contactAboutImage: optionalText,
     contactStepsImage: optionalText,
@@ -161,6 +161,11 @@ const settings = defineCollection({
     motionImage: optionalText,
     storiesCtaImage: optionalText,
     storiesHeroImage: optionalText,
+
+    // apexhome.json — Apex studio hub (/home) hero carousel slides 2 & 3
+    // (slide 1 is apexHeroImage, already declared below).
+    apexHeroImage2: optionalText,
+    apexHeroImage3: optionalText,
 
     // home.json — Home page images.
     homeHeroImage: optionalText,

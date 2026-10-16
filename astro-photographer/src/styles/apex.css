@@ -61,6 +61,17 @@
 .lq-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
 .lq-hero__image { position: absolute; inset: 0; }
 .lq-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+
+/* Cross-fade carousel: slides stacked, only .is-active is opaque. The slow
+   opacity transition is the fade. First slide is active in the HTML, so with no
+   JS the hero shows a static first image. */
+.lq-hero__slides { position: absolute; inset: 0; }
+.lq-hero__slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1600ms ease-in-out; }
+.lq-hero__slide.is-active { opacity: 1; }
+.lq-hero__slide img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+@media (prefers-reduced-motion: reduce) {
+  .lq-hero__slide { transition: none; }
+}
 .lq-hero__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(16, 12, 8, 0.82) 0%, rgba(16, 12, 8, 0.58) 30%, rgba(16, 12, 8, 0.2) 56%, rgba(16, 12, 8, 0.05) 80%, transparent 100%), linear-gradient(0deg, rgba(16, 12, 8, 0.4), transparent 38%); }
 .lq-hero__content { position: relative; z-index: 1; }
 .lq-hero__eyebrow { color: #e6d4b8; }
@@ -72,8 +83,10 @@
 .lq-hero__indicator { position: absolute; left: 0; bottom: 54px; z-index: 2; width: min(1240px, calc(100% - 120px)); left: 50%; transform: translateX(-50%); }
 .lq-hero__count { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3px; color: #efe8dd; display: inline-flex; align-items: center; gap: 10px; }
 .lq-hero__dots { display: flex; gap: 10px; margin-top: 14px; }
-.lq-hero__dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid rgba(244, 240, 232, 0.7); }
+.lq-hero__dot { width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 1px solid rgba(244, 240, 232, 0.7); background: transparent; cursor: pointer; transition: background 400ms ease, border-color 400ms ease, transform 400ms ease; }
+.lq-hero__dot:hover { border-color: var(--ivory); transform: scale(1.15); }
 .lq-hero__dot.is-active { background: var(--ivory); border-color: var(--ivory); }
+.lq-hero__dot:focus-visible { outline: 2px solid var(--ivory); outline-offset: 3px; }
 
 /* Right-edge vertical keyword stack. */
 .lq-hero__keywords { position: absolute; right: max(48px, calc((100% - 1240px) / 2)); top: 50%; transform: translateY(-50%); z-index: 2; display: flex; flex-direction: column; gap: 10px; text-align: right; font: 600 10px/1 var(--sans); letter-spacing: 3px; text-transform: uppercase; color: #efe8dd; }

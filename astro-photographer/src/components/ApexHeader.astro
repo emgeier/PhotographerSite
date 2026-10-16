@@ -37,8 +37,8 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-    <!-- Mockup nav labels this "Inquire"; it points at /contact so the link
+    <!-- Mockup nav labels this "Inquire"; it points at /inquire so the link
          resolves today (/inquire arrives with the paths-restructure). -->
-    <a class="lq-nav__inquire" href="/contact">Inquire</a>
+    <a class="lq-nav__inquire" href="/inquire">Inquire</a>
   </nav>
 </header>

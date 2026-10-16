@@ -13,14 +13,14 @@
         "timestamp": 1791680064970
       }
     ],
-    "1. Build the shared Contact dialog component (`ContactDialog.astro`)": [
+    "1. Build the shared Inquire dialog component (`ContactDialog.astro`)": [
       {
         "executionId": "843f91ab-2aaa-4e2d-a864-7fa7a885d0dc",
         "chatSessionId": "sess_fdf20426-7fc6-4ded-bb16-62953a9c58bf",
         "timestamp": 1791680065000
       }
     ],
-    "3.1 Add `data-open-contact` to `Header.astro` and `Footer.astro` Contact links": [
+    "3.1 Add `data-open-inquire` to `Header.astro` and `Footer.astro` Inquire links": [
       {
         "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
         "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
@@ -32,7 +32,7 @@
         "timestamp": 1791682108314
       }
     ],
-    "3.2 Add `data-open-contact` to Home, Portfolio, and story-detail CTAs": [
+    "3.2 Add `data-open-inquire` to Home, Portfolio, and story-detail CTAs": [
       {
         "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
         "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",
@@ -154,7 +154,7 @@
         "timestamp": 1791687646952
       }
     ],
-    "2. Build the Contact dialog controller (`contact-dialog.ts`)": [
+    "2. Build the Inquire dialog controller (`inquire-dialog.ts`)": [
       {
         "executionId": "748687e6-aa51-4599-be53-c55d6ddebcc1",
         "chatSessionId": "sess_6033f107-a6fe-4524-a85f-a592f19a5344",

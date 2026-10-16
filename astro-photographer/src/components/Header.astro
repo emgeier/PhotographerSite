@@ -1,5 +1,5 @@
 ---
-// Shared masthead for all pages (Codex home/portfolio + legacy experience/stories/contact).
+// Shared masthead for all pages (Codex home/portfolio + legacy experience/stories/inquire).
 // Markup/structure ported from the Codex header in Glammuse/index.html + css/styles.css,
 // but the links are the REAL Astro routes (no Codex mailto/consultation).
 //
@@ -47,10 +47,6 @@ const isActive = (href: string) =>
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-    <a class="nav-contact" href="/contact" aria-current={isActive('/contact') ? 'page' : undefined}>Contact</a>
+    <a class="nav-inquire" href="/inquire" aria-current={isActive('/inquire') ? 'page' : undefined}>Inquire</a>
   </nav>
-    <a class="brand" href="/home" aria-label="LQ, home">
-
-    <img class="brand-image" src={'/images/LB.png'} alt="" aria-hidden="true" />
-</a>
 </header>

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This feature imports the Codex static site's visual design (its home and portfolio look, markup, CSS, and motion) into the existing Astro platform, so that the Home and Portfolio pages adopt the Codex aesthetic while every existing Astro platform capability survives untouched: the muses content collection, the Sveltia CMS, the `Pic.astro`/`astro:assets` image pipeline, the real ActiveCampaign contact Lambda and its API, the CloudFormation stack, and the GitHub Actions deploy. The `experience`, `stories`, and `contact` pages keep their current Astro design, and a shared Header/Footer/token layer bridges the visual-consistency gap.
+This feature imports the Codex static site's visual design (its home and portfolio look, markup, CSS, and motion) into the existing Astro platform, so that the Home and Portfolio pages adopt the Codex aesthetic while every existing Astro platform capability survives untouched: the muses content collection, the Sveltia CMS, the `Pic.astro`/`astro:assets` image pipeline, the real ActiveCampaign inquire Lambda and its API, the CloudFormation stack, and the GitHub Actions deploy. The `experience`, `stories`, and `inquire` pages keep their current Astro design, and a shared Header/Footer/token layer bridges the visual-consistency gap.
 
 The work is derived from an already-approved design (design-first workflow). It also formalizes two new product decisions: (1) when there is no clean one-to-one mapping between a Codex element and an Astro element, the Codex structure wins by default; and (2) the fixed marketing/art-direction media (hero, portfolio portraits, banner, etc.) must use stable, predictable filenames so a future direct-to-S3 "replace-by-filename" upload admin can swap a file without a CMS round-trip. That future upload admin is out of scope here, but the current work must not block it.
 
@@ -16,7 +16,7 @@ Each requirement below is written to map cleanly to the design's ten correctness
 - **CMS**: The Sveltia content management system configured at `public/admin/config.yml` that authors Muses_Collection content.
 - **Pic**: The existing `Pic.astro` component that wraps `astro:assets` to emit responsive `<picture>` elements (AVIF/WebP, srcset, baked dimensions).
 - **Image_Pipeline**: The `Pic` + `astro:assets` processing path that transforms imported raster assets into optimized `<picture>` output.
-- **AC_Lambda**: The real ActiveCampaign contact backend (Lambda behind API Gateway) that the existing `contact.astro` form posts to.
+- **AC_Lambda**: The real ActiveCampaign inquire backend (Lambda behind API Gateway) that the existing `inquire.astro` form posts to.
 - **GSAP_Motion**: The animation system ported from the Codex JavaScript, implemented as bundled client modules (`motion.ts`, `portfolio.ts`) using the npm `gsap` package and `ScrollTrigger`.
 - **Lightbox**: The native `<dialog>`-based portfolio image gallery (keyboard navigation, swipe, index wrapping) ported from the Codex JavaScript.
 - **Experience_Video**: The YouTube (`youtube-nocookie`) film embed shown in a dialog on the portfolio page.
@@ -36,8 +36,8 @@ Each requirement below is written to map cleanly to the design's ten correctness
 
 1. WHEN the Home page is rendered, THE Astro_Platform SHALL present the Codex hero section, perspective ("Look Again") section, experience-steps section, stories-teaser section, and closing section in Codex markup and layout.
 2. THE Astro_Platform SHALL render the Home hero image with the Codex hero motion hooks (`data-hero-line`, `data-hero-item`, `data-hero-image`) preserved.
-3. WHERE a Home closing call-to-action invites booking, THE Astro_Platform SHALL link that call-to-action to `/contact`.
-4. THE Astro_Platform SHALL keep the `experience`, `stories`, and `contact` pages on their existing Astro design.
+3. WHERE a Home closing call-to-action invites booking, THE Astro_Platform SHALL link that call-to-action to `/inquire`.
+4. THE Astro_Platform SHALL keep the `experience`, `stories`, and `inquire` pages on their existing Astro design.
 
 ### Requirement 2: Portfolio page adopts the Codex look
 
@@ -105,16 +105,16 @@ Each requirement below is written to map cleanly to the design's ten correctness
 3. IF `prefers-reduced-motion: reduce` matches, THEN THE Experience_Video SHALL set `autoplay=0`, ELSE THE Experience_Video SHALL set `autoplay=1`.
 4. WHEN the experience dialog closes, THE Experience_Video SHALL reset the iframe source to `about:blank`.
 
-### Requirement 8: Contact reconciliation — the real ActiveCampaign backend wins
+### Requirement 8: Inquire reconciliation — the real ActiveCampaign backend wins
 
-**User Story:** As the site owner, I want contact submissions to continue flowing to ActiveCampaign, so that no leads are lost to a ported mailto flow.
+**User Story:** As the site owner, I want inquire submissions to continue flowing to ActiveCampaign, so that no leads are lost to a ported mailto flow.
 
 #### Acceptance Criteria
 
-1. THE Astro_Platform SHALL keep the existing `contact.astro` form posting to the AC_Lambda endpoint unchanged.
-2. THE Astro_Platform SHALL preserve the existing `?sent=1` / `?sent=0` no-JavaScript contact fallback behavior.
-3. WHERE a Home or Portfolio call-to-action targets booking or contact, THE Astro_Platform SHALL link it to `/contact`.
-4. THE Astro_Platform SHALL contain no `mailto:` contact flow and SHALL NOT port the Codex consultation dialog.
+1. THE Astro_Platform SHALL keep the existing `inquire.astro` form posting to the AC_Lambda endpoint unchanged.
+2. THE Astro_Platform SHALL preserve the existing `?sent=1` / `?sent=0` no-JavaScript inquire fallback behavior.
+3. WHERE a Home or Portfolio call-to-action targets booking or inquire, THE Astro_Platform SHALL link it to `/inquire`.
+4. THE Astro_Platform SHALL contain no `mailto:` inquire flow and SHALL NOT port the Codex consultation dialog.
 
 ### Requirement 9: Home stories teaser derived from the muses collection
 
@@ -165,7 +165,7 @@ Each requirement below is written to map cleanly to the design's ten correctness
 
 #### Acceptance Criteria
 
-1. THE Shared_Chrome SHALL render the same Header and Footer across the Codex Home and Portfolio pages and the legacy `experience`, `stories`, and `contact` pages.
+1. THE Shared_Chrome SHALL render the same Header and Footer across the Codex Home and Portfolio pages and the legacy `experience`, `stories`, and `inquire` pages.
 2. THE Shared_Chrome SHALL keep brand, navigation routes, type scale, and color identical across Codex and legacy pages.
 3. THE Footer SHALL link to the real Astro_Platform navigation routes.
 

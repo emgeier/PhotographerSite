@@ -1,4 +1,4 @@
-# Design Document: Codex Experience, Stories & Sitewide Contact Dialog
+# Design Document: Codex Experience, Stories & Sitewide Inquire Dialog
 
 ## Overview
 
@@ -20,11 +20,11 @@ existing content forward. All page imagery routes through `Pic.astro`, and the
 `muses` content collection + Sveltia CMS and the working featured rotator are
 preserved.
 
-Part B converts Contact from a standalone page into a **sitewide popup** built
+Part B converts Inquire from a standalone page into a **sitewide popup** built
 on the native `<dialog>` element and the Codex `.dialog` / `.consultation-dialog`
 styles that already exist (unused) in `codex-base.css`. The real ActiveCampaign
 Lambda backend (`PUBLIC_AC_FORM_ENDPOINT`) is preserved verbatim — the dialog
-submits to the same endpoint the same way. The `/contact` page is **kept** as a
+submits to the same endpoint the same way. The `/inquire` page is **kept** as a
 no-JS fallback and direct-link target; the dialog is progressive enhancement
 layered over it. The new dialog slots into the existing single-dialog invariant
 and `body.dialog-open` pattern already established by `portfolio.ts`.
@@ -57,14 +57,14 @@ graph TD
       Experience[experience.astro - REBUILT]
       Stories[stories.astro - REBUILT]
       StoryDetail["stories/[slug].astro"]
-      Contact[contact.astro - fallback page]
+      Inquire[inquire.astro - fallback page]
     end
     Pages --> Header[Header.astro masthead]
     Pages --> Footer[Footer.astro]
     Pages --> ContactDialog[ContactDialog.astro - NEW shared]
     Pages --> SiteMotion[SiteMotion.astro]
     SiteMotion --> motion[motion.ts: initNav + initMotion]
-    ContactDialog --> contactScript[contact-dialog.ts - NEW]
+    ContactDialog --> contactScript[inquire-dialog.ts - NEW]
     Portfolio --> portfolioScript[portfolio.ts: lightbox + video]
     Stories --> Muses[(muses collection)]
     Home --> Muses
@@ -78,8 +78,8 @@ graph TD
 
 **New files**
 
-- `src/components/ContactDialog.astro` — the shared contact `<dialog>` + AC form.
-- `src/scripts/contact-dialog.ts` — opens/closes the dialog, AC fetch submit,
+- `src/components/ContactDialog.astro` — the shared inquire `<dialog>` + AC form.
+- `src/scripts/inquire-dialog.ts` — opens/closes the dialog, AC fetch submit,
   `?sent=` fallback banner, single-dialog + `body.dialog-open` integration.
 - `src/styles/codex-content.css` — the new Experience + Stories section styles
   (`.ex2-*` / `.ms2-*` or similar), authored against the Codex tokens. Keeps
@@ -91,8 +91,8 @@ graph TD
 - `src/pages/experience.astro` — rebuilt markup (Codex primitives + `Pic`).
 - `src/pages/stories.astro` — rebuilt markup (Codex primitives + `Pic`),
   featured rotator preserved.
-- `src/components/Header.astro` — the nav `Contact` link gains a dialog hook.
-- `src/components/Footer.astro` — the footer `Contact` link gains a dialog hook.
+- `src/components/Header.astro` — the nav `Inquire` link gains a dialog hook.
+- `src/components/Footer.astro` — the footer `Inquire` link gains a dialog hook.
 - `src/pages/index.astro`, `portfolio.astro`, `stories/[slug].astro` — the
   "Book your consultation" CTAs gain the dialog hook (page markup otherwise
   unchanged; `[slug].astro` stays on `global.css` for now).
@@ -104,18 +104,18 @@ graph TD
   restore focus to the invoking trigger. This mirrors `initLightbox` /
   `initExperienceVideo` in `portfolio.ts` exactly.
 - Progressive enhancement: nothing is hidden by JS. If a script fails to load,
-  CTAs remain real `<a href="/contact">` links and `/contact` still works.
+  CTAs remain real `<a href="/inquire">` links and `/inquire` still works.
 
 ## Sequence Diagrams
 
-### Contact dialog open + AC submit (JS available)
+### Inquire dialog open + AC submit (JS available)
 
 ```mermaid
 sequenceDiagram
     participant U as Visitor
-    participant CTA as "Book consultation" CTA (a[data-open-contact])
-    participant D as "#contact-dialog <dialog>"
-    participant S as contact-dialog.ts
+    participant CTA as "Book consultation" CTA (a[data-open-inquire])
+    participant D as "#inquire-dialog <dialog>"
+    participant S as inquire-dialog.ts
     participant AC as AC Lambda (PUBLIC_AC_FORM_ENDPOINT)
 
     U->>CTA: click
@@ -135,17 +135,17 @@ sequenceDiagram
     D->>S: close event -> body.dialog-open = false; focus returns to CTA
 ```
 
-### Contact fallback (JS disabled or script failed)
+### Inquire fallback (JS disabled or script failed)
 
 ```mermaid
 sequenceDiagram
     participant U as Visitor
-    participant CTA as "Book consultation" CTA (a[href="/contact"])
-    participant P as /contact page
+    participant CTA as "Book consultation" CTA (a[href="/inquire"])
+    participant P as /inquire page
     participant AC as AC Lambda
 
     U->>CTA: click (no JS to intercept)
-    CTA->>P: navigate to /contact
+    CTA->>P: navigate to /inquire
     U->>P: submit native form (method=POST, action=endpoint)
     P->>AC: native POST
     AC-->>P: 302 redirect ?sent=1 | ?sent=0
@@ -158,21 +158,21 @@ sequenceDiagram
 
 **Purpose**: A single reusable native `<dialog>` containing the ActiveCampaign
 consultation form, included once per page near the end of `<body>` (after
-`Footer`, alongside `SiteMotion`). Opened by any `[data-open-contact]` trigger.
+`Footer`, alongside `SiteMotion`). Opened by any `[data-open-inquire]` trigger.
 
 **Markup contract** (styled by the existing `.dialog` / `.consultation-dialog`
 rules in `codex-base.css`, which are currently defined but unused):
 
 ```html
-<dialog class="dialog consultation-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">
+<dialog class="dialog consultation-dialog" id="inquire-dialog" aria-labelledby="inquire-dialog-title">
   <form method="dialog">
-    <button class="dialog-close" type="submit" aria-label="Close contact form"><span aria-hidden="true">×</span></button>
+    <button class="dialog-close" type="submit" aria-label="Close inquire form"><span aria-hidden="true">×</span></button>
   </form>
   <div class="consultation-dialog__content">
-    <p class="eyebrow">Contact</p>
-    <h2 id="contact-dialog-title">Start the conversation.</h2>
-    <p class="dialog-intro">…carried from contact.astro hero lede…</p>
-    <!-- AC form: identical fields + endpoint to contact.astro -->
+    <p class="eyebrow">Inquire</p>
+    <h2 id="inquire-dialog-title">Start the conversation.</h2>
+    <p class="dialog-intro">…carried from inquire.astro hero lede…</p>
+    <!-- AC form: identical fields + endpoint to inquire.astro -->
     <form class="ct-form consultation-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
       …first, last, email, phone, reason, more, feel, hear (same name=… as today)…
       <button class="button" type="submit">Start the conversation</button>
@@ -185,12 +185,12 @@ rules in `codex-base.css`, which are currently defined but unused):
 
 **Responsibilities**:
 - Render the AC form once with the SAME field `name` attributes and the SAME
-  `action={PUBLIC_AC_FORM_ENDPOINT}` as `contact.astro` (so the Lambda contract
+  `action={PUBLIC_AC_FORM_ENDPOINT}` as `inquire.astro` (so the Lambda contract
   is unchanged).
-- Expose a stable DOM contract for `contact-dialog.ts`: `#contact-dialog`,
+- Expose a stable DOM contract for `inquire-dialog.ts`: `#inquire-dialog`,
   the inner `.consultation-form`, a `.form-status` region, and the close button
   via `<form method="dialog">`.
-- Carry no JS itself; behavior is in `contact-dialog.ts`.
+- Carry no JS itself; behavior is in `inquire-dialog.ts`.
 
 **Design decision — two nested forms**: the outer `<form method="dialog">`
 provides native close (its submit button dismisses the dialog without posting),
@@ -198,16 +198,16 @@ and the inner `<form method="POST">` is the real AC form. This matches the Codex
 dialog-close pattern already used in `portfolio.astro`'s gallery/experience
 dialogs. `method="dialog"` requires the close button to be inside its own form.
 
-### Component 2: `contact-dialog.ts` (NEW)
+### Component 2: `inquire-dialog.ts` (NEW)
 
-**Purpose**: Progressive-enhancement controller for the contact dialog. It is
-the contact analogue of `initExperienceVideo` in `portfolio.ts`, plus the AC
-fetch/`?sent=` logic currently inline in `contact.astro`.
+**Purpose**: Progressive-enhancement controller for the inquire dialog. It is
+the inquire analogue of `initExperienceVideo` in `portfolio.ts`, plus the AC
+fetch/`?sent=` logic currently inline in `inquire.astro`.
 
 **Interface**:
 
 ```ts
-/** Wire every [data-open-contact] trigger to open #contact-dialog, enhance
+/** Wire every [data-open-inquire] trigger to open #inquire-dialog, enhance
  *  the AC form submit with fetch, and show the ?sent= fallback banner. Safe
  *  no-op when the dialog is absent (e.g. a page without the component). */
 export function initContactDialog(): void;
@@ -219,8 +219,8 @@ export interface ContactPayload { [field: string]: string; }
 export function serializeForm(form: HTMLFormElement): ContactPayload;
 ```
 
-**Responsibilities / behavior** (ported from `contact.astro`'s inline script):
-- `[data-open-contact]` click → `preventDefault`, close any other open dialog,
+**Responsibilities / behavior** (ported from `inquire.astro`'s inline script):
+- `[data-open-inquire]` click → `preventDefault`, close any other open dialog,
   `showModal()`, set `body.dialog-open`, remember the trigger for focus return.
 - On form `submit`: run native `reportValidity()` first (so built-in prompts
   show); if valid, `preventDefault`, disable the submit button, show a
@@ -229,8 +229,8 @@ export function serializeForm(form: HTMLFormElement): ContactPayload;
 - On dialog `close`: clear `body.dialog-open` only if no other dialog is open;
   return focus to the trigger.
 - `?sent=1` / `?sent=0` banner: read `window.location.search` once on load and,
-  because the fallback redirect lands on `/contact` (the page), this logic lives
-  on BOTH the `/contact` page (as today) and — harmlessly — can be skipped in
+  because the fallback redirect lands on `/inquire` (the page), this logic lives
+  on BOTH the `/inquire` page (as today) and — harmlessly — can be skipped in
   the dialog controller since the dialog path never navigates away. (See
   "Error Handling / fallback coexistence".)
 
@@ -245,8 +245,8 @@ preserved; only its surrounding markup/classes change.
 
 ### Component 5: `Header.astro` / `Footer.astro` (CHANGED)
 
-The nav `Contact` and footer `Contact` links keep `href="/contact"` (fallback)
-and gain `data-open-contact`. No structural change otherwise.
+The nav `Inquire` and footer `Inquire` links keep `href="/inquire"` (fallback)
+and gain `data-open-inquire`. No structural change otherwise.
 
 ## Per-Page Section Structure
 
@@ -267,7 +267,7 @@ Content carried over verbatim from today's `experience.astro`: hero title
 | `experience-hero` | `.hero` treatment: absolute `Header`, `hero__image` via `Pic` + veil, `hero__content` with `.eyebrow` + `.display-title`/`hero__title` (weight 100) + lede + a `.text-link` "Step inside ↓" | `data-hero-image`, `data-hero-line` on title lines, `data-hero-item` on lede/link | existing hero copy; `ex-hero.png` → `Pic` |
 | `experience-process` | section rhythm like home `.experience`/portfolio `.portfolio-process`: `.eyebrow` + `.display-title` heading row + intro; 3 `data-reveal` cards each with `Pic` image, **small label numeral** (`.experience-step__number`-style: 13px uppercase `var(--champagne)`), `.short-rule`, `h3`, `p` | `data-reveal` per head row + per card | existing step data (`ex-process-1..3.webp`) |
 | `experience-inside` | heading row (`.eyebrow` + `.display-title`) + a 4-up `.image-frame` grid, each `Pic` | `data-reveal` per figure | existing `ex-inside-1..4.webp` |
-| `experience-cta` | Codex closing treatment (like `.closing`): `.eyebrow` + `.display-title` "LET THIS BE YOUR MOMENT." + `.short-rule` + a `.button data-open-contact href="/contact"` | `data-reveal` | existing CTA copy |
+| `experience-cta` | Codex closing treatment (like `.closing`): `.eyebrow` + `.display-title` "LET THIS BE YOUR MOMENT." + `.short-rule` + a `.button data-open-inquire href="/inquire"` | `data-reveal` | existing CTA copy |
 
 **Numerals**: process numerals stay SMALL label-style (13px uppercase,
 `var(--champagne)`) exactly as the recent project change dictates — reuse the
@@ -290,7 +290,7 @@ the "IN MOTION" video teaser; the closing CTA. The frontmatter data pipeline
 | `stories-meet` | centered heading (`.eyebrow` + `.display-title` with flanking `.short-rule`) + `.stories__grid`-style 3-col grid of `.story-card`s, each `Pic` + title + rule, linking `/stories/{id}` | `data-reveal` per heading + per card | `getCollection('muses')` sorted by `order` |
 | `stories-look` | dark tonal band (reuse `.experience` umber treatment or a closing-style band): `.display-title` "LOOK AGAIN." + `.eyebrow` sub + `Pic` + para | `data-reveal` | existing copy; `ms-look-again.webp` → `Pic` |
 | `stories-motion` | video teaser row: a play-poster button + copy (`.eyebrow`, `.display-title` "IN MOTION.", para, `.text-link`). Reuse the privacy-preserving `<dialog>` pattern from portfolio if a real film is wired; otherwise keep the poster as a link placeholder as today | `data-reveal` | existing copy; `ms-motion.webp` → `Pic` |
-| `stories-cta` | Codex closing treatment: `.eyebrow` + `.display-title` "YOU'VE SEEN THEIR STORIES." + italic line + `.short-rule` + `.button data-open-contact href="/contact"` | `data-reveal` | existing CTA copy |
+| `stories-cta` | Codex closing treatment: `.eyebrow` + `.display-title` "YOU'VE SEEN THEIR STORIES." + italic line + `.short-rule` + `.button data-open-inquire href="/inquire"` | `data-reveal` | existing CTA copy |
 
 **Featured rotator preservation**: the rebuilt `stories-featured` markup MUST
 keep every id/attribute the existing inline `<script>` queries
@@ -306,17 +306,17 @@ string src emits a plain `<img>`; the collection `cardImage` values are strings,
 so `Pic` renders a passthrough `<img>` the script can mutate). This keeps the
 rotator functional. (See Open Question OQ-3.)
 
-## Contact Dialog — detailed design
+## Inquire Dialog — detailed design
 
 ### How it wires to the AC endpoint (unchanged backend)
 
 - The dialog's inner form uses `action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}`
-  and `method="POST"`, identical to `contact.astro`. Field `name`s are copied
+  and `method="POST"`, identical to `inquire.astro`. Field `name`s are copied
   verbatim (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`).
-- `contact-dialog.ts` serializes `FormData` to a flat JSON object and
+- `inquire-dialog.ts` serializes `FormData` to a flat JSON object and
   `fetch`-POSTs it with `Content-Type: application/json`, reading `{ ok }` from
   the response — byte-for-byte the same enhancement already shipping in
-  `contact.astro`. The Lambda is the single validation authority; the client
+  `inquire.astro`. The Lambda is the single validation authority; the client
   does not add validation beyond native HTML constraints.
 
 ### Reconciling with existing dialogs
@@ -325,26 +325,26 @@ rotator functional. (See Open Question OQ-3.)
 lightbox (`#gallery-dialog`) and the experience video (`#experience-dialog`):
 before opening, close any `dialog[open]`; toggle `body.dialog-open`; on close,
 clear it only if no dialog remains open; restore focus to the trigger. The
-contact dialog adopts the identical pattern in `contact-dialog.ts`. Because all
+inquire dialog adopts the identical pattern in `inquire-dialog.ts`. Because all
 controllers check `document.querySelector('dialog[open]')`, they cooperate
-without a shared singleton: opening Contact from the portfolio page closes a
+without a shared singleton: opening Inquire from the portfolio page closes a
 lightbox if one is open, and vice-versa. The muse-story detail page
-(`stories/[slug].astro`) has no dialogs today; its CTA simply opens the contact
-dialog if `contact-dialog.ts` is present there, else navigates to `/contact`.
+(`stories/[slug].astro`) has no dialogs today; its CTA simply opens the inquire
+dialog if `inquire-dialog.ts` is present there, else navigates to `/inquire`.
 
 ### Trigger inventory (every CTA that opens the dialog)
 
 | Location | Current link | Change |
 | --- | --- | --- |
-| `index.astro` hero + closing "Book your consultation" | `a.button href="/contact"` | add `data-open-contact` |
-| `portfolio.astro` closing "Book your consultation" | `a.button href="/contact"` | add `data-open-contact` |
-| `experience.astro` CTA (rebuilt) | `a.button href="/contact"` | include `data-open-contact` |
-| `stories.astro` featured + CTA (rebuilt) | `a href="/contact"` | include `data-open-contact` |
-| `stories/[slug].astro` CTA | `a href="/contact"` | add `data-open-contact` |
-| `Header.astro` nav `Contact` | `a.nav-contact href="/contact"` | add `data-open-contact` |
-| `Footer.astro` `Contact` | `a href="/contact"` | add `data-open-contact` |
+| `index.astro` hero + closing "Book your consultation" | `a.button href="/inquire"` | add `data-open-inquire` |
+| `portfolio.astro` closing "Book your consultation" | `a.button href="/inquire"` | add `data-open-inquire` |
+| `experience.astro` CTA (rebuilt) | `a.button href="/inquire"` | include `data-open-inquire` |
+| `stories.astro` featured + CTA (rebuilt) | `a href="/inquire"` | include `data-open-inquire` |
+| `stories/[slug].astro` CTA | `a href="/inquire"` | add `data-open-inquire` |
+| `Header.astro` nav `Inquire` | `a.nav-inquire href="/inquire"` | add `data-open-inquire` |
+| `Footer.astro` `Inquire` | `a href="/inquire"` | add `data-open-inquire` |
 
-Every trigger keeps a real `href="/contact"` so no-JS users navigate to the
+Every trigger keeps a real `href="/inquire"` so no-JS users navigate to the
 working fallback page.
 
 ## Data Models
@@ -381,10 +381,10 @@ interface MuseData {
 **Home page** continues to use the first 3 muses by `order`. The CMS schema
 (`public/admin/config.yml`) and image pipeline are untouched.
 
-### Contact form fields (unchanged — Lambda contract)
+### Inquire form fields (unchanged — Lambda contract)
 
 ```ts
-// name= attributes POSTed to PUBLIC_AC_FORM_ENDPOINT, same as contact.astro
+// name= attributes POSTed to PUBLIC_AC_FORM_ENDPOINT, same as inquire.astro
 interface ContactFormFields {
   first: string; last: string; email: string; phone: string; // required
   reason: string;                                             // required select
@@ -401,20 +401,20 @@ interface ContactFormFields {
 For every field `f` in
 `ContactFormFields`, the dialog form renders an input with `name === f` and
 the form `action` equals `PUBLIC_AC_FORM_ENDPOINT` with `method="POST"` —
-identical to `contact.astro`. ∴ the Lambda sees the same payload shape from
+identical to `inquire.astro`. ∴ the Lambda sees the same payload shape from
 the dialog as from the page.
 
 ### Property 2: Progressive enhancement never hides content
 
 ∀ triggers `t` with
-`[data-open-contact]`: `t` also has `href="/contact"`. If `contact-dialog.ts`
+`[data-open-inquire]`: `t` also has `href="/inquire"`. If `inquire-dialog.ts`
 fails to load or JS is off, activating `t` navigates to the working
-`/contact` page. No CTA is a JS-only control.
+`/inquire` page. No CTA is a JS-only control.
 
 ### Property 3: Single open dialog
 
 At any time `document.querySelectorAll('dialog[open]').length ≤ 1`
-across contact + gallery + experience dialogs, because every `openX` closes
+across inquire + gallery + experience dialogs, because every `openX` closes
 any existing `dialog[open]` before `showModal()`.
 
 ### Property 4: `body.dialog-open` reflects state
@@ -461,20 +461,20 @@ a deterministic sequence; grid order == featured-rotator order == `order`.
 **Response**: show the error status ("Something went wrong sending your
 message. Please try again."), re-enable the submit button, keep the dialog open
 and the entered values intact (no `reset()` on error).
-**Recovery**: the visitor can retry, or close the dialog and use `/contact`.
+**Recovery**: the visitor can retry, or close the dialog and use `/inquire`.
 
 ### Script absent / JS disabled
-**Condition**: `contact-dialog.ts` never runs.
-**Response**: CTAs behave as plain links to `/contact`; the page's native form
+**Condition**: `inquire-dialog.ts` never runs.
+**Response**: CTAs behave as plain links to `/inquire`; the page's native form
 POSTs to the endpoint and the Lambda redirects back with `?sent=1|0`.
-**Recovery**: `/contact`'s existing inline script reads `?sent=` and renders the
+**Recovery**: `/inquire`'s existing inline script reads `?sent=` and renders the
 success/error banner (unchanged behavior).
 
 ### Fallback coexistence (`?sent=` + dialog)
-The `?sent=` redirect only ever lands on the `/contact` **page** (the native
+The `?sent=` redirect only ever lands on the `/inquire` **page** (the native
 form's `action` is the endpoint; the Lambda redirects to the page). The dialog
 path never navigates, so it never produces `?sent=`. Therefore the `?sent=`
-banner logic stays on the `/contact` page only; the dialog controller does not
+banner logic stays on the `/inquire` page only; the dialog controller does not
 duplicate it. No conflict is possible.
 
 ### Empty muses collection
@@ -486,7 +486,7 @@ current `?? entries[0]` fallback and additionally guards the featured block
 render when no entry exists, so the build does not throw.
 
 ### Missing dialog on a page
-**Condition**: a page includes a `[data-open-contact]` trigger but not
+**Condition**: a page includes a `[data-open-inquire]` trigger but not
 `ContactDialog.astro`.
 **Response**: `initContactDialog()` no-ops (null-guarded lookup); the trigger
 falls back to navigation. **Design rule**: include `ContactDialog.astro` on
@@ -502,9 +502,9 @@ every page that has a trigger (all of them).
   by `order`, `featured` selection, `featuredList` shape, and `featuredIndex`.
 
 ### DOM / behavioral tests (jsdom or Playwright)
-- Clicking `[data-open-contact]` opens `#contact-dialog`, sets `body.dialog-open`,
+- Clicking `[data-open-inquire]` opens `#inquire-dialog`, sets `body.dialog-open`,
   and Escape/close returns focus to the trigger (Properties 3–5).
-- Opening contact while the gallery dialog is open closes the gallery first
+- Opening inquire while the gallery dialog is open closes the gallery first
   (Property 3), on the portfolio page.
 - Submit success path: mock `fetch` → `{ ok: true }` → success status +
   `form.reset()`; error path keeps values and shows the error status.
@@ -536,8 +536,8 @@ every page that has a trigger (all of them).
 
 ## Open Questions
 
-- **OQ-1 — Keep or remove `/contact`?** *Recommendation: KEEP.* The dialog is
-  progressive enhancement; `/contact` is the no-JS fallback, the `?sent=`
+- **OQ-1 — Keep or remove `/inquire`?** *Recommendation: KEEP.* The dialog is
+  progressive enhancement; `/inquire` is the no-JS fallback, the `?sent=`
   redirect target, and a direct-linkable address. Removing it would break the
   native fallback and any existing inbound links. The design assumes KEEP.
 - **OQ-2 — New stylesheet vs. extend `codex-base.css`?** The design proposes a

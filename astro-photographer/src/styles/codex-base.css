@@ -46,9 +46,9 @@ button { border: 0; }
 .primary-nav a { position: relative; padding-block: 10px; }
 .primary-nav a::after { position: absolute; content: ""; bottom: 5px; left: 0; width: 100%; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 350ms var(--ease); }
 .primary-nav a:hover::after { transform: scaleX(1); }
-.primary-nav .nav-contact { border: 1px solid currentColor; padding: 11px 20px; }
-.primary-nav .nav-contact::after { display: none; }
-.primary-nav .nav-contact:hover { color: var(--ivory); background: var(--black); }
+.primary-nav .nav-inquire { border: 1px solid currentColor; padding: 11px 20px; }
+.primary-nav .nav-inquire::after { display: none; }
+.primary-nav .nav-inquire:hover { color: var(--ivory); background: var(--black); }
 .menu-toggle { display: none; }
 
 /* Hero layout and motion hooks. Motion is an enhancement: nothing starts hidden. */
@@ -82,7 +82,7 @@ button { border: 0; }
 
 /* The experience's quiet, tonal texture is CSS, avoiding a decorative download. */
 .experience { position: relative; overflow: hidden; padding-block: 53px 47px; color: var(--ivory); background: var(--ink); }
-/* Full-bleed background photo + strong dark overlay, matching the Contact
+/* Full-bleed background photo + strong dark overlay, matching the Inquire
  * "A Simple Beginning" band (.ct-steps). The overlay guarantees high contrast
  * for the ivory copy regardless of the chosen image. */
 .experience__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
@@ -175,8 +175,8 @@ button { border: 0; }
 .form-status:not(:empty) { margin-top: 14px; padding-top: 13px; border-top: 1px solid #b8b0a3; }
 .form-status a { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; margin-top: 12px; padding: 12px 18px; color: var(--ivory); background: var(--black); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
 .form-status a:hover { background: #4b4032; }
-.contact-email { display: inline-block; margin-top: 19px; padding-bottom: 3px; border-bottom: 1px solid #b8b0a3; font: 400 11px/1.5 var(--sans); }
-.contact-email:hover { border-color: var(--black); }
+.inquire-email { display: inline-block; margin-top: 19px; padding-bottom: 3px; border-bottom: 1px solid #b8b0a3; font: 400 11px/1.5 var(--sans); }
+.inquire-email:hover { border-color: var(--black); }
 .gallery-dialog { width: min(1060px, calc(100% - 48px)); padding: 30px 42px 22px; color: var(--ivory); background: #211e19; }
 .dialog-close--light { color: var(--ivory); border-color: rgba(244, 240, 232, 0.45); background: #211e19; }
 .dialog-close--light:hover { background: #383126; }
@@ -223,7 +223,7 @@ button { border: 0; }
   .brand__name { font-size: 32px; }
   .brand__top, .brand__bottom { font-size: 11px; }
   .primary-nav { gap: 21px; font-size: 8px; letter-spacing: 1.3px; }
-  .primary-nav .nav-contact { padding: 10px 15px; }
+  .primary-nav .nav-inquire { padding: 10px 15px; }
   .hero { min-height: 600px; height: 62vw; }
   .hero__title { font-size: 76px; letter-spacing: -3px; }
   .hero__subtitle { font-size: 13px; }
@@ -249,7 +249,7 @@ button { border: 0; }
   .brand { width: 165px; }
   .brand__name { font-size: 27px; }
   .primary-nav { gap: 16px; font-size: 6px; letter-spacing: 1.3px; }
-  .primary-nav .nav-contact { padding: 9px 13px; }
+  .primary-nav .nav-inquire { padding: 9px 13px; }
   .hero { min-height: 520px; height: 57vw; }
   .hero__title { font-size: 62px; max-width: 380px; letter-spacing: -2.5px; }
   .hero__content { padding-top: 62px; padding-bottom: 10px; }
@@ -305,7 +305,7 @@ button { border: 0; }
   .primary-nav.is-open { display: flex; }
   .primary-nav a { padding: 14px 0; }
   .primary-nav a::after { bottom: 10px; }
-  .primary-nav .nav-contact { align-self: start; margin-top: 8px; padding: 12px 18px; }
+  .primary-nav .nav-inquire { align-self: start; margin-top: 8px; padding: 12px 18px; }
   .hero { display: flex; flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ivory); }
   .hero__image { position: relative; order: 2; inset: auto; width: 100%; height: 450px; flex-shrink: 0; }
   .hero__image img { object-position: right top; }

@@ -1,7 +1,7 @@
 // ActiveCampaign lead-capture proxy Lambda (Node.js 20.x).
 //
 // Single HTTP API route handles both the real submission and the CORS preflight:
-//   POST    /ac/subscribe  -> create-or-update AC contact, subscribe to list, best-effort tags
+//   POST    /ac/subscribe  -> create-or-update AC inquire, subscribe to list, best-effort tags
 //   OPTIONS /ac/subscribe  -> 204 preflight
 //
 // Design: ../../.agents/tasks/activecampaign-aws/design.md §1.
@@ -290,36 +290,36 @@ export const handler = async (event = {}, context = {}, deps = {}) => {
   }
   const base = apiUrl.replace(/\/+$/, '');
 
-  // (a) contact/sync — create-or-update, dedupe on email.
+  // (a) inquire/sync — create-or-update, dedupe on email.
   const contactBody = {
-    contact: {
+    inquire: {
       email: data.email,
       firstName: data.first,
       lastName: data.last,
       fieldValues: buildFieldValues(data),
     },
   };
-  if (data.phone) contactBody.contact.phone = data.phone;
+  if (data.phone) contactBody.inquire.phone = data.phone;
 
-  const sync = await acCall(fetchImpl, `${base}/api/3/contact/sync`, token, contactBody);
-  log.info?.(`contact/sync: ${sync.status} (${emailDomain(data.email)})`);
+  const sync = await acCall(fetchImpl, `${base}/api/3/inquire/sync`, token, contactBody);
+  log.info?.(`inquire/sync: ${sync.status} (${emailDomain(data.email)})`);
   if (sync.kind === 'client') {
-    log.error?.(`contact/sync 4xx ${sync.status}: ${sync.snippet || ''}`);
+    log.error?.(`inquire/sync 4xx ${sync.status}: ${sync.snippet || ''}`);
     return respond(mode, 502, 'ac_error');
   }
   if (sync.kind === 'server') {
-    log.error?.(`contact/sync unavailable ${sync.status}: ${sync.snippet || ''}`);
+    log.error?.(`inquire/sync unavailable ${sync.status}: ${sync.snippet || ''}`);
     return respond(mode, 502, 'ac_unavailable');
   }
-  const contactId = sync.json?.contact?.id != null ? String(sync.json.contact.id) : '';
+  const contactId = sync.json?.inquire?.id != null ? String(sync.json.inquire.id) : '';
   if (!contactId) {
-    log.error?.('contact/sync 2xx without contact.id');
+    log.error?.('inquire/sync 2xx without inquire.id');
     return respond(mode, 502, 'ac_no_contact_id');
   }
 
   // (b) contactLists — subscribe (status 1). Required; body uninspected.
   const listRes = await acCall(fetchImpl, `${base}/api/3/contactLists`, token, {
-    contactList: { list: listId, contact: contactId, status: 1 },
+    contactList: { list: listId, inquire: contactId, status: 1 },
   });
   log.info?.(`contactLists: ${listRes.status}`);
   if (listRes.kind === 'client') {
@@ -338,7 +338,7 @@ export const handler = async (event = {}, context = {}, deps = {}) => {
     .filter(Boolean);
   for (const tagId of tags) {
     const tagRes = await acCall(fetchImpl, `${base}/api/3/contactTags`, token, {
-      contactTag: { contact: contactId, tag: tagId },
+      contactTag: { inquire: contactId, tag: tagId },
     });
     if (tagRes.kind !== 'ok') {
       log.warn?.(`tag ${tagId} failed: ${tagRes.status}`);

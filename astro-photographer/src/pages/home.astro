@@ -20,6 +20,16 @@ import '../styles/apex.css';
 // /images/* default below so /home renders identically when the entry is absent.
 const apex = await getEntry('settings', 'apexhome');
 const heroImage = apex?.data.apexHeroImage ?? '/images/ms-hero.webp';          // warm glam beauty portrait
+// Hero cross-fade carousel: 3 slides, each CMS-editable, with its own default.
+// Slides 2/3 fall back to other existing portraits so the carousel has distinct
+// frames out of the box; swap any of them in the CMS (apexhome.json).
+const heroImage2 = apex?.data.apexHeroImage2 ?? '/images/ms-featured.webp';
+const heroImage3 = apex?.data.apexHeroImage3 ?? '/images/ms-muse-2.webp';
+const heroSlides = [
+  { src: heroImage, alt: 'A woman in a flowing gown bathed in warm golden light.' },
+  { src: heroImage2, alt: 'An editorial bridal portrait in soft light.' },
+  { src: heroImage3, alt: 'A dramatic glam portrait in a dark gown.' },
+];
 const weddingsCardImage = apex?.data.apexWeddingsCardImage ?? '/images/ms-featured.webp'; // ivory bridal portrait (closest "weddings")
 const glamCardImage = apex?.data.apexGlamCardImage ?? '/images/ms-muse-2.webp';    // black-top glam portrait
 const beautyImage = apex?.data.apexBeautyImage ?? '/images/portfolio-banner.webp'; // woman in golden-hour landscape
@@ -35,20 +45,34 @@ const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  //
     <!-- 1 + 2. HEADER OVER HERO (single static slide) -->
     <section class="lq-hero">
       <ApexHeader />
-      <div class="lq-hero__image" data-parallax>
-        <Pic src={heroImage} alt="A woman in a flowing gown bathed in warm golden light." priority sizes="100vw" />
+      <!-- Hero cross-fade carousel: slides stacked, first is active by default
+           so no-JS / reduced-motion shows a static first image. JS cross-fades
+           between them and syncs the dot indicator below. -->
+      <div class="lq-hero__slides" data-hero-carousel data-parallax>
+        {heroSlides.map((slide, i) => (
+          <div class={`lq-hero__slide${i === 0 ? ' is-active' : ''}`} data-hero-slide>
+            <Pic src={slide.src} alt={slide.alt} priority={i === 0} sizes="100vw" />
+          </div>
+        ))}
       </div>
       <div class="lq-container lq-hero__content">
         <span class="lq-rule lq-hero__rule" data-hero-item aria-hidden="true"></span>
         <h1 class="lq-display lq-hero__title" data-hero-item>LIFE<br />AS<br />STORIES.</h1>
       </div>
-      <!-- Static/decorative carousel indicator — no JS carousel (single slide). -->
-      <div class="lq-hero__indicator" aria-hidden="true">
-        <span class="lq-hero__count">01 &mdash; 03</span>
-        <div class="lq-hero__dots">
-          <span class="lq-hero__dot is-active"></span>
-          <span class="lq-hero__dot"></span>
-          <span class="lq-hero__dot"></span>
+      <!-- Carousel indicator: count reflects the active slide; dots are
+           clickable controls the carousel script wires up and keeps in sync. -->
+      <div class="lq-hero__indicator">
+        <span class="lq-hero__count" data-hero-count aria-hidden="true">01 &mdash; 03</span>
+        <div class="lq-hero__dots" role="tablist" aria-label="Hero slides">
+          {heroSlides.map((_, i) => (
+            <button
+              type="button"
+              class={`lq-hero__dot${i === 0 ? ' is-active' : ''}`}
+              data-hero-dot
+              aria-label={`Show slide ${i + 1} of ${heroSlides.length}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+            ></button>
+          ))}
         </div>
       </div>
       <div class="lq-hero__keywords" aria-hidden="true">
@@ -131,12 +155,67 @@ const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  //
       <div class="lq-container lq-cta__content" data-reveal>
         <p id="lq-cta-eyebrow" class="lq-eyebrow lq-cta__eyebrow">Your story begins here.</p>
         <span class="lq-rule lq-cta__rule" aria-hidden="true"></span>
-        <!-- Mockup labels this "Inquire"; /contact resolves today (/inquire
+        <!-- Mockup labels this "Inquire"; /inquire resolves today (/inquire
              arrives with the paths-restructure). -->
-        <a class="lq-outline-btn" href="/contact">Let’s connect</a>
+        <a class="lq-outline-btn" href="/inquire">Let’s connect</a>
       </div>
     </section>
   </main>
   <ApexFooter />
   <SiteMotion />
 </Base>
+
+<script>
+  // Hero cross-fade carousel (apex /home). Progressive enhancement:
+  // - First slide is already .is-active in the HTML, so with no JS (or if this
+  //   script fails) the hero shows a static first image.
+  // - Honors prefers-reduced-motion: no auto-advance; dots still let the visitor
+  //   switch slides manually (an explicit choice is not "motion" the user didn't ask for).
+  // - Cross-fade itself is pure CSS opacity transition; this script only toggles
+  //   the .is-active class on slides + dots and updates the "01 — 03" count.
+  (() => {
+    const carousel = document.querySelector<HTMLElement>('[data-hero-carousel]');
+    if (!carousel) return;
+    const slides = [...carousel.querySelectorAll<HTMLElement>('[data-hero-slide]')];
+    const dots = [...document.querySelectorAll<HTMLButtonElement>('[data-hero-dot]')];
+    const count = document.querySelector<HTMLElement>('[data-hero-count]');
+    if (slides.length < 2) return; // nothing to cycle
+
+    const total = slides.length;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    let current = slides.findIndex((s) => s.classList.contains('is-active'));
+    if (current < 0) current = 0;
+
+    const show = (next: number) => {
+      const i = ((next % total) + total) % total;
+      if (i === current) return;
+      slides[current]?.classList.remove('is-active');
+      dots[current]?.classList.remove('is-active');
+      dots[current]?.setAttribute('aria-selected', 'false');
+      slides[i].classList.add('is-active');
+      dots[i]?.classList.add('is-active');
+      dots[i]?.setAttribute('aria-selected', 'true');
+      if (count) count.innerHTML = `${pad(i + 1)} &mdash; ${pad(total)}`;
+      current = i;
+    };
+
+    // Manual control via dots (available regardless of reduced-motion).
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stop(); show(i); }));
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: number | undefined;
+    const SLIDE_MS = 6000; // slow, editorial pacing
+    const start = () => {
+      if (reduce.matches || timer !== undefined || total < 2) return;
+      timer = window.setInterval(() => show(current + 1), SLIDE_MS);
+    };
+    const stop = () => { if (timer !== undefined) { clearInterval(timer); timer = undefined; } };
+
+    // Pause auto-advance when the tab is hidden; resume when visible.
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    // React if the user toggles reduced-motion.
+    reduce.addEventListener?.('change', () => (reduce.matches ? stop() : start()));
+
+    start();
+  })();
+</script>

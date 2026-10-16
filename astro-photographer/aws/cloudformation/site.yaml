@@ -15,7 +15,7 @@ Parameters:
     Description: ActiveCampaign account API base URL, e.g. https://acct.api-us1.com
   AcListId:
     Type: String
-    Description: ActiveCampaign list id the contact is subscribed to (status 1).
+    Description: ActiveCampaign list id the inquire is subscribed to (status 1).
   AcTags:
     Type: String
     Default: ''
@@ -49,7 +49,7 @@ Parameters:
     Description: >-
       Redirect target for the no-JS native form fallback. Leave empty on first
       bring-up (the Lambda returns minimal inline HTML); set to
-      https://<CloudFrontDomainName>/contact on the hardening redeploy.
+      https://<CloudFrontDomainName>/inquire on the hardening redeploy.
   AcmCertificateArn:
     Type: String
     Default: ''
@@ -206,7 +206,7 @@ Resources:
 
           // Weddings subdomain: map its bare root to the /weddings home page.
           // Only the root is remapped; deeper paths fall through to the shared
-          // clean-URL logic below (so /contact etc. still resolve normally).
+          // clean-URL logic below (so /inquire etc. still resolve normally).
           if (WEDDINGS_HOST && host === WEDDINGS_HOST && (uri === '/' || uri === '')) {
             request.uri = '/weddings/index.html';
             return request;

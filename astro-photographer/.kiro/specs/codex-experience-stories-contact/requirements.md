@@ -4,7 +4,7 @@
 
 This feature completes the unification of The Glam Muse Experience site to the Codex
 design system and interaction model. It is derived from the approved design
-document for `codex-experience-stories-contact` and formalizes that design into
+document for `codex-experience-stories-inquire` and formalizes that design into
 testable requirements.
 
 The work is delivered in two coordinated parts:
@@ -17,11 +17,11 @@ The work is delivered in two coordinated parts:
   Existing page content is carried forward, all imagery routes through
   `Pic.astro`, and the Stories `muses` content collection usage plus the working
   featured-muse rotator are preserved.
-- **Part B — Sitewide contact dialog.** Contact becomes a sitewide popup built
+- **Part B — Sitewide inquire dialog.** Inquire becomes a sitewide popup built
   on the native `<dialog>` element and the Codex `.dialog` /
   `.consultation-dialog` styles. The popup matches the ivory-modal mockup at
-  `Website/02 Glam Muse Experience/05 Contact/contact_popup.png` but submits to the
-  real ActiveCampaign Lambda (there is no mailto). The standalone `/contact`
+  `Website/02 Glam Muse Experience/05 Inquire/contact_popup.png` but submits to the
+  real ActiveCampaign Lambda (there is no mailto). The standalone `/inquire`
   page is kept as the no-JS fallback and `?sent=` redirect target.
 
 The design's nine correctness properties map to the numbered acceptance criteria
@@ -54,11 +54,11 @@ below so each can later be cited as "Validates: Requirements X.Y".
   the `PUBLIC_AC_FORM_ENDPOINT` environment URL. It is the single validation
   authority for lead capture and accepts the field names `first`, `last`,
   `email`, `phone`, `reason`, `more`, `feel`, `hear`.
-- **Contact dialog**: The sitewide `ContactDialog.astro` native `<dialog>`
-  (`#contact-dialog`) plus its controller `contact-dialog.ts`.
-- **data-open-contact trigger**: Any element carrying the `data-open-contact`
-  attribute; activating it opens the Contact dialog when JS is available.
-- **/contact fallback**: The standalone `contact.astro` page kept as the no-JS
+- **Inquire dialog**: The sitewide `ContactDialog.astro` native `<dialog>`
+  (`#inquire-dialog`) plus its controller `inquire-dialog.ts`.
+- **data-open-inquire trigger**: Any element carrying the `data-open-inquire`
+  attribute; activating it opens the Inquire dialog when JS is available.
+- **/inquire fallback**: The standalone `inquire.astro` page kept as the no-JS
   fallback, the `?sent=1` / `?sent=0` redirect target, and a direct-link address.
 - **single-dialog invariant**: The shared rule that at most one `<dialog>` is
   open at a time; before opening one, any other open dialog is closed. Already
@@ -154,59 +154,59 @@ readable without animation, so that the site respects my accessibility setting.
 1. WHILE `prefers-reduced-motion: reduce` is active, THE SiteMotion SHALL register zero motion tweens.
 2. WHILE `prefers-reduced-motion: reduce` is active, THE SiteMotion reveal safety-net SHALL force every `[data-reveal]` element to its visible resting state on the Experience and Stories pages.
 
-### Requirement 8: Contact dialog appearance matches the mockup (user decision)
+### Requirement 8: Inquire dialog appearance matches the mockup (user decision)
 
-**User Story:** As a visitor, I want a polished contact popup, so that starting a
+**User Story:** As a visitor, I want a polished inquire popup, so that starting a
 conversation feels inviting and on-brand.
 
 #### Acceptance Criteria
 
-1. THE Contact_Dialog SHALL render as a native `<dialog>` with id `contact-dialog`, styled by the Codex `.dialog` / `.consultation-dialog` system as an ivory modal.
+1. THE Contact_Dialog SHALL render as a native `<dialog>` with id `inquire-dialog`, styled by the Codex `.dialog` / `.consultation-dialog` system as an ivory modal.
 2. THE Contact_Dialog SHALL render a top-right circular close control labeled with an "×" that dismisses the dialog.
 3. THE Contact_Dialog SHALL render the eyebrow "YOUR STORY STARTS HERE", a large serif heading "Begin your story.", and a short intro paragraph.
 4. THE Contact_Dialog SHALL lay out its visible fields as a name field and an email field on one row, a "WHAT BRINGS YOU HERE?" dropdown, an "ANYTHING YOU WOULD LIKE US TO KNOW (OPTIONAL)" textarea, a full-width dark submit button, and a reassurance line with the studio email beneath.
 5. THE Contact_Dialog submit button SHALL read as a real submission (for example "Begin your story" or "Start the conversation") and SHALL NOT read "Prepare your email".
 6. THE Contact_Dialog SHALL expose `aria-labelledby` referencing its heading and provide a status region with `role="status"` and `aria-live="polite"`.
 
-### Requirement 9: Contact dialog submits to the real AC Lambda with explicit field mapping (user decision)
+### Requirement 9: Inquire dialog submits to the real AC Lambda with explicit field mapping (user decision)
 
-**User Story:** As the site owner, I want contact submissions to reach
+**User Story:** As the site owner, I want inquire submissions to reach
 ActiveCampaign exactly as they do today, so that lead capture is preserved
 despite the simplified popup.
 
 #### Acceptance Criteria
 
 1. THE Contact_Dialog form `action` SHALL equal `PUBLIC_AC_FORM_ENDPOINT` with `method="POST"`, and the dialog SHALL NOT use a mailto draft.
-2. THE Contact_Dialog SHALL POST a payload that satisfies the AC Lambda field contract (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`) and that payload shape SHALL be identical to the one produced by the `/contact` page.
+2. THE Contact_Dialog SHALL POST a payload that satisfies the AC Lambda field contract (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`) and that payload shape SHALL be identical to the one produced by the `/inquire` page.
 3. THE Contact_Dialog SHALL map its visible fields to Lambda field names as follows: the name field populates `first` (with `last` sent as an empty string when a single name field is used), the email field populates `email`, the "WHAT BRINGS YOU HERE?" dropdown populates `reason`, and the optional notes textarea populates `more`.
 4. THE Contact_Dialog SHALL send the remaining Lambda field names not shown in the popup (`phone`, `feel`, `hear`) as empty strings so the payload contract remains complete.
 5. WHEN a visitor submits the Contact_Dialog form with JS available, THE contact_dialog_controller SHALL run native `reportValidity()` first and, if valid, `preventDefault`, disable the submit button, show a sending status, and `fetch`-POST the serialized fields as JSON to the endpoint.
 6. WHEN the AC Lambda responds with `{ ok: true }`, THE contact_dialog_controller SHALL show a success status and reset the form.
 7. IF the `fetch` rejects or the response is not `{ ok: true }`, THEN THE contact_dialog_controller SHALL show an error status, re-enable the submit button, and preserve the entered values without resetting the form.
 
-### Requirement 10: Sitewide contact triggers
+### Requirement 10: Sitewide inquire triggers
 
-**User Story:** As a visitor, I want to reach the contact popup from anywhere on
+**User Story:** As a visitor, I want to reach the inquire popup from anywhere on
 the site, so that I can start a conversation without leaving the page.
 
 #### Acceptance Criteria
 
-1. THE Site SHALL attach `data-open-contact` to the Home hero and closing CTAs, the Portfolio closing CTA, the Experience closing CTA, the Stories featured and closing CTAs, the story-detail CTA, the `Header` nav Contact link, and the `Footer` Contact link.
-2. WHEN a visitor activates a `data-open-contact` trigger with JS available, THE contact_dialog_controller SHALL prevent default navigation and open `#contact-dialog`.
-3. THE Site SHALL include `ContactDialog.astro` on every page that has a `data-open-contact` trigger.
-4. IF a page includes a `data-open-contact` trigger but not the Contact dialog, THEN THE contact_dialog_controller SHALL no-op and the trigger SHALL fall back to navigation.
+1. THE Site SHALL attach `data-open-inquire` to the Home hero and closing CTAs, the Portfolio closing CTA, the Experience closing CTA, the Stories featured and closing CTAs, the story-detail CTA, the `Header` nav Inquire link, and the `Footer` Inquire link.
+2. WHEN a visitor activates a `data-open-inquire` trigger with JS available, THE contact_dialog_controller SHALL prevent default navigation and open `#inquire-dialog`.
+3. THE Site SHALL include `ContactDialog.astro` on every page that has a `data-open-inquire` trigger.
+4. IF a page includes a `data-open-inquire` trigger but not the Inquire dialog, THEN THE contact_dialog_controller SHALL no-op and the trigger SHALL fall back to navigation.
 
-### Requirement 11: Progressive enhancement and /contact fallback (user decision)
+### Requirement 11: Progressive enhancement and /inquire fallback (user decision)
 
-**User Story:** As a visitor without JavaScript, I want contact to still work, so
+**User Story:** As a visitor without JavaScript, I want inquire to still work, so
 that I can always submit an inquiry.
 
 #### Acceptance Criteria
 
-1. THE Site SHALL keep the standalone `/contact` page as the no-JS fallback, the `?sent=1` / `?sent=0` redirect target, and a direct-link address.
-2. THE Site SHALL give every `data-open-contact` trigger a real `href="/contact"`.
-3. IF `contact-dialog.ts` fails to load or JavaScript is disabled, THEN activating a `data-open-contact` trigger SHALL navigate to `/contact`.
-4. WHEN the `/contact` native form submission returns via `?sent=1` or `?sent=0`, THE Contact_Page SHALL display the corresponding success or error banner.
+1. THE Site SHALL keep the standalone `/inquire` page as the no-JS fallback, the `?sent=1` / `?sent=0` redirect target, and a direct-link address.
+2. THE Site SHALL give every `data-open-inquire` trigger a real `href="/inquire"`.
+3. IF `inquire-dialog.ts` fails to load or JavaScript is disabled, THEN activating a `data-open-inquire` trigger SHALL navigate to `/inquire`.
+4. WHEN the `/inquire` native form submission returns via `?sent=1` or `?sent=0`, THE Contact_Page SHALL display the corresponding success or error banner.
 
 ### Requirement 12: Single-dialog invariant and body state
 
@@ -215,7 +215,7 @@ one modal is ever open and the page is not left in a broken state.
 
 #### Acceptance Criteria
 
-1. THE Site SHALL maintain at most one open `<dialog>` at a time across the contact, gallery, and experience dialogs.
+1. THE Site SHALL maintain at most one open `<dialog>` at a time across the inquire, gallery, and experience dialogs.
 2. WHEN a dialog is opened, THE opening controller SHALL close any currently open `dialog[open]` before calling `showModal()`.
 3. WHILE at least one dialog is open, THE Site SHALL apply the `dialog-open` class to `body`.
 4. WHEN a dialog closes, THE closing controller SHALL remove the `body.dialog-open` class only if no other dialog remains open.

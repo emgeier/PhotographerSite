@@ -8,9 +8,9 @@ import { getEntry } from 'astro:content';
 import '../styles/codex-base.css';
 import '../styles/codex-content.css';
 
-// Page images are CMS-editable via settings/contact.json; each falls back to
+// Page images are CMS-editable via settings/inquire.json; each falls back to
 // its original /images/* path when absent.
-const ct = await getEntry('settings', 'contact');
+const ct = await getEntry('settings', 'inquire');
 const heroImage = ct?.data.contactHeroImage ?? '/images/ct-hero.webp';
 const aboutImage = ct?.data.contactAboutImage ?? '/images/ct-about.webp';
 const stepsImage = ct?.data.contactStepsImage ?? '/images/ct-steps-band.webp';
@@ -22,7 +22,7 @@ const steps = [
   { n:'03', t:'YOUR DECISION', p:'If The Glam Muse Experience feels right for you, we\u2019ll begin planning your portrait experience together.' },
 ];
 ---
-<Base title="Contact — The Glam Muse Experience" description="Tell me a little about yourself and what brought you here. This is simply the beginning of the conversation.">
+<Base title="Inquire — The Glam Muse Experience" description="Tell me a little about yourself and what brought you here. This is simply the beginning of the conversation.">
   <main>
     <!-- HERO: Codex .hero masthead treatment (absolute Header, hero__image +
          veil, hero__content) — the shared LIGHT masthead like Home/Portfolio.

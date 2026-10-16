@@ -149,7 +149,7 @@ Página de contacto de Bodas.
 - **Story detail closing CTA background** — fondo de la sección final en cada
   historia individual.
 
-### Páginas del lado Glam Muse (Home, Portfolio, Experience, Contact,
+### Páginas del lado Glam Muse (Home, Portfolio, Experience, Inquire,
 ### Muse Stories, Landing, Instagram link)
 Funcionan igual: entra a la página en **Settings**, cambia los campos de imagen
 (**Hero image**, **Closing image**, etc.) y publica. En **Landing** y

@@ -92,9 +92,9 @@ Convert the feature design into a series of prompts for a code-generation LLM th
   - Ensure all unit/property tests pass and the scripts/components type-check; ask the user if questions arise.
 
 - [x] 9. Rewrite the Home page (`src/pages/index.astro`) to the Codex look
-  - [x] 9.1 Build Codex home sections with Pic imagery and CTAs to `/contact`
+  - [x] 9.1 Build Codex home sections with Pic imagery and CTAs to `/inquire`
     - Rewrite `index.astro` with the Codex hero, perspective ("Look Again"), experience-steps, stories-teaser, and closing sections in Codex markup/layout; keep `data-hero-line`/`data-hero-item`/`data-hero-image` motion hooks; render the hero through `Pic` with the `priority` hint.
-    - Route all home rasters through `Pic` (AVIF/WebP + srcset); no bare `<img src=".webp">`. Link the closing/booking CTA to `/contact`. Retain the Codex "Preview a portrait" behavior per default-to-Codex (link to `/portfolio`).
+    - Route all home rasters through `Pic` (AVIF/WebP + srcset); no bare `<img src=".webp">`. Link the closing/booking CTA to `/inquire`. Retain the Codex "Preview a portrait" behavior per default-to-Codex (link to `/portfolio`).
     - Include `<Header/>`, `<Footer/>`, and `<SiteMotion/>`.
     - _Requirements: 1.1, 1.2, 1.3, 3.1, 3.3, 8.3, 10.1, 10.2, 10.4_
 
@@ -109,9 +109,9 @@ Convert the feature design into a series of prompts for a code-generation LLM th
     - Include `<Header/>`, `<Footer/>`, `<SiteMotion/>`, the `#gallery-dialog`, and the `#experience-dialog` + `#experience-video` iframe, and wire the `initPortfolioGrid`/`initLightbox`/`initExperienceVideo` script.
     - _Requirements: 2.1, 2.2, 2.3, 3.1, 10.1, 10.2, 10.3, 10.4_
 
-- [x] 11. Confirm the contact/platform guarantees in markup
+- [x] 11. Confirm the inquire/platform guarantees in markup
   - [x] 11.1 Verify no mailto/consultation port and legacy pages unchanged
-    - Confirm `contact.astro` still posts to the AC_Lambda endpoint with the `?sent=1`/`?sent=0` no-JS fallback intact; ensure no `mailto:` flow and no Codex consultation dialog were introduced; confirm `experience.astro`, `stories.astro`, and the muse detail route keep their existing Astro design/rendering.
+    - Confirm `inquire.astro` still posts to the AC_Lambda endpoint with the `?sent=1`/`?sent=0` no-JS fallback intact; ensure no `mailto:` flow and no Codex consultation dialog were introduced; confirm `experience.astro`, `stories.astro`, and the muse detail route keep their existing Astro design/rendering.
     - _Requirements: 1.4, 8.1, 8.2, 8.4, 14.2, 14.3_
 
 - [x] 12. Verification and CI guards

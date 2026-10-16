@@ -28,9 +28,9 @@ Cloudflare Pages settings:
 
 Replace files in `public/images/` or update the paths in `src/pages/index.astro`. For production, use properly sized AVIF/WebP/JPEG derivatives rather than camera originals.
 
-## Contact form (ActiveCampaign)
+## Inquire form (ActiveCampaign)
 
-The contact form (`src/pages/contact.astro`) submits to a serverless ActiveCampaign
+The inquire form (`src/pages/inquire.astro`) submits to a serverless ActiveCampaign
 proxy — an AWS Lambda behind an API Gateway HTTP API. The AC API key never touches
 the client; it lives in AWS Secrets Manager and is read server-side by the Lambda.
 

@@ -1,11 +1,11 @@
-# Implementation Plan: Codex Experience, Stories & Sitewide Contact Dialog
+# Implementation Plan: Codex Experience, Stories & Sitewide Inquire Dialog
 
 ## Overview
 
 This plan delivers the feature in two coordinated parts, built incrementally so
 each step integrates with the last and nothing is left orphaned.
 
-- **Part B first (foundation)**: the shared Contact dialog component, its
+- **Part B first (foundation)**: the shared Inquire dialog component, its
   progressive-enhancement controller, and the sitewide triggers. The Experience
   and Stories CTAs (Part A) wire into this dialog, so the shared pieces land
   first.
@@ -23,20 +23,20 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
 
 ## Tasks
 
-- [x] 1. Build the shared Contact dialog component (`ContactDialog.astro`)
+- [x] 1. Build the shared Inquire dialog component (`ContactDialog.astro`)
   - [x] 1.1 Create `src/components/ContactDialog.astro` markup + AC form
-    - Add a native `<dialog class="dialog consultation-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">` styled by the existing `.dialog` / `.consultation-dialog` rules in `codex-base.css`
+    - Add a native `<dialog class="dialog consultation-dialog" id="inquire-dialog" aria-labelledby="inquire-dialog-title">` styled by the existing `.dialog` / `.consultation-dialog` rules in `codex-base.css`
     - Add the top-right circular close control via an outer `<form method="dialog">` with a `.dialog-close` submit button labeled with an "×" (`aria-hidden` span + `aria-label`)
-    - Add the eyebrow "YOUR STORY STARTS HERE", a large serif heading `#contact-dialog-title` "Begin your story.", and a short intro paragraph
+    - Add the eyebrow "YOUR STORY STARTS HERE", a large serif heading `#inquire-dialog-title` "Begin your story.", and a short intro paragraph
     - Lay out visible fields: a name field + an email field on one row, a "WHAT BRINGS YOU HERE?" `<select>`, an "ANYTHING YOU WOULD LIKE US TO KNOW (OPTIONAL)" `<textarea>`, a full-width dark `.button` submit reading "Begin your story" (not "Prepare your email"), and a reassurance line with the studio email beneath
     - Add a status region `<p class="form-status" role="status" aria-live="polite">`
     - Set the inner form `action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}` with `method="POST"`; render inputs for every Lambda field name (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`), mapping name→`first` (hidden/empty `last`), email→`email`, dropdown→`reason`, notes→`more`, and `phone`/`feel`/`hear` as empty-string inputs
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 9.1, 9.2, 9.3, 9.4_
 
-- [x] 2. Build the Contact dialog controller (`contact-dialog.ts`)
+- [x] 2. Build the Inquire dialog controller (`inquire-dialog.ts`)
   - [x] 2.1 Implement `serializeForm(form)` and the `ContactPayload` type
     - Export `serializeForm(form: HTMLFormElement): ContactPayload` that maps the form's present fields (`FormData` → flat string object), serializing empty optional fields as `""`
-    - Produce a payload shape identical to the one `/contact` posts (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`)
+    - Produce a payload shape identical to the one `/inquire` posts (`first`, `last`, `email`, `phone`, `reason`, `more`, `feel`, `hear`)
     - _Requirements: 9.2, 9.4_
 
   - [ ]* 2.2 Write unit test for `serializeForm`
@@ -44,10 +44,10 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - **Validates: Requirements 9.2, 9.4**
 
   - [x] 2.3 Implement `initContactDialog()` open/close + single-dialog + focus
-    - Wire every `[data-open-contact]` trigger: on click `preventDefault`, close any other open `dialog[open]`, `showModal()` on `#contact-dialog`, set `body.dialog-open`, remember the trigger for focus return
+    - Wire every `[data-open-inquire]` trigger: on click `preventDefault`, close any other open `dialog[open]`, `showModal()` on `#inquire-dialog`, set `body.dialog-open`, remember the trigger for focus return
     - On dialog `close`: clear `body.dialog-open` only if no other dialog remains open; return focus to the invoking trigger if it is still connected
-    - Null-guard the dialog lookup so the controller no-ops when `#contact-dialog` is absent (trigger falls back to its `href="/contact"`)
-    - Mirror the single-dialog invariant already in `src/scripts/portfolio.ts` so contact/gallery/experience dialogs cooperate
+    - Null-guard the dialog lookup so the controller no-ops when `#inquire-dialog` is absent (trigger falls back to its `href="/inquire"`)
+    - Mirror the single-dialog invariant already in `src/scripts/portfolio.ts` so inquire/gallery/experience dialogs cooperate
     - _Requirements: 10.2, 10.4, 12.1, 12.2, 12.3, 12.4, 13.1_
 
   - [x] 2.4 Implement the AC fetch submit path
@@ -57,18 +57,18 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - _Requirements: 9.5, 9.6, 9.7_
 
   - [ ]* 2.5 Write DOM/behavioral tests for the dialog controller
-    - Clicking `[data-open-contact]` opens `#contact-dialog`, sets `body.dialog-open`; Escape/close returns focus to the trigger
+    - Clicking `[data-open-inquire]` opens `#inquire-dialog`, sets `body.dialog-open`; Escape/close returns focus to the trigger
     - Submit success path (`fetch` → `{ ok: true }`) shows success + resets; error path keeps values and shows error status
     - **Property 1, 3, 4, 5 — AC contract / single dialog / body state / focus return**
     - **Validates: Requirements 9.5, 9.6, 9.7, 12.1, 12.2, 12.3, 12.4, 13.1**
 
-- [ ] 3. Wire the sitewide contact triggers into existing pages/components
-  - [x] 3.1 Add `data-open-contact` to `Header.astro` and `Footer.astro` Contact links
-    - Keep each `href="/contact"` and add `data-open-contact`
+- [ ] 3. Wire the sitewide inquire triggers into existing pages/components
+  - [x] 3.1 Add `data-open-inquire` to `Header.astro` and `Footer.astro` Inquire links
+    - Keep each `href="/inquire"` and add `data-open-inquire`
     - _Requirements: 10.1, 11.2_
 
-  - [x] 3.2 Add `data-open-contact` to Home, Portfolio, and story-detail CTAs
-    - `index.astro` hero + closing "Book your consultation", `portfolio.astro` closing CTA, and `stories/[slug].astro` CTA each keep `href="/contact"` and gain `data-open-contact`
+  - [x] 3.2 Add `data-open-inquire` to Home, Portfolio, and story-detail CTAs
+    - `index.astro` hero + closing "Book your consultation", `portfolio.astro` closing CTA, and `stories/[slug].astro` CTA each keep `href="/inquire"` and gain `data-open-inquire`
     - Confirm Home still uses the first three muses by `order` for its teaser (unchanged)
     - _Requirements: 10.1, 11.2, 14.4_
 
@@ -77,7 +77,7 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - Initialize `initContactDialog()` where `SiteMotion`/scripts are set up so every triggered page wires the dialog
     - _Requirements: 10.3, 11.1, 11.3_
 
-- [ ] 4. Checkpoint - contact dialog foundation
+- [ ] 4. Checkpoint - inquire dialog foundation
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 5. Create the Codex content stylesheet (`codex-content.css`)
@@ -93,7 +93,7 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - Render process step numerals in the small label style; lay out with `--content-width` (112px gutter) and `--header-h`
     - Include `SiteMotion` and annotate sections with `data-hero-image`, `data-hero-line`, `data-hero-item`, `data-reveal`
     - Add `data-parallax` to the hero image and the inside-the-experience content photos so they get the same desktop scroll movement as Home/Portfolio (the Codex `.hero`/`.image-frame` primitives provide the scroll runway the legacy `.ex-*` hero lacked)
-    - Give the closing CTA `href="/contact"` + `data-open-contact`
+    - Give the closing CTA `href="/inquire"` + `data-open-inquire`
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 10.1, 11.2_
 
   - [x] 6.2 Route every Experience image through `Pic`
@@ -113,7 +113,7 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - Lay out with `--content-width` (112px gutter) and `--header-h`; include `SiteMotion` with `data-hero-image`, `data-hero-line`, `data-hero-item`, `data-reveal`
     - Add `data-parallax` to the hero image and the featured/meet-the-muses content photos so they get the same desktop scroll movement as Home/Portfolio (`.hero`/`.image-frame` runway), excluding the `#ms-featured-photo` passthrough `<img>` the rotator mutates at runtime
     - Keep the "IN MOTION." section as a poster/link placeholder with no wired video player or video `<dialog>`
-    - Give the featured and closing CTAs `href="/contact"` + `data-open-contact`
+    - Give the featured and closing CTAs `href="/inquire"` + `data-open-inquire`
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 3.2, 5.1, 5.2, 10.1, 11.2_
 
   - [ ] 7.3 Preserve the featured-rotator DOM contract and route images through Pic
@@ -136,7 +136,7 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
 
 - [ ]* 9. Add progressive-enhancement and reduced-motion safety tests
   - [ ]* 9.1 Write a property test for trigger progressive enhancement
-    - For every `[data-open-contact]` trigger, assert it also has `href="/contact"` (no JS-only CTA)
+    - For every `[data-open-inquire]` trigger, assert it also has `href="/inquire"` (no JS-only CTA)
     - **Property 2: Progressive enhancement never hides content**
     - **Validates: Requirements 10.4, 11.2, 11.3**
 
@@ -152,8 +152,8 @@ vitest only (no dev/preview server), so all behavioral checks are automated.
     - **Property 8: Images are responsive & non-upscaled**
     - _Requirements: 6.3, 6.4, 14.1, 14.2, 14.3, 14.5_
 
-  - [ ]* 10.2 Verify the /contact fallback banner path
-    - Assert the `/contact` page still reads `?sent=1` / `?sent=0` on load and renders the corresponding success/error banner (unchanged behavior)
+  - [ ]* 10.2 Verify the /inquire fallback banner path
+    - Assert the `/inquire` page still reads `?sent=1` / `?sent=0` on load and renders the corresponding success/error banner (unchanged behavior)
     - _Requirements: 11.1, 11.4_
 
 - [ ] 11. Final checkpoint - full suite

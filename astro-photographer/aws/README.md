@@ -113,7 +113,7 @@ This is the only client-visible AC value (a URL, not a secret).
 npm run build
 
 # The endpoint URL should appear in dist/, and no non-PUBLIC AC value should:
-grep -r 'execute-api' dist/            # expect: the endpoint URL (contact page)
+grep -r 'execute-api' dist/            # expect: the endpoint URL (inquire page)
 grep -rE 'REPLACE_ME|Api-Token|AC_API_KEY|AC_LIST_ID|AC_FIELD_|api-us1\.com' dist/  # expect: nothing
 ```
 
@@ -147,7 +147,7 @@ aws cloudfront create-invalidation \
 ## 8. Smoke test
 
 - Load `https://<CloudFrontDomainName>/` and a clean URL like `/stories/heather`.
-- Submit the contact form (JS on and off) and confirm a lead appears in ActiveCampaign.
+- Submit the inquire form (JS on and off) and confirm a lead appears in ActiveCampaign.
 - `OPTIONS` the endpoint and confirm the CORS headers.
 
 ## 9. Harden CORS + the no-JS redirect (redeploy)
@@ -161,12 +161,12 @@ aws cloudformation deploy \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
     AllowedOrigin='https://<cloudfront-or-custom-domain>' \
-    ContactSuccessUrl='https://<cloudfront-or-custom-domain>/contact' \
+    ContactSuccessUrl='https://<cloudfront-or-custom-domain>/inquire' \
     # ...plus the same AcApiUrl/AcListId/AcmCertificateArn/CmsRepo/CmsBranch as before
 ```
 
-`ContactSuccessUrl` makes the no-JS fallback land on `/contact?sent=1` (success) or
-`/contact?sent=0&error=<code>` (failure) instead of inline HTML.
+`ContactSuccessUrl` makes the no-JS fallback land on `/inquire?sent=1` (success) or
+`/inquire?sent=0&error=<code>` (failure) instead of inline HTML.
 
 ## 10. CMS backend + OAuth
 
@@ -364,7 +364,7 @@ CloudFront console** for those properties (configuration drift is reset on deplo
 | Parameter | Example | Effect |
 |---|---|---|
 | `DomainName` | `muse.luisquintanastudio.com` | Primary alias → serves `/index.html` (muse home). |
-| `WeddingsDomainName` | `weddings.luisquintanastudio.com` | Second alias. The `CleanUrlFunction` rewrites this host's root `/` → `/weddings/index.html`. Deeper paths (e.g. `/contact`) resolve normally for both hosts. |
+| `WeddingsDomainName` | `weddings.luisquintanastudio.com` | Second alias. The `CleanUrlFunction` rewrites this host's root `/` → `/weddings/index.html`. Deeper paths (e.g. `/inquire`) resolve normally for both hosts. |
 | `AcmCertificateArn` | `arn:aws:acm:us-east-1:…:certificate/…` | Viewer cert. **MUST cover BOTH hosts** — use a SAN cert listing both names, or a wildcard `*.luisquintanastudio.com`. Must be in **us-east-1**. |
 
 `aws cloudformation deploy` resets any parameter you don't pass to its template `Default`
@@ -410,7 +410,7 @@ aws cloudformation deploy \
     AcApiUrl='https://acct.api-us1.com' AcListId='7' AcTags='' \
     AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
     AllowedOrigin='https://muse.luisquintanastudio.com' \
-    ContactSuccessUrl='https://muse.luisquintanastudio.com/contact' \
+    ContactSuccessUrl='https://muse.luisquintanastudio.com/inquire' \
     CmsRepo='emgeier/PhotographerSite' CmsBranch='main' \
     GitHubRepo='emgeier/PhotographerSite' GitHubBranch='main' \
     CreateGitHubOidcProvider='false' \
@@ -443,7 +443,7 @@ manually. Then:
 curl -sI https://muse.luisquintanastudio.com/        | grep -i '^HTTP'
 curl -sI https://weddings.luisquintanastudio.com/    | grep -i '^HTTP'
 # both resolve shared clean URLs
-curl -sI https://weddings.luisquintanastudio.com/contact | grep -i '^HTTP'
+curl -sI https://weddings.luisquintanastudio.com/inquire | grep -i '^HTTP'
 ```
 
 If a host 403s on `/`, re-check that the cert covers it and the alias is present on the

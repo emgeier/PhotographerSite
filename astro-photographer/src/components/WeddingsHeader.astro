@@ -5,14 +5,14 @@
 const links = [
   { href: '/weddings', label: 'Weddings' },
   { href: '/weddings/engagements', label: 'Engagements' },
-  { href: '/weddings/experience', label: 'The Experience' },
-  { href: '/weddings/testimonials', label: 'Testimonials' },
   { href: '/weddings/stories', label: 'Love Stories' },
 ] as const;
 
 const discover = [
   { href: '/weddings/about', label: 'About' },
   { href: '/weddings/faq', label: 'FAQ' },
+  { href: '/weddings/testimonials', label: 'Testimonials' },
+  { href: '/weddings/experience', label: 'The Experience' },
 ] as const;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -23,15 +23,8 @@ const discoverActive = discover.some((d) => isActive(d.href));
 <header class="wd-header">
     <a class="brand" href="/" aria-label="LQ, home">
 
-    <img class="brand-image" src={'/images/LW.png'} alt="" aria-hidden="true" />
+    <img class="lq-brand-image" src={'/images/LQSB.png'} alt="" aria-hidden="true" />
 </a>
-  <a class="wd-brand" href="/weddings" aria-label="Luis Quintana Studio, weddings home">
-
-    <span class="wd-brand__words">
-      <span class="wd-brand__name">LUIS QUINTANA</span>
-      <span class="wd-brand__sub">STUDIO</span>
-    </span>
-  </a>
   <button
     class="menu-toggle wd-menu-toggle"
     id="menu-toggle"

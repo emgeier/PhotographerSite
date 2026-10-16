@@ -79,9 +79,9 @@ function restoreEnv() {
 
 // --- Case 1: happy path ----------------------------------------------------
 
-test('happy path: contact/sync then contactLists, returns 200 {ok:true}', async () => {
+test('happy path: inquire/sync then contactLists, returns 200 {ok:true}', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } }, // contact/sync
+    { status: 200, json: { inquire: { id: '42' } } }, // inquire/sync
     { status: 200, json: {} }, // contactLists
   ]);
   const res = await handler(
@@ -94,29 +94,29 @@ test('happy path: contact/sync then contactLists, returns 200 {ok:true}', async 
 
   // Correct call order + URLs.
   assert.equal(fetchMock.calls.length, 2);
-  assert.match(fetchMock.calls[0].url, /\/api\/3\/contact\/sync$/);
+  assert.match(fetchMock.calls[0].url, /\/api\/3\/inquire\/sync$/);
   assert.match(fetchMock.calls[1].url, /\/api\/3\/contactLists$/);
 
-  // contact/sync body carries standard fields + phone.
+  // inquire/sync body carries standard fields + phone.
   const syncBody = fetchMock.calls[0].body;
-  assert.equal(syncBody.contact.email, 'heather@example.com');
-  assert.equal(syncBody.contact.firstName, 'Heather');
-  assert.equal(syncBody.contact.lastName, 'Jones');
-  assert.equal(syncBody.contact.phone, '(123) 456-7890');
+  assert.equal(syncBody.inquire.email, 'heather@example.com');
+  assert.equal(syncBody.inquire.firstName, 'Heather');
+  assert.equal(syncBody.inquire.lastName, 'Jones');
+  assert.equal(syncBody.inquire.phone, '(123) 456-7890');
 
   // Api-Token header present (and equals the injected secret).
   assert.equal(fetchMock.calls[0].opts.headers['Api-Token'], SECRET);
 
-  // contactLists body: status 1, list id, contact id (coerced to string).
+  // contactLists body: status 1, list id, inquire id (coerced to string).
   const listBody = fetchMock.calls[1].body;
-  assert.deepEqual(listBody.contactList, { list: '7', contact: '42', status: 1 });
+  assert.deepEqual(listBody.contactList, { list: '7', inquire: '42', status: 1 });
 
   restoreEnv();
 });
 
 // --- Case 2: AC error on a required call -----------------------------------
 
-test('AC 4xx on contact/sync -> 502 ac_error', async () => {
+test('AC 4xx on inquire/sync -> 502 ac_error', async () => {
   const fetchMock = mockFetch([{ status: 422, json: { errors: [{ title: 'bad' }] } }]);
   const res = await handler(
     makeEvent({ body: JSON.stringify(VALID_FIELDS) }),
@@ -131,7 +131,7 @@ test('AC 4xx on contact/sync -> 502 ac_error', async () => {
 
 test('AC 5xx on contactLists -> 502 ac_unavailable', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 503, json: {} },
   ]);
   const res = await handler(
@@ -185,7 +185,7 @@ test('OPTIONS preflight -> 204 with CORS headers', async () => {
 test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
   process.env.AC_TAGS = '10, 11';
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } }, // sync
+    { status: 200, json: { inquire: { id: '42' } } }, // sync
     { status: 200, json: {} }, // contactLists
     { status: 500, json: {} }, // tag 10 fails
     { status: 200, json: {} }, // tag 11 ok
@@ -199,7 +199,7 @@ test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
   assert.deepEqual(JSON.parse(res.body), { ok: true });
   assert.equal(fetchMock.calls.length, 4);
   assert.match(fetchMock.calls[2].url, /\/api\/3\/contactTags$/);
-  assert.deepEqual(fetchMock.calls[2].body.contactTag, { contact: '42', tag: '10' });
+  assert.deepEqual(fetchMock.calls[2].body.contactTag, { inquire: '42', tag: '10' });
   restoreEnv();
 });
 
@@ -208,7 +208,7 @@ test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
 test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
   // Unset case.
   let fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   let res = await handler(
@@ -217,13 +217,13 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, []);
+  assert.deepEqual(fetchMock.calls[0].body.inquire.fieldValues, []);
 
   // Set case: two field ids mapped.
   process.env.AC_FIELD_REASON = '1';
   process.env.AC_FIELD_FEEL = '3';
   fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   res = await handler(
@@ -232,7 +232,7 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, [
+  assert.deepEqual(fetchMock.calls[0].body.inquire.fieldValues, [
     { field: '1', value: 'A new chapter' },
     { field: '3', value: 'Confident' },
   ]);
@@ -242,9 +242,9 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
 // --- Case 7: native form-encoded POST -> 303 (or HTML when url empty) ------
 
 test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=1 on success', async () => {
-  process.env.CONTACT_SUCCESS_URL = 'https://d123.cloudfront.net/contact';
+  process.env.CONTACT_SUCCESS_URL = 'https://d123.cloudfront.net/inquire';
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const form = new URLSearchParams(VALID_FIELDS).toString();
@@ -254,12 +254,12 @@ test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=1 on success', asyn
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 303);
-  assert.equal(res.headers.Location, 'https://d123.cloudfront.net/contact?sent=1');
+  assert.equal(res.headers.Location, 'https://d123.cloudfront.net/inquire?sent=1');
   restoreEnv();
 });
 
 test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=0&error on failure', async () => {
-  process.env.CONTACT_SUCCESS_URL = 'https://d123.cloudfront.net/contact';
+  process.env.CONTACT_SUCCESS_URL = 'https://d123.cloudfront.net/inquire';
   const fetchMock = mockFetch([{ status: 422, json: {} }]);
   const form = new URLSearchParams(VALID_FIELDS).toString();
   const res = await handler(
@@ -268,13 +268,13 @@ test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=0&error on failure'
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 303);
-  assert.equal(res.headers.Location, 'https://d123.cloudfront.net/contact?sent=0&error=ac_error');
+  assert.equal(res.headers.Location, 'https://d123.cloudfront.net/inquire?sent=0&error=ac_error');
   restoreEnv();
 });
 
 test('native form POST with CONTACT_SUCCESS_URL empty -> text/html body', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const form = new URLSearchParams(VALID_FIELDS).toString();
@@ -317,7 +317,7 @@ test('GET method -> 405 method_not_allowed', async () => {
 
 test('base64-encoded JSON body is decoded', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: { inquire: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const b64 = Buffer.from(JSON.stringify(VALID_FIELDS), 'utf8').toString('base64');
