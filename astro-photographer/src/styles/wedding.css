@@ -76,6 +76,10 @@
 
 /* Light header when it sits over the dark hero image. */
 .wd-hero .wd-header, .wd-hero .wd-header a, .wd-hero .wd-header .wd-nav__discover-toggle { color: var(--ivory); }
+/* ...but the Discover dropdown panel is white, so its links stay dark for
+   contrast even over the hero (overrides the ivory rule above). */
+.wd-hero .wd-header .wd-nav__menu a { color: var(--wd-ink, #211c15); }
+.wd-hero .wd-header .wd-nav__menu a:hover { color: var(--wd-gold, #b08d57); }
 .wd-hero .wd-nav__inquire { border-color: rgba(244, 240, 232, 0.55); }
 .wd-hero .wd-menu-toggle span { background: var(--ivory); }
 /* --------------------------------------------------------------- *

@@ -3,7 +3,7 @@
 // distinct from the Glam Muse Header. Mirrors the mobile-menu contract that
 // motion.ts initNav() targets (#menu-toggle, #primary-nav, body.menu-open).
 const links = [
-  { href: '/weddings', label: 'Weddings' },
+  { href: '/weddings/portfolio', label: 'Weddings' },
   { href: '/weddings/engagements', label: 'Engagements' },
   { href: '/weddings/stories', label: 'Love Stories' },
 ] as const;
@@ -21,10 +21,9 @@ const isActive = (href: string) =>
 const discoverActive = discover.some((d) => isActive(d.href));
 ---
 <header class="wd-header">
-    <a class="brand" href="/" aria-label="LQ, home">
-
-    <img class="lq-brand-image" src={'/images/LQSB.png'} alt="" aria-hidden="true" />
-</a>
+  <a class="brand" href="/" aria-label="LQ, home">
+    <img class="lq-brand-image" src={'/images/LQSW.png'} alt="" aria-hidden="true" />
+  </a>
   <button
     class="menu-toggle wd-menu-toggle"
     id="menu-toggle"

@@ -1,0 +1,235 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
+import '../styles/codex-base.css';
+import '../styles/codex-content.css';
+
+// Page images are CMS-editable via settings/inquire.json; each falls back to
+// its original /images/* path when absent.
+const ct = await getEntry('settings', 'inquire');
+const heroImage = ct?.data.contactHeroImage ?? '/images/ct-hero.webp';
+const aboutImage = ct?.data.contactAboutImage ?? '/images/ct-about.webp';
+const stepsImage = ct?.data.contactStepsImage ?? '/images/ct-steps-band.webp';
+const closeImage = ct?.data.contactCloseImage ?? '/images/ct-close.webp';
+
+const steps = [
+  { n:'01', t:'YOUR INQUIRY', p:'Send a few details about yourself and what brought you here.' },
+  { n:'02', t:'THE CONVERSATION', p:'We\u2019ll meet for a private 15\u201320 minute Zoom consultation and talk about your vision, your questions, and the experience.' },
+  { n:'03', t:'YOUR DECISION', p:'If The Glam Muse Experience feels right for you, we\u2019ll begin planning your portrait experience together.' },
+];
+---
+<Base title="Inquire — The Glam Muse Experience" description="Tell me a little about yourself and what brought you here. This is simply the beginning of the conversation.">
+  <main>
+    <!-- HERO: Codex .hero masthead treatment (absolute Header, hero__image +
+         veil, hero__content) — the shared LIGHT masthead like Home/Portfolio.
+         Styled by `.ct2-hero` in codex-content.css. Movement via SiteMotion. -->
+    <section class="ct2-hero hero" aria-labelledby="ct-hero-title">
+      <Header/>
+      <div class="hero__image" data-hero-image data-parallax>
+        <Pic src={heroImage} alt="A softly lit editorial portrait inviting you to start the conversation." priority sizes="100vw" />
+      </div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="container hero__content">
+        <p class="eyebrow" data-hero-item>Begin here</p>
+        <h1 id="ct-hero-title" class="hero__title ct2-hero__title display-title">
+          <span class="line-mask"><span data-hero-line>Start the</span></span>
+          <span class="line-mask"><span data-hero-line>conversation.</span></span>
+        </h1>
+        <span class="short-rule" aria-hidden="true" data-hero-item></span>
+          <p class="eyebrow ct2-hero__sub">Tell me about you. Every woman arrives here for a different reason.</p>
+
+
+          <p class="eyebrow ct2-hero__sub">There is no perfect answer.</p>
+                  <span class="short-rule" aria-hidden="true" data-hero-item></span>
+
+      </div>
+    </section>
+
+    <section class="ct-about">
+      <div class="wrap ct-about-row" data-reveal>
+        <figure class="ct-about-photo">
+          <img src={aboutImage} alt="Placeholder black-and-white portrait" />
+          <figcaption class="eyebrow ct-about-caption">EVERY WOMAN.<br/>A STORY WORTH SEEING.</figcaption>
+        </figure>
+
+        <form class="ct-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
+          <div class="ct-form-row">
+            <div>
+              <label for="ct-first">FIRST NAME *</label>
+              <input id="ct-first" name="first" type="text" placeholder="First name" required />
+            </div>
+            <div>
+              <label for="ct-last">LAST NAME *</label>
+              <input id="ct-last" name="last" type="text" placeholder="Last name" required />
+            </div>
+          </div>
+          <div class="ct-form-row">
+            <div>
+              <label for="ct-email">EMAIL ADDRESS *</label>
+              <input id="ct-email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div>
+              <label for="ct-phone">PHONE NUMBER *</label>
+              <input id="ct-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+            </div>
+          </div>
+          <div>
+            <label for="ct-reason">WHAT BROUGHT YOU TO THE GLAM MUSE SERIES AT THIS MOMENT? *</label>
+            <select id="ct-reason" name="reason" required>
+              <option value="" disabled selected>Select an option</option>
+              <option>Celebrating a milestone</option>
+              <option>Rediscovering myself</option>
+              <option>A new chapter</option>
+              <option>Just curious</option>
+            </select>
+          </div>
+          <div>
+            <label for="ct-more">TELL ME A LITTLE MORE ABOUT WHAT BROUGHT YOU HERE.</label>
+            <textarea id="ct-more" name="more" placeholder="A celebration, a transition, a new chapter, curiosity — whatever feels true to you."></textarea>
+          </div>
+          <div>
+            <label for="ct-feel">WHAT WOULD YOU LOVE TO SEE OR FEEL WHEN YOU LOOK AT YOUR PORTRAITS? *</label>
+            <textarea id="ct-feel" name="feel" placeholder="Tell me about how you want to feel and what you hope to see." required></textarea>
+          </div>
+          <div>
+            <label for="ct-hear">HOW DID YOU HEAR ABOUT THE GLAM MUSE SERIES?</label>
+            <select id="ct-hear" name="hear">
+              <option value="" disabled selected>Select an option</option>
+              <option>Instagram</option>
+              <option>Facebook</option>
+              <option>Pinterest</option>
+              <option>A friend</option>
+              <option>Google search</option>
+            </select>
+          </div>
+          <button class="button ct-form-submit" type="submit">START THE CONVERSATION</button>
+          <p class="ct-form-note">No pressure. No obligation. Just a conversation about what this experience could look like for you.</p>
+          <p class="ct-form-status" role="status" aria-live="polite" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="ct-steps">
+      <img class="ct-steps-photo" src={stepsImage} alt="" />
+      <div class="wrap ct-steps-inner" data-reveal>
+        <div class="ct-steps-head">
+          <div>
+            <p class="eyebrow ct-steps-eyebrow">WHAT HAPPENS NEXT</p>
+            <h2 class="display ct-steps-title">A Simple<br/>Beginning.</h2>
+          </div>
+          <p class="ct-steps-intro">From your inquiry to your portraits, the process is simple, personal, and designed entirely around you.</p>
+        </div>
+        <div class="ct-steps-row">
+          {steps.map(s => (
+            <article>
+              <b>{s.n}</b>
+              <span class="ct-step-rule"></span>
+              <h3>{s.t}</h3>
+              <p>{s.p}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" aria-labelledby="ct-close-title">
+      <div class="closing__image" data-parallax>
+        <Pic src={closeImage} alt="A soft closing portrait." sizes="100vw" />
+      </div>
+      <div class="closing__veil" aria-hidden="true"></div>
+      <div class="container closing__content" data-reveal>
+        <h2 id="ct-close-title" class="display-title">You, <br/> complete.</h2>
+        <span class="short-rule" aria-hidden="true"></span>
+        <p class="eyebrow">Not transformed.<br />Revealed.</p>
+      </div>
+    </section>
+  </main>
+  <Footer/>
+  <SiteMotion/>
+</Base>
+
+<script is:inline>
+  (function () {
+    var form = document.querySelector('.ct-form');
+    if (!form) return;
+    var status = form.querySelector('.ct-form-status');
+
+    function show(state, message) {
+      if (!status) return;
+      status.hidden = false;
+      status.setAttribute('data-state', state);
+      status.textContent = message;
+    }
+
+    // Progressive-enhancement banner for the no-JS native fallback return
+    // (?sent=1 / ?sent=0). Reads the query string only; adds no markup/classes
+    // beyond the pre-rendered .ct-form-status element.
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('sent') === '1') {
+        show('success', 'Thank you — your message is on its way.');
+      } else if (params.get('sent') === '0') {
+        show('error', 'Something went wrong sending your message. Please try again.');
+      }
+    } catch (e) {}
+
+    var endpoint = form.getAttribute('action');
+    // Without a configured endpoint there is nothing to enhance; the native
+    // POST fallback (form action/method) still works once the endpoint is set.
+    if (!endpoint) return;
+
+    form.addEventListener('submit', function (ev) {
+      // Let the browser run its native HTML validation first; if the form is
+      // invalid, don't intercept so built-in prompts show.
+      if (typeof form.reportValidity === 'function' && !form.reportValidity()) return;
+
+      ev.preventDefault();
+
+      var button = form.querySelector('.ct-form-submit');
+      var originalLabel = button ? button.textContent : null;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'SENDING…';
+      }
+      show('sending', 'Sending your message…');
+
+      // Serialize every present field as-is — the Lambda is the single
+      // validation authority, so a blank phone is treated no differently here
+      // than on the native fallback.
+      var payload = {};
+      new FormData(form).forEach(function (value, key) {
+        payload[key] = value;
+      });
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: res.ok }; });
+        })
+        .then(function (data) {
+          if (data && data.ok) {
+            show('success', 'Thank you — your message is on its way.');
+            form.reset();
+          } else {
+            show('error', 'Something went wrong sending your message. Please try again.');
+          }
+        })
+        .catch(function () {
+          show('error', 'Something went wrong sending your message. Please try again.');
+        })
+        .then(function () {
+          if (button) {
+            button.disabled = false;
+            button.textContent = originalLabel;
+          }
+        });
+    });
+  })();
+</script>
