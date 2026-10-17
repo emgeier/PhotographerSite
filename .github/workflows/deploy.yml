@@ -57,7 +57,7 @@ jobs:
       - name: Build
         env:
           # Baked into the static output at build time. Empty is tolerated (the
-          # contact form stays inert) but a real value wires up submissions.
+          # inquire form stays inert) but a real value wires up submissions.
           PUBLIC_AC_FORM_ENDPOINT: ${{ vars.PUBLIC_AC_FORM_ENDPOINT }}
           # Adobe Typekit kit id for ivypresto-display (the serif used by all
           # hero/display titles). Baked in at build time: without it Base.astro
