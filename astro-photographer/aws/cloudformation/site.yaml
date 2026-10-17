@@ -95,15 +95,22 @@ Parameters:
       (/muse, /weddings). When empty, the default *.cloudfront.net domain is
       used and no Aliases are set. The ACM cert in AcmCertificateArn must cover
       this name (a wildcard *.luisquintanastudio.com or an apex SAN cert).
+  WwwDomainName:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional www alias, e.g. www.luisquintanastudio.com. Set this so the
+      distribution serves HTTPS for the www host too (a www CNAME -> the
+      distribution needs www in Aliases, or the browser gets
+      ERR_SSL_VERSION_OR_CIPHER_MISMATCH). The ACM cert MUST cover this name
+      (a wildcard *.luisquintanastudio.com covers www; the bare apex needs its
+      own SAN on the cert).
   WeddingsDomainName:
     Type: String
     Default: ''
     Description: >-
-      DEPRECATED — no longer used. The site moved from subdomains to path-based
-      sections (/muse, /weddings) on the single apex domain, so there is no
-      weddings subdomain alias or host rewrite anymore. Leave empty. (Retained
-      as a no-op parameter so existing deploy scripts that still pass it don't
-      error; it is referenced nowhere in the template.)
+      DEPRECATED — no longer used (site moved to path-based sections). Leave
+      empty. Retained as a no-op so older deploy scripts don't error.
   GitHubRepo:
     Type: String
     Default: ''
@@ -136,8 +143,16 @@ Conditions:
   HasDomainName: !And
     - !Not [!Equals [!Ref DomainName, '']]
     - !Not [!Equals [!Ref AcmCertificateArn, '']]
-  # (HasWeddingsDomain removed — the weddings subdomain alias no longer exists
-  # after the move to path-based sections.)
+  # The www alias is added when WwwDomainName is set alongside a cert
+  # (CloudFront rejects Aliases without a matching ACM cert).
+  HasWwwDomain: !And
+    - !Not [!Equals [!Ref WwwDomainName, '']]
+    - !Not [!Equals [!Ref AcmCertificateArn, '']]
+  # Both apex + www together (controls the two-alias list form).
+  HasApexAndWww: !And
+    - !Not [!Equals [!Ref DomainName, '']]
+    - !Not [!Equals [!Ref WwwDomainName, '']]
+    - !Not [!Equals [!Ref AcmCertificateArn, '']]
   # CI/CD: create the deploy role only when a GitHub repo is supplied.
   HasGitHubRepo: !Not [!Equals [!Ref GitHubRepo, '']]
   # CMS login: create the OAuth relay only when a client id is supplied.
@@ -229,12 +244,19 @@ Resources:
         Enabled: true
         Comment: !Sub '${AWS::StackName} static site'
         DefaultRootObject: index.html
-        # Single-domain (apex) alias. The former weddings-subdomain alias was
-        # removed with the move to path-based sections (/muse, /weddings).
+        # Aliases for the single domain: apex and/or www, whichever are set
+        # (each must be covered by the ACM cert). A www CNAME to the
+        # distribution only works over HTTPS when www is listed here.
         Aliases: !If
-          - HasDomainName
-          - [!Ref DomainName]
-          - !Ref AWS::NoValue
+          - HasApexAndWww
+          - [!Ref DomainName, !Ref WwwDomainName]
+          - !If
+            - HasDomainName
+            - [!Ref DomainName]
+            - !If
+              - HasWwwDomain
+              - [!Ref WwwDomainName]
+              - !Ref AWS::NoValue
         Origins:
           - Id: site-origin
             DomainName: !GetAtt SiteBucket.RegionalDomainName
