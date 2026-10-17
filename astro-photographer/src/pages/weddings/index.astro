@@ -19,10 +19,16 @@ const engagementsCardImage = wed?.data.wedHomeEngagementsCardImage ?? '/images/m
 const aboutImage = wed?.data.wedHomeAboutImage ?? '/images/portrait.webp';
 const ctaImage = wed?.data.wedHomeCtaImage ?? '/images/home-closing.webp';
 
+// The experience step photos are shared with the /weddings/experience page:
+// both read wedExperienceStepImages from the weddings-experience settings, so
+// editing them once in the CMS updates both sections. Copy differs per page.
+const expSettings = await getEntry('settings', 'weddings-experience');
+const stepImageDefaults = ['/images/muses/portrait-01.webp', '/images/muses/portrait-02.webp', '/images/muses/portrait-03.webp'];
+const stepImages = expSettings?.data.wedExperienceStepImages?.length ? expSettings.data.wedExperienceStepImages : stepImageDefaults;
 const steps = [
-  { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: '/images/muses/portrait-01.webp' },
-  { n: '02', t: 'Planning', p: 'We’ll plan the details, location and timeline so everything feels seamless.', img: '/images/muses/portrait-02.webp' },
-  { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: '/images/muses/portrait-03.webp' },
+  { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: stepImages[0] ?? stepImageDefaults[0] },
+  { n: '02', t: 'Planning', p: 'We’ll plan the details, location and timeline so everything feels seamless.', img: stepImages[1] ?? stepImageDefaults[1] },
+  { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: stepImages[2] ?? stepImageDefaults[2] },
 ];
 
 const loveStories = (await getCollection('weddingStories'))
@@ -130,7 +136,10 @@ const loveStories = (await getCollection('weddingStories'))
       </div>
     </section>
 
-    <!-- LOVE STORIES -->
+    {/* LOVE STORIES — hidden for now (no real galleries yet). To restore, remove
+        this comment wrapper; the `loveStories` data is still computed above. Swap
+        the "Coming soon" block back for the {loveStories.map(...)} card grid when
+        real love-story photos are ready.
     <section class="wd-stories" aria-labelledby="wd-stories-title">
       <div class="wd-container">
         <div class="wd-stories__head" data-reveal>
@@ -140,16 +149,13 @@ const loveStories = (await getCollection('weddingStories'))
           </div>
           <a class="wd-textlink" href="/weddings/stories">View more love stories</a>
         </div>
-        <div class="wd-stories__grid">
-          {loveStories.map((s) => (
-            <a class="wd-storycard" href={`/weddings/stories/${s.slug}`} data-reveal>
-              <span class="wd-storycard__image"><Pic src={s.img} alt={s.name} sizes="(max-width: 860px) 100vw, 33vw" /></span>
-              <span class="wd-storycard__name">{s.name}</span>
-            </a>
-          ))}
+        <div class="wd-stories__soon" data-reveal>
+          <p class="wd-eyebrow wd-eyebrow-no-line wd-stories__soon-eyebrow">Coming soon</p>
+          <p class="wd-stories__soon-text">Real love stories are on their way. Check back soon.</p>
         </div>
       </div>
     </section>
+    */}
 
     <!-- CLOSING CTA -->
     <section class="wd-cta" aria-labelledby="wd-cta-title">

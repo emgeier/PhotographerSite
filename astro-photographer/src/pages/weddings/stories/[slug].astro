@@ -98,8 +98,9 @@ const ctaImage = wed?.data.wedStoryDetailCtaImage ?? '/images/portfolio-banner.w
       </div>
     </section>
 
-    <!-- MORE LOVE STORIES -->
-    {others.length > 0 && (
+    {/* MORE LOVE STORIES — hidden for now (Love Stories area is not public yet).
+        Restore by changing `false` back to `others.length > 0`. */}
+    {false && others.length > 0 && (
       <section class="wd-journal" aria-labelledby="wd-more-title">
         <div class="wd-container">
           <div class="wd-journal__head" data-reveal>

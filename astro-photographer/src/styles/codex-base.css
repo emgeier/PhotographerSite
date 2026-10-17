@@ -36,7 +36,7 @@ button { border: 0; }
 .image-frame img { transition: scale 1100ms var(--ease); }
 
 /* A light masthead sits within the hero, as on the editorial reference. */
-.site-header { position: absolute; z-index: 5; top: 0; left: 50%; display: flex; align-items: center; justify-content: space-between; width: min(1280px, calc(100% - 112px)); height: var(--header-h); transform: translateX(-50%); }
+.site-header { position: absolute; z-index: 5; top: 0; left: 50%; display: flex; align-items: center; justify-content: space-between; width: min(1600px, calc(100% - 112px)); height: var(--header-h); transform: translateX(-50%); }
 .brand { font-family: var(--serif); font-weight: 100; display: inline-flex; flex-direction: column; align-items: center; width: 258px; flex-shrink: 0; }
 .brand__top { margin-bottom: 2px; font-size: 14px; line-height: 1; letter-spacing: 6px; padding-left: 6px; }
 .brand__name { font-size: 38px; line-height: 0.95; letter-spacing: -2px; white-space: nowrap; }
@@ -130,7 +130,7 @@ button { border: 0; }
 .closing__content .button { min-width: 282px; }
 
 .site-footer { padding: 32px 0 30px; color: var(--ivory); background: #171613; }
-.footer-container { width: min(1280px, calc(100% - 112px)); margin-inline: auto; }
+.footer-container { width: min(1600px, calc(100% - 112px)); margin-inline: auto; }
 .footer-main { display: flex; align-items: center; justify-content: space-between; gap: 40px; padding-bottom: 28px; }
 .brand--footer { width: 222px; }
 .brand--footer .brand__name { font-size: 33px; }

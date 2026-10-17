@@ -57,6 +57,7 @@ aws cloudformation deploy \
   --parameter-overrides \
     AcApiUrl='https://luisquintanastudio.api-us1.com' \
     AcListId='53' \
+    AcListIdGiveaway='54' \
     AcTags='' \
     AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
     AllowedOrigin='*' \
@@ -71,6 +72,14 @@ aws cloudformation deploy \
 > `AllowedOrigin='*'` is a bring-up default only. **TODO: restrict `AllowedOrigin` to the
 > CloudFront distribution domain (`https://dXXXX.cloudfront.net` or the custom domain)
 > before production.** See step 9.
+
+> **Segmented lists (`AcListIdGiveaway`).** Most forms (contact, inquire) subscribe to
+> `AcListId`. The engagement-giveaway landing page (`/enter-to-win-a-free-engagement-session`)
+> POSTs `list=giveaway`, which the Lambda allowlists to `AcListIdGiveaway` (list **54**)
+> so giveaway entrants are segmented onto their own list. The form sends only the symbolic
+> key `giveaway`, never a raw list id — an unknown/absent key falls back to `AcListId`, so
+> a visitor cannot inject an arbitrary AC list. Leave `AcListIdGiveaway` empty to route
+> giveaway entries to the default list until the separate list exists.
 
 Read the Outputs after deploy:
 
@@ -407,7 +416,7 @@ aws cloudformation deploy \
     DomainName='muse.luisquintanastudio.com' \
     WeddingsDomainName='weddings.luisquintanastudio.com' \
     AcmCertificateArn='arn:aws:acm:us-east-1:<acct>:certificate/<id>' \
-    AcApiUrl='https://acct.api-us1.com' AcListId='7' AcTags='' \
+    AcApiUrl='https://acct.api-us1.com' AcListId='7' AcListIdGiveaway='54' AcTags='' \
     AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
     AllowedOrigin='https://muse.luisquintanastudio.com' \
     ContactSuccessUrl='https://muse.luisquintanastudio.com/inquire' \
@@ -448,3 +457,94 @@ curl -sI https://weddings.luisquintanastudio.com/inquire | grep -i '^HTTP'
 
 If a host 403s on `/`, re-check that the cert covers it and the alias is present on the
 distribution (`aws cloudfront get-distribution-config --id <DistributionId>`).
+
+## 14. Redeploying the CloudFormation stack (updating infra / parameters)
+
+Code deploys (site content) go through the GitHub Actions workflow (§11). **Infra
+changes** — editing `aws/cloudformation/site.yaml`, or changing a stack parameter such as
+adding the giveaway list — go through `aws cloudformation deploy`, not the Actions
+workflow.
+
+> ⚠️ **CloudFormation resets any parameter you do NOT pass to its template default.**
+> `aws cloudformation deploy` does not silently keep previous values. On every redeploy
+> you must pass **all** parameters you want to keep, or they revert (empty for most
+> optional params — which can take the custom domain offline, clear the giveaway list,
+> etc.). See §13a–13b for the domain/cert consequences.
+
+### 14a. Capture the current parameters first
+
+So you don't drop anything, print the stack's current parameters and reuse them:
+
+```bash
+aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+  --query 'Stacks[0].Parameters' --output table
+```
+
+### 14b. Preview the change set (recommended, non-destructive)
+
+Generate but DON'T execute the change set, review the diff, then apply:
+
+```bash
+aws cloudformation deploy \
+  --template-file aws/cloudformation/site.yaml \
+  --stack-name glam-muse --region us-east-2 \
+  --capabilities CAPABILITY_IAM \
+  --no-execute-changeset \
+  --parameter-overrides \
+    AcApiUrl='https://luisquintanastudio.api-us1.com' \
+    AcListId='53' \
+    AcListIdGiveaway='54' \
+    AcTags='' \
+    AcFieldReason='' AcFieldMore='' AcFieldFeel='' AcFieldHear='' \
+    AllowedOrigin='https://luisquintanastudio.com' \
+    ContactSuccessUrl='https://luisquintanastudio.com/inquire' \
+    AcmCertificateArn='arn:aws:acm:us-east-1:<acct>:certificate/<id>' \
+    DomainName='muse.luisquintanastudio.com' \
+    WeddingsDomainName='weddings.luisquintanastudio.com' \
+    CmsRepo='emgeier/PhotographerSite' CmsBranch='main' \
+    GitHubRepo='emgeier/PhotographerSite' GitHubBranch='main' \
+    CreateGitHubOidcProvider='false' \
+    OAuthClientId='<github-oauth-client-id>'
+```
+
+> Replace every placeholder with the real values from §14a. The list above is the full
+> set of parameters this stack uses — omitting any one resets it to its template default.
+> Review the printed change set (or open it in the CloudFormation console), then execute
+> the named change set it prints, or re-run the same command **without**
+> `--no-execute-changeset` to apply.
+
+### 14c. Apply (execute) the redeploy
+
+Re-run the §14b command without `--no-execute-changeset`. When the Lambda code itself
+changed (e.g. the `index.mjs` list-routing logic), also re-package/upload the zip the
+template points at before deploying — see §12b for the zip + `aws s3 cp` pattern (the AC
+Lambda zip is `ac-lambda.zip` in the `muse-photographer-site` bucket). CloudFormation only
+picks up new Lambda code when the referenced S3 object changes.
+
+### 14d. Example: wiring the separate giveaway list (list 54)
+
+The engagement-giveaway page (`/enter-to-win-a-free-engagement-session`) posts
+`list=giveaway`; the Lambda allowlists that to `AcListIdGiveaway`. To turn it on:
+
+1. Confirm list **54** exists in ActiveCampaign.
+2. Re-zip and upload the AC Lambda if `aws/lambda/activecampaign/index.mjs` changed:
+   ```bash
+   (cd aws/lambda/activecampaign && zip -j ../../ac-lambda.zip index.mjs)
+   aws s3 cp aws/ac-lambda.zip s3://muse-photographer-site/ac-lambda.zip --profile muse
+   ```
+3. Redeploy with `AcListIdGiveaway='54'` added to the parameter set (§14b/§14c), keeping
+   every other current parameter.
+4. Verify: submit the giveaway form and confirm the new contact lands on list 54 in
+   ActiveCampaign (contact/inquire submissions still land on `AcListId`). Until the stack
+   is redeployed with the parameter set, giveaway entries safely fall back to the default
+   list.
+
+### 14e. Verify after any redeploy
+
+```bash
+aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+  --query 'Stacks[0].Parameters' --output table   # confirm params are as intended
+```
+
+Then smoke-test the affected behavior (submit a form, load the domains, etc.). If a
+redeploy accidentally dropped a parameter, re-run §14c passing the full set.

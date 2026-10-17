@@ -42,10 +42,8 @@ const ctaImage = wed?.data.wedStoriesCtaImage ?? '/images/portfolio-banner.webp'
 
     <!-- FEATURED LOVE STORY -->
     <section class="wd-featured" aria-labelledby="wd-featured-title">
-      <div class="wd-container wd-featured__row">
-        <figure class="wd-featured__photo" data-reveal>
-          <Pic src={featuredPhoto} alt="Alex and Taylor at Lake Como." sizes="(max-width: 900px) 100vw, 48vw" />
-        </figure>
+      <!-- Featured photo hidden until real galleries are ready (copy kept). -->
+      <div class="wd-container wd-featured__row wd-featured__row--soon">
         <div class="wd-featured__copy" data-reveal>
           <p class="wd-eyebrow">Featured love story</p>
           <h2 id="wd-featured-title" class="wd-display wd-featured__title">A love story,<br />beautifully told.</h2>
@@ -70,21 +68,12 @@ const ctaImage = wed?.data.wedStoriesCtaImage ?? '/images/portfolio-banner.webp'
             <span class="wd-journal__tab">Engagements</span>
           </div>
         </div>
-        <div class="wd-journal__grid">
-          {stories.map((s) => (
-            <article class="wd-jcard" data-reveal>
-              <a class="wd-jcard__image" href={`/weddings/stories/${s.slug}`} aria-label={`View ${s.names}'s story`}>
-                <Pic src={s.img} alt={`${s.names} — ${s.place}`} sizes="(max-width: 900px) 100vw, 33vw" />
-              </a>
-              <p class="wd-jcard__type">{s.type}</p>
-              <h3 class="wd-jcard__names">{s.names}</h3>
-              <p class="wd-jcard__place">{s.place}</p>
-              <a class="wd-textlink wd-jcard__link" href={`/weddings/stories/${s.slug}`}>View story</a>
-            </article>
-          ))}
-        </div>
-        <div class="wd-journal__more" data-reveal>
-          <a class="wd-outline-btn" href="/weddings/stories">Load more stories</a>
+        <!-- Journal photo grid hidden until real love stories are ready; show a
+             "Coming soon" placeholder. To restore, bring back the
+             {stories.map(...)} grid + "Load more" (stories is still computed). -->
+        <div class="wd-journal__soon" data-reveal>
+          <p class="wd-eyebrow wd-eyebrow-no-line wd-journal__soon-eyebrow">Coming soon</p>
+          <p class="wd-journal__soon-text">New love stories are being prepared and will appear here soon.</p>
         </div>
       </div>
     </section>

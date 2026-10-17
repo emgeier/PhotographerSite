@@ -170,6 +170,12 @@ collections:
         fields:
           - { name: wedExperienceHeroImage, label: Hero image, widget: image, required: false }
           - { name: wedExperienceEasePhoto, label: '“At ease” photo', widget: image, required: false }
+          - name: wedExperienceStepImages
+            label: 'Process step images (3, in order — also shown on the Weddings home page)'
+            widget: list
+            required: false
+            field: { name: image, label: Image, widget: image }
+            hint: 'Consultation, Planning, Your Day — one image each, in order. Shared by the Experience page and the Weddings home experience section.'
           - { name: wedExperienceCtaImage, label: Closing CTA background, widget: image, required: false }
 
       - name: weddings-portfolio
@@ -230,6 +236,19 @@ collections:
           - { name: wedStoriesHeroImage, label: Listing hero image, widget: image, required: false }
           - { name: wedStoriesCtaImage, label: Listing closing CTA background, widget: image, required: false }
           - { name: wedStoryDetailCtaImage, label: Story detail closing CTA background, widget: image, required: false }
+
+      - name: enter-to-win-a-free-engagement-session
+        label: 'Weddings — Engagement Giveaway images'
+        file: astro-photographer/src/content/settings/enter-to-win-a-free-engagement-session.json
+        fields:
+          - { name: wedGiveawayHeroImage, label: Hero image (the offer), widget: image, required: false }
+          - { name: wedGiveawayClosingImage, label: Closing couple image, widget: image, required: false }
+          - { name: wedGiveawayMeetImage, label: Meet Luis portrait, widget: image, required: false }
+          - name: wedGiveawayGallery
+            label: 'Engagements gallery (up to 10 — leave empty to use placeholders)'
+            widget: list
+            required: false
+            field: { name: image, label: Image, widget: image }
 
   - name: muses
     label: Muses

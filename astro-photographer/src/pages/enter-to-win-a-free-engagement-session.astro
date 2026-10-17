@@ -1,0 +1,256 @@
+---
+// ENGAGEMENT GIVEAWAY LANDING PAGE — "Enter to win a free engagement session".
+// A focused two-column campaign landing page for the weddings brand (Luis
+// Quintana Studio), matching Website/01 Weddings and engagements/
+// EngagemenLandingPage.png. Landing-page style masthead (brand wordmark only,
+// no full nav) like the Glam Muse /landing page. Placeholder images reuse
+// existing /images/* assets — real engagement photos get swapped in via the
+// CMS later. The entry form posts to the same ActiveCampaign endpoint the
+// inquire form uses (progressive-enhancement submit script at the bottom).
+import Base from '../layouts/Base.astro';
+import WeddingsFooter from '../components/WeddingsFooter.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
+import '../styles/wedding.css';
+
+// All imagery is CMS-editable via settings/enter-to-win-a-free-engagement-session.json;
+// each falls back to an existing /images/* placeholder so the page renders now.
+const g = await getEntry('settings', 'enter-to-win-a-free-engagement-session');
+const heroImage = g?.data.wedGiveawayHeroImage ?? '/images/portfolio-banner.webp';
+const closingImage = g?.data.wedGiveawayClosingImage ?? '/images/portfolio-closing.webp';
+const meetImage = g?.data.wedGiveawayMeetImage ?? '/images/portrait.webp';
+
+// Right-column engagement grid — 10 placeholder frames (real photos via CMS).
+const gridPool = [
+  '/images/muses/portrait-01.webp',
+  '/images/muses/portrait-02.webp',
+  '/images/muses/portrait-03.webp',
+  '/images/muses/portrait-04.webp',
+  '/images/muses/portrait-05.webp',
+  '/images/muses/portrait-06.webp',
+  '/images/muses/portrait-07.webp',
+  '/images/muses/portrait-08.webp',
+  '/images/muses/portrait-09.webp',
+  '/images/portfolio-hero.webp',
+];
+const grid = (g?.data.wedGiveawayGallery?.length ? g.data.wedGiveawayGallery : gridPool).slice(0, 10);
+
+// "If you win, here's what's included" — three prize details.
+const included = [
+  {
+    n: '01',
+    t: 'An Experience Worth Remembering.',
+    p: 'A 90-minute engagement session with you and your fiancé in romantic locations.',
+  },
+  {
+    n: '02',
+    t: 'Three Outfit Changes',
+    p: 'To express a variety of looks.',
+  },
+  {
+    n: '03',
+    t: '11x14 portrait of your favorite shot',
+    p: 'Additional portraits available for purchase',
+  },
+    {
+    n: '04',
+    t: 'A Beautiful Experience',
+    p: 'Thoughtful guidance and a relaxed, meaningful session designed to feel effortless and memorable.',
+  },
+];
+---
+<Base
+  title="Win a Free Engagement Session — Luis Quintana Studio"
+  description="Enter to win a free engagement session — a $895 value. Celebrate this exciting chapter of your story with an unforgettable engagement photography experience by Luis Quintana Studio."
+>
+  <main class="wd wd-page wd-give" id="main-content">
+    <div class="wd-give__columns">
+      <!-- ============================ LEFT COLUMN ============================ -->
+      <div class="wd-give__col wd-give__col--left">
+        <!-- HERO: dark, couple photo, the giveaway offer -->
+        <section class="wd-give__hero">
+          <div class="wd-give__hero-image" data-parallax>
+            <Pic src={heroImage} alt="An engaged couple in a tender embrace at golden hour." priority sizes="(max-width: 980px) 100vw, 50vw" />
+          </div>
+          <div class="wd-give__hero-veil" aria-hidden="true"></div>
+ 
+          <div class="wd-give__hero-content" >
+            <p class="wd-eyebrow-no-line wd-give__hero-eyebrow">Enter to win a</p>
+            <h1 class="wd-display wd-give__hero-title">Free<br />Engagement<br />Session</h1>
+            <p class="wd-give__value"><span class="wd-give__value-a">A</span> <span class="wd-give__value-amount">$895</span> <span class="wd-give__value-label">Value</span></p>
+            <p class="wd-give__hero-lede">Celebrate this exciting chapter of your story with an unforgettable engagement photography experience.</p>
+            <a class="wd-btn wd-give__hero-btn" href="#wd-give-form">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+          </div>
+        </section>
+
+        <!-- ENTRY FORM -->
+        <section class="wd-give__form-band" aria-labelledby="wd-give-form-title">
+          <p class="wd-eyebrow-no-line wd-give__form-eyebrow" id="wd-give-form-title">Your story starts here.</p>
+          <form class="wd-form wd-give__form" id="wd-give-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
+            <!-- Routes entrants to the dedicated giveaway AC list (allowlisted
+                 server-side to AC_LIST_ID_GIVEAWAY), separate from the main
+                 contact/inquire list. -->
+            <input type="hidden" name="list" value="giveaway" />
+            <div class="wd-form__field wd-form__field--full">
+              <label for="wd-give-bride">Bride’s Full Name *</label>
+              <input id="wd-give-bride" name="bride" type="text" placeholder="Bride’s full name" required />
+            </div>
+            <div class="wd-form__field wd-form__field--full">
+              <label for="wd-give-groom">Groom’s Full Name</label>
+              <input id="wd-give-groom" name="groom" type="text" placeholder="Groom’s full name" />
+            </div>
+            <div class="wd-form__field wd-form__field--full">
+              <label for="wd-give-email">Email Address *</label>
+              <input id="wd-give-email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="wd-form__field wd-form__field--full">
+              <label for="wd-give-phone">Phone Number *</label>
+              <input id="wd-give-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+            </div>
+            <button class="wd-btn wd-form__submit" type="submit">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
+            <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
+          </form>
+        </section>
+
+        <!-- CONGRATULATIONS COPY -->
+        <section class="wd-give__congrats">
+          <h2 class="wd-display wd-give__congrats-title">Congratulations!</h2>
+          <p class="wd-give__congrats-para">What an exciting time for you and your families!</p>
+          <p class="wd-give__congrats-para">Create engagement photos that feel like you — authentic and elegant, to capture the emotions of this special time.</p>
+        </section>
+
+        <!-- CLOSING IMAGE -->
+        <section class="wd-give__closing" aria-hidden="true">
+          <Pic src={closingImage} alt="" sizes="(max-width: 980px) 100vw, 50vw" />
+        </section>
+      </div>
+
+      <!-- ============================ RIGHT COLUMN ============================ -->
+      <div class="wd-give__col wd-give__col--right">
+        <!-- ENGAGEMENTS GALLERY -->
+        <section class="wd-give__gallery-band" aria-labelledby="wd-give-gallery-title">
+          <p class="wd-eyebrow wd-give__gallery-eyebrow">A collection of love stories</p>
+          <h2 class="wd-display wd-give__gallery-title" id="wd-give-gallery-title">Engagements</h2>
+          <span class="wd-rule wd-give__gallery-rule" aria-hidden="true"></span>
+          <div class="wd-give__gallery">
+            {grid.map((src, i) => (
+              <figure class="wd-give__gallery-item" data-reveal>
+                <Pic src={src} alt={`Engagement session photograph ${i + 1}.`} sizes="(max-width: 980px) 45vw, 22vw" />
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        <!-- WHAT'S INCLUDED -->
+        <section class="wd-give__included" aria-labelledby="wd-give-included-title">
+          <p class="wd-eyebrow-no-line wd-give__included-eyebrow" id="wd-give-included-title">If you win, here’s what’s included:</p>
+          <ol class="wd-give__included-list">
+            {included.map((item) => (
+              <li class="wd-give__inc" data-reveal>
+                <span class="wd-give__inc-num" aria-hidden="true">{item.n}</span>
+                <div class="wd-give__inc-copy">
+                  <h3 class="wd-give__inc-title">{item.t}</h3>
+                  <p class="wd-give__inc-para">{item.p}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <!-- PRIZE VALUE + CTA -->
+        <section class="wd-give__prize">
+          <p class="wd-eyebrow-no-line wd-give__prize-eyebrow">Total prize value</p>
+          <p class="wd-display wd-give__prize-amount">$895</p>
+          <a class="wd-btn wd-give__prize-btn" href="#wd-give-form">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+        </section>
+
+        <!-- MEET LUIS -->
+        <section class="wd-give__meet" aria-labelledby="wd-give-meet-title">
+          <div class="wd-give__meet-image" data-parallax>
+            <Pic src={meetImage} alt="A portrait of Luis holding a camera." sizes="(max-width: 980px) 100vw, 50vw" />
+          </div>
+          <div class="wd-give__meet-veil" aria-hidden="true"></div>
+          <div class="wd-give__meet-copy">
+            <p class="wd-eyebrow-no-line  wd-give__meet-eyebrow">The person behind the lens</p>
+            <h2 class="wd-display wd-give__meet-title" id="wd-give-meet-title">Meet Luis.</h2>
+            <p class="wd-give__meet-para">Luis Quintana is a wedding and engagement photographer in Franklin, Tennessee, creating timeless, meaningful photographs for couples who value visible connection.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>
+
+<script is:inline>
+  (function () {
+    var form = document.querySelector('.wd-give__form');
+    if (!form) return;
+    var status = form.querySelector('.wd-form__status');
+
+    function show(state, message) {
+      if (!status) return;
+      status.hidden = false;
+      status.setAttribute('data-state', state);
+      status.textContent = message;
+    }
+
+    try {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('sent') === '1') {
+        show('success', 'You’re entered — good luck! We’ll be in touch.');
+      } else if (params.get('sent') === '0') {
+        show('error', 'Something went wrong submitting your entry. Please try again.');
+      }
+    } catch (e) {}
+
+    var endpoint = form.getAttribute('action');
+    if (!endpoint) return;
+
+    form.addEventListener('submit', function (ev) {
+      if (typeof form.reportValidity === 'function' && !form.reportValidity()) return;
+      ev.preventDefault();
+
+      var button = form.querySelector('.wd-form__submit');
+      var originalLabel = button ? button.textContent : null;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Sending…';
+      }
+      show('sending', 'Submitting your entry…');
+
+      var payload = {};
+      new FormData(form).forEach(function (value, key) {
+        payload[key] = value;
+      });
+
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: res.ok }; });
+        })
+        .then(function (data) {
+          if (data && data.ok) {
+            show('success', 'You’re entered — good luck! We’ll be in touch.');
+            form.reset();
+          } else {
+            show('error', 'Something went wrong submitting your entry. Please try again.');
+          }
+        })
+        .catch(function () {
+          show('error', 'Something went wrong submitting your entry. Please try again.');
+        })
+        .then(function () {
+          if (button) {
+            button.disabled = false;
+            button.textContent = originalLabel;
+          }
+        });
+    });
+  })();
+</script>

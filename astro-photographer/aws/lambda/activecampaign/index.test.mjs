@@ -55,7 +55,7 @@ const silentLog = { info() {}, warn() {}, error() {} };
 // Clean env between tests so one test's config can't leak into another.
 const SAVED_ENV = {};
 const ENV_KEYS = [
-  'AC_API_URL', 'AC_LIST_ID', 'AC_TAGS',
+  'AC_API_URL', 'AC_LIST_ID', 'AC_LIST_ID_GIVEAWAY', 'AC_TAGS',
   'AC_FIELD_REASON', 'AC_FIELD_MORE', 'AC_FIELD_FEEL', 'AC_FIELD_HEAR',
   'CORS_ALLOW_ORIGIN', 'CONTACT_SUCCESS_URL',
 ];
@@ -328,5 +328,58 @@ test('base64-encoded JSON body is decoded', async () => {
   );
   assert.equal(res.statusCode, 200);
   assert.deepEqual(JSON.parse(res.body), { ok: true });
+  restoreEnv();
+});
+
+// --- Case 8: per-form list override (allowlisted) --------------------------
+
+test('list=giveaway with AC_LIST_ID_GIVEAWAY set -> subscribes to giveaway list', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } }, // inquire/sync
+    { status: 200, json: {} }, // contactLists
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ ...VALID_FIELDS, list: 'giveaway' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  // contactLists used the giveaway list id (54), not the default (7).
+  assert.equal(fetchMock.calls[1].body.contactList.list, '54');
+  restoreEnv();
+});
+
+test('list=giveaway but AC_LIST_ID_GIVEAWAY unset -> falls back to default list', async () => {
+  // AC_LIST_ID_GIVEAWAY is deliberately not set (cleared in beforeEach).
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ ...VALID_FIELDS, list: 'giveaway' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  // No giveaway list configured -> default AC_LIST_ID (7).
+  assert.equal(fetchMock.calls[1].body.contactList.list, '7');
+  restoreEnv();
+});
+
+test('unknown list key -> default list (no open relay to arbitrary lists)', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    // A tampered/raw value must NOT select an arbitrary list.
+    makeEvent({ body: JSON.stringify({ ...VALID_FIELDS, list: '999' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.equal(fetchMock.calls[1].body.contactList.list, '7');
   restoreEnv();
 });

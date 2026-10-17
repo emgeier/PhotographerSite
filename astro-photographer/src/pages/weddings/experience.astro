@@ -10,10 +10,14 @@ import '../../styles/wedding.css';
 const wed = await getEntry('settings', 'weddings-experience');
 const heroImage = wed?.data.wedExperienceHeroImage ?? '/images/portfolio-banner.webp';
 const easePhoto = wed?.data.wedExperienceEasePhoto ?? '/images/story-portrait.webp';
+// Step images are shared with the Weddings home experience section via the
+// weddings-experience settings; fall back to the original paths by position.
+const stepImageDefaults = ['/images/muses/portrait-01.webp', '/images/muses/portrait-02.webp', '/images/muses/portrait-03.webp'];
+const stepImages = wed?.data.wedExperienceStepImages?.length ? wed.data.wedExperienceStepImages : stepImageDefaults;
 const steps = [
-  { n: '01', t: 'Consultation', p: 'We get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: '/images/muses/portrait-01.webp' },
-  { n: '02', t: 'Planning', p: 'We plan together with intention, creating a seamless photography experience that fits your day. From timelines to key moments, we handle the details so you can feel confident and at ease.', img: '/images/muses/portrait-02.webp' },
-  { n: '03', t: 'Your Day', p: 'You get to be fully present while we document it all — the big moments, the quiet ones, and everything in between. We’ll be there with a calm, thoughtful approach, letting your day unfold naturally.', img: '/images/muses/portrait-03.webp' },
+  { n: '01', t: 'Consultation', p: 'We get to know your vision, your story, and what matters most to you. This is a conversation about your dreams, your priorities, and the experience you envision for your wedding day.', img: stepImages[0] ?? stepImageDefaults[0] },
+  { n: '02', t: 'Planning', p: 'We plan together with intention, creating a seamless photography experience that fits your day. From timelines to key moments, we handle the details so you can feel confident and at ease.', img: stepImages[1] ?? stepImageDefaults[1] },
+  { n: '03', t: 'Your Day', p: 'You get to be fully present while we document it all — the big moments, the quiet ones, and everything in between. We’ll be there with a calm, thoughtful approach, letting your day unfold naturally.', img: stepImages[2] ?? stepImageDefaults[2] },
 ];
 const ctaImage = wed?.data.wedExperienceCtaImage ?? '/images/portfolio-closing.webp';
 ---

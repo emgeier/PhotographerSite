@@ -192,6 +192,23 @@ function buildFieldValues(data) {
 }
 
 // ---------------------------------------------------------------------------
+// List selection. Forms may send a SYMBOLIC key (e.g. "giveaway") to subscribe
+// the contact to a segmented list. The key is allowlisted against configured
+// env vars — never the raw list id — so a visitor cannot inject an arbitrary
+// AC list. Unknown/absent keys fall back to the default AC_LIST_ID.
+//   list=giveaway -> AC_LIST_ID_GIVEAWAY (the engagement-giveaway list)
+//   (anything else / absent) -> AC_LIST_ID
+// A mapped-but-unconfigured key also falls back to the default, so the site
+// never fails closed on a list that hasn't been set up yet.
+function resolveListId(listKey) {
+  const key = typeof listKey === 'string' ? listKey.trim().toLowerCase() : '';
+  const map = {
+    giveaway: process.env.AC_LIST_ID_GIVEAWAY,
+  };
+  return map[key] || process.env.AC_LIST_ID;
+}
+
+// ---------------------------------------------------------------------------
 // ActiveCampaign v3 calls (§1.3). Each is a single fetch.
 // Returns a classification: 'ok' | 'client' (4xx) | 'server' (>=5xx/network).
 // ---------------------------------------------------------------------------
@@ -283,7 +300,7 @@ export const handler = async (event = {}, context = {}, deps = {}) => {
     return respond(mode, 500, 'server_misconfigured');
   }
   const apiUrl = process.env.AC_API_URL;
-  const listId = process.env.AC_LIST_ID;
+  const listId = resolveListId(fields.list);
   if (!apiUrl || !listId) {
     log.error?.('AC_API_URL or AC_LIST_ID not set');
     return respond(mode, 500, 'server_misconfigured');
@@ -365,4 +382,5 @@ export const _internal = {
   validate,
   buildFieldValues,
   parseBody,
+  resolveListId,
 };

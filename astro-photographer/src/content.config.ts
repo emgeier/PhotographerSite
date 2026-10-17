@@ -167,6 +167,12 @@ const settings = defineCollection({
     apexHeroImage2: optionalText,
     apexHeroImage3: optionalText,
 
+    // enter-to-win-a-free-engagement-session.json — the engagement-giveaway landing page.
+    wedGiveawayHeroImage: optionalText,
+    wedGiveawayClosingImage: optionalText,
+    wedGiveawayMeetImage: optionalText,
+    wedGiveawayGallery: optionalList,
+
     // home.json — Home page images.
     homeHeroImage: optionalText,
     homePortraitImage: optionalText,
@@ -243,8 +249,11 @@ const settings = defineCollection({
     wedHomeCtaImage: optionalText,
 
     // weddings-experience.json — The Experience (/weddings/experience) images.
+    // wedExperienceStepImages drives BOTH the experience page's approach steps
+    // AND the weddings home page's experience steps (shared source).
     wedExperienceHeroImage: optionalText,
     wedExperienceEasePhoto: optionalText,
+    wedExperienceStepImages: optionalList,
     wedExperienceCtaImage: optionalText,
 
     // weddings-portfolio.json — Wedding Portfolio (/weddings/portfolio) images.
