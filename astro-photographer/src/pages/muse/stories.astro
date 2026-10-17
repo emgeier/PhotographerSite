@@ -1,11 +1,11 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SiteMotion from '../components/SiteMotion.astro';
-import Pic from '../components/Pic.astro';
-import '../styles/codex-base.css';
-import '../styles/codex-content.css';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
 import { getCollection, getEntry } from 'astro:content';
 
 // Hero + band images (look-again / in-motion / closing CTA) are CMS-editable
@@ -82,7 +82,7 @@ const featuredIndex = featured
             <h2 class="ms2-featured__name display-title" id="ms-featured-name">{featured.data.name}</h2>
             <p class="ms2-featured__tag" id="ms-featured-tag">{featured.data.tagline}</p>
             <p class="ms2-featured__para" id="ms-featured-para">{featuredPara}</p>
-            <a class="button ms2-featured__link" id="ms-featured-link" href={`/stories/${featured.id}`}>Read her story <span aria-hidden="true">→</span></a>
+            <a class="button ms2-featured__link" id="ms-featured-link" href={`/muse/stories/${featured.id}`}>Read her story <span aria-hidden="true">→</span></a>
           </div>
           <div class="ms2-featured__nav" aria-hidden="true">
             <span class="ms2-featured__count"><span id="ms-featured-current">{String(featuredIndex + 1).padStart(2, "0")}</span><br />/<br />{String(featuredList.length).padStart(2, "0")}</span>
@@ -110,7 +110,7 @@ const featuredIndex = featured
         </div>
         <div class="ms2-grid">
           {muses.map(m => (
-            <a class="ms2-card" href={`/stories/${m.slug}`} data-reveal>
+            <a class="ms2-card" href={`/muse/stories/${m.slug}`} data-reveal>
               <span class="ms2-card__image image-frame" data-parallax>
                 <Pic src={m.src} alt={`A portrait of ${m.name}.`} sizes="(max-width: 768px) 100vw, 33vw" />
               </span>
@@ -171,7 +171,7 @@ const featuredIndex = featured
         <p class="ms2-cta__italic">Now imagine yours.</p>
         <span class="short-rule" aria-hidden="true"></span>
         <p class="ms2-cta__sub">What could your story look like?</p>
-        <a class="button" href="/inquire">Book your consultation</a>
+        <a class="button" href="/muse/inquire">Book your consultation</a>
       </div>
     </section>
   </main>

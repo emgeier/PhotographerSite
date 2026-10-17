@@ -12,6 +12,7 @@ import WeddingsFooter from '../components/WeddingsFooter.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
 import { getEntry } from 'astro:content';
+import { listKeyFor, mailtoHref, STUDIO_EMAIL } from '../lib/contact';
 import '../styles/wedding.css';
 
 // All imagery is CMS-editable via settings/enter-to-win-a-free-engagement-session.json;
@@ -88,10 +89,9 @@ const included = [
         <section class="wd-give__form-band" aria-labelledby="wd-give-form-title">
           <p class="wd-eyebrow-no-line wd-give__form-eyebrow" id="wd-give-form-title">Your story starts here.</p>
           <form class="wd-form wd-give__form" id="wd-give-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
-            <!-- Routes entrants to the dedicated giveaway AC list (allowlisted
-                 server-side to AC_LIST_ID_GIVEAWAY), separate from the main
-                 contact/inquire list. -->
-            <input type="hidden" name="list" value="giveaway" />
+            <!-- Giveaway campaign -> AC_LIST_ID_GIVEAWAY (list 54), via the
+                 modular registry in src/lib/contact.ts. -->
+            <input type="hidden" name="list" value={listKeyFor('giveaway')} />
             <div class="wd-form__field wd-form__field--full">
               <label for="wd-give-bride">Bride’s Full Name *</label>
               <input id="wd-give-bride" name="bride" type="text" placeholder="Bride’s full name" required />
@@ -109,6 +109,7 @@ const included = [
               <input id="wd-give-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
             </div>
             <button class="wd-btn wd-form__submit" type="submit">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
+            <p class="wd-give__form-email">Prefer email? Write to <a href={mailtoHref('Engagement Giveaway Entry')}>{STUDIO_EMAIL}</a>.</p>
             <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
           </form>
         </section>
@@ -179,6 +180,22 @@ const included = [
         </section>
       </div>
     </div>
+
+    <!-- Thank-you dialog shown on successful giveaway entry (JS) and on the
+         no-JS ?sent=1 return. Native <dialog>; opened by the submit script. -->
+    <dialog class="thanks-dialog" id="wd-give-thanks" aria-labelledby="wd-give-thanks-title">
+      <form method="dialog" class="thanks-dialog__inner">
+        <button class="thanks-dialog__close" type="submit" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <img class="thanks-dialog__logo" src="/images/LB.png" alt="Luis Quintana Studio" width="72" height="72" />
+        <p class="wd-eyebrow wd-eyebrow-no-line thanks-dialog__eyebrow">You’re entered</p>
+        <h2 id="wd-give-thanks-title" class="wd-display thanks-dialog__title">We’ll contact<br />you soon.</h2>
+        <span class="wd-rule" aria-hidden="true"></span>
+        <p class="thanks-dialog__text">Good luck! Your entry is in. In the meantime, take a look at the wedding portfolio.</p>
+        <a class="wd-btn thanks-dialog__cta" href="/weddings/portfolio">Explore the portfolio <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </form>
+    </dialog>
   </main>
   <WeddingsFooter />
   <SiteMotion />
@@ -189,6 +206,7 @@ const included = [
     var form = document.querySelector('.wd-give__form');
     if (!form) return;
     var status = form.querySelector('.wd-form__status');
+    var thanks = document.getElementById('wd-give-thanks');
 
     function show(state, message) {
       if (!status) return;
@@ -197,10 +215,17 @@ const included = [
       status.textContent = message;
     }
 
+    function openThanks() {
+      if (thanks && typeof thanks.showModal === 'function') {
+        try { thanks.showModal(); return true; } catch (e) {}
+      }
+      return false;
+    }
+
     try {
       var params = new URLSearchParams(window.location.search);
       if (params.get('sent') === '1') {
-        show('success', 'You’re entered — good luck! We’ll be in touch.');
+        if (!openThanks()) show('success', 'You’re entered — good luck! We’ll be in touch.');
       } else if (params.get('sent') === '0') {
         show('error', 'Something went wrong submitting your entry. Please try again.');
       }
@@ -236,8 +261,8 @@ const included = [
         })
         .then(function (data) {
           if (data && data.ok) {
-            show('success', 'You’re entered — good luck! We’ll be in touch.');
             form.reset();
+            if (!openThanks()) show('success', 'You’re entered — good luck! We’ll be in touch.');
           } else {
             show('error', 'Something went wrong submitting your entry. Please try again.');
           }

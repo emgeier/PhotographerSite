@@ -15,7 +15,7 @@
       "titleBottom": "Experience",
       "sub": "Your Beauty, Rediscovered.",
       "button": "Book your consultation",
-      "href": "/inquire",
+      "href": "/muse/inquire",
       "external": false
     },
     {
@@ -25,8 +25,8 @@
       "titleMain2": "Engagements",
       "sub": "The Day, As It Felt.",
       "button": "Book your consultation",
-      "href": "https://luisquintanastudio.com",
-      "external": true
+      "href": "/weddings",
+      "external": false
     }
   ],
   "linkFooter": "Looking forward to meeting you."

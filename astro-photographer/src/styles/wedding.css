@@ -575,3 +575,20 @@
   .wd-btn, .wd-textlink::after, .wd-storycard__image img { transition: none; }
   .wd-storycard:hover .wd-storycard__image img { scale: 1; }
 }
+
+/* Email fallback line under the giveaway form submit. */
+.wd-give__form-email { margin-top: 10px; font-size: 13px; color: var(--wd-body, #5a5247); }
+.wd-give__form-email a { color: var(--wd-gold, #b08d57); text-decoration: underline; }
+
+/* Thank-you dialog (giveaway form success) — native <dialog> modal, weddings palette. */
+.thanks-dialog { width: min(440px, calc(100% - 40px)); padding: 0; border: 0; border-radius: 4px; background: var(--wd-cream, #f4f0e7); color: var(--wd-ink, #211c15); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3); }
+.thanks-dialog::backdrop { background: rgba(16, 12, 8, 0.55); backdrop-filter: blur(2px); }
+.thanks-dialog__inner { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 52px 40px 44px; margin: 0; }
+.thanks-dialog__close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; padding: 0; background: transparent; border: 0; font-size: 24px; line-height: 1; color: var(--wd-body, #5a5247); cursor: pointer; }
+.thanks-dialog__close:hover { color: var(--wd-ink, #211c15); }
+.thanks-dialog__logo { width: 72px; height: 72px; margin-bottom: 22px; }
+.thanks-dialog__eyebrow { color: var(--wd-gold, #b08d57); margin-bottom: 14px; }
+.thanks-dialog__title { font-weight: 100; font-size: clamp(38px, 6vw, 52px); line-height: 0.98; margin: 0; color: var(--wd-ink, #211c15); text-transform: uppercase; }
+.thanks-dialog .wd-rule { margin: 20px auto; }
+.thanks-dialog__text { max-width: 320px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.7; margin: 0 0 28px; }
+.thanks-dialog__cta { min-width: 240px; justify-content: center; }

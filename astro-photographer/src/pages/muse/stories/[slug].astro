@@ -1,11 +1,11 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import SiteMotion from '../../components/SiteMotion.astro';
-import Pic from '../../components/Pic.astro';
-import '../../styles/codex-base.css';
-import '../../styles/codex-content.css';
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import SiteMotion from '../../../components/SiteMotion.astro';
+import Pic from '../../../components/Pic.astro';
+import '../../../styles/codex-base.css';
+import '../../../styles/codex-content.css';
 import { getCollection, getEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -178,7 +178,7 @@ const captionFor = (i: number): string =>
         <p class="ms2-cta__italic">Now imagine yours.</p>
         <span class="short-rule" aria-hidden="true"></span>
         <p class="ms2-cta__sub">What could your story look like?</p>
-        <a class="button" href="/inquire">Book your consultation</a>
+        <a class="button" href="/muse/inquire">Book your consultation</a>
       </div>
     </section>
 
@@ -213,7 +213,7 @@ const captionFor = (i: number): string =>
 
   <SiteMotion/>
   <script>
-    import { initStoryGallery } from '../../scripts/portfolio.ts';
+    import { initStoryGallery } from '../../../scripts/portfolio.ts';
     initStoryGallery();
   </script>
 </Base>

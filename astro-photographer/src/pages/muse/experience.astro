@@ -1,12 +1,12 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SiteMotion from '../components/SiteMotion.astro';
-import Pic from '../components/Pic.astro';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
 import { getEntry } from 'astro:content';
-import '../styles/codex-base.css';
-import '../styles/codex-content.css';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
 
 // Page images are CMS-editable via settings/experience.json; each falls back to
 // its original /images/* path when the entry (or a field) is absent. All are
@@ -120,7 +120,7 @@ const inside = insideImages;
       <div class="content-container ex2-cta__content" data-reveal>
         <h2 id="ex-cta-title" class="display-title">Let this be<br /><em>your moment.</em></h2>
         <span class="short-rule" aria-hidden="true"></span>
-        <a class="button" href="/inquire">Book your consultation</a>
+        <a class="button" href="/muse/inquire">Book your consultation</a>
       </div>
     </section>
   </main>

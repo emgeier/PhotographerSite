@@ -1,12 +1,12 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SiteMotion from '../components/SiteMotion.astro';
-import Pic from '../components/Pic.astro';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
 import { getEntry } from 'astro:content';
-import '../styles/codex-base.css';
-import '../styles/codex-content.css';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
 
 // Single-muse landing page (modeled on the "Landing Page" mockup). Content is
 // CMS-editable via settings/landing.json; each field falls back to its default.
@@ -185,7 +185,7 @@ const ctaImage = lp?.data.landingCtaImage ?? '/images/home-closing.webp';
       <div class="content-container lp-cta__content" data-reveal>
         <h2 id="lp-cta-title" class="display-title lp-cta__title">{ctaTitle}</h2>
         <p class="lp-cta__copy">{ctaCopy}</p>
-        <a class="button" href="/inquire">{ctaButton}</a>
+        <a class="button" href="/muse/inquire">{ctaButton}</a>
       </div>
     </section>
   </main>
@@ -217,7 +217,7 @@ const ctaImage = lp?.data.landingCtaImage ?? '/images/home-closing.webp';
     <p id="st-gallery-count" class="gallery-count" aria-live="polite">01 / {String(gallery.length).padStart(2, '0')}</p>
   </dialog>
   <script>
-    import { initStoryGallery } from '../scripts/portfolio.ts';
+    import { initStoryGallery } from '../../scripts/portfolio.ts';
     initStoryGallery();
   </script>
 </Base>

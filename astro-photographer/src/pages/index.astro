@@ -1,158 +1,217 @@
 ---
+// APEX STUDIO HUB — the top-level home for luisquintanastudio.com. This page is
+// built at /home for now; it is DESTINED TO BECOME the root `/` index.astro when
+// the paths-restructure runs (see astro-photographer/.agents/tasks/
+// paths-restructure-plan.md). Do NOT overwrite src/pages/index.astro (the muse
+// home) — this file is additive. It unites the Weddings and Glam Muse sections
+// under one brand and matches Website/LQhomepage.png.
 import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import ApexHeader from '../components/ApexHeader.astro';
+import ApexFooter from '../components/ApexFooter.astro';
 import SiteMotion from '../components/SiteMotion.astro';
 import Pic from '../components/Pic.astro';
-import { getCollection, getEntry } from 'astro:content';
-// Codex home styles (shared Codex primitives + home sections). global.css is
-// imported by Base.astro; this adds the Codex-aliased home look on top.
-import '../styles/codex-base.css';
+import { getEntry } from 'astro:content';
+import '../styles/apex.css';
 
-// Stories teaser: first 3 muses by `order`, each card links to /stories/{id}.
-const muses = (await getCollection('muses')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
-
-// Home images are CMS-editable via settings/home.json; each falls back to its
-// own /images/* default. These are string paths (passthrough <img>), so the
-// CMS can swap them per page — the heroes are no longer a shared placeholder.
-const home = await getEntry('settings', 'home');
-const hero = home?.data.homeHeroImage ?? '/images/home-hero.webp';
-const portrait = home?.data.homePortraitImage ?? '/images/home-portrait.webp';
-const closing = home?.data.homeClosingImage ?? '/images/home-closing.webp';
-const experienceImage = home?.data.homeExperienceImage ?? '/images/home-experience-bg.webp';
+// Reused existing imagery from public/images/ (no new binaries). Closest match
+// per section; see .agents/tasks/apex-home-plan.md image table for the
+// compromises (no wedding-couple / male-photographer / golden-hour assets exist).
+// Images are CMS-editable via settings/apexhome.json; each falls back to its own
+// /images/* default below so /home renders identically when the entry is absent.
+const apex = await getEntry('settings', 'apexhome');
+const heroImage = apex?.data.apexHeroImage ?? '/images/ms-hero.webp';          // warm glam beauty portrait
+// Hero cross-fade carousel: 3 slides, each CMS-editable, with its own default.
+// Slides 2/3 fall back to other existing portraits so the carousel has distinct
+// frames out of the box; swap any of them in the CMS (apexhome.json).
+const heroImage2 = apex?.data.apexHeroImage2 ?? '/images/ms-featured.webp';
+const heroImage3 = apex?.data.apexHeroImage3 ?? '/images/ms-muse-2.webp';
+const heroSlides = [
+  { src: heroImage, alt: 'A woman in a flowing gown bathed in warm golden light.' },
+  { src: heroImage2, alt: 'An editorial bridal portrait in soft light.' },
+  { src: heroImage3, alt: 'A dramatic glam portrait in a dark gown.' },
+];
+const weddingsCardImage = apex?.data.apexWeddingsCardImage ?? '/images/ms-featured.webp'; // ivory bridal portrait (closest "weddings")
+const glamCardImage = apex?.data.apexGlamCardImage ?? '/images/ms-muse-2.webp';    // black-top glam portrait
+const beautyImage = apex?.data.apexBeautyImage ?? '/images/portfolio-banner.webp'; // woman in golden-hour landscape
+const beautyInset = apex?.data.apexBeautyInsetImage ?? '/images/story-portrait.webp'; // intimate B&W inset
+const meetImage = apex?.data.apexMeetImage ?? '/images/muses/portrait-04.webp'; // stand-in for B&W photographer portrait
+const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  // warm golden-hour landscape
 ---
-<Base>
-  <main id="main-content">
-    <!-- HERO: Codex markup with data-hero-* motion hooks; hero image via Pic (priority/LCP). -->
-    <section class="hero" id="home" aria-labelledby="hero-title">
-      <Header />
-      <div class="hero__image" data-hero-image data-parallax>
-        <Pic
-          src={hero}
-          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
-          priority
-          sizes="100vw"
-        />
-      </div>
-      <div class="hero__veil" aria-hidden="true"></div>
-      <div class="container hero__content">
-        <h1 id="hero-title" class="hero__title">
-          <span class="line-mask"><span data-hero-line>A portrait</span></span>
-          <span class="line-mask"><span data-hero-line>experience to</span></span>
-          <span class="line-mask"><span data-hero-line>tell your story.</span></span>
-          <span class="line-mask"><span data-hero-line></span></span>
-        </h1>
-        <p class="hero__subtitle" data-hero-item>Your beauty. Revealed.</p>
-        <a class="button" href="/inquire" data-hero-item>Book your consultation</a>
-      </div>
-    </section>
-
-    <!-- PERSPECTIVE ("Look Again"): "Preview a portrait" links to /portfolio (default-to-Codex). -->
-    <section class="perspective section" id="portfolio" aria-labelledby="perspective-title">
-      <div class="container perspective__grid">
-        <a class="portrait-button" href="/portfolio" aria-label="Preview a portrait" data-reveal>
-          <span class="image-frame perspective__image" data-parallax>
-            <Pic
-              src={portrait}
-              alt="A black-and-white portrait of a woman turning gently toward the light."
-              sizes="(max-width: 700px) 90vw, 410px"
-            />
-          </span>
-          <span class="portrait-button__label">Preview a portrait <span aria-hidden="true">↗</span></span>
-        </a>
-        <div class="perspective__content" data-reveal>
-          <h2 id="perspective-title" class="display-title">Look Again.</h2>
-          <p class="eyebrow perspective__subtitle">A fresh perspective.</p>
-          <span class="short-rule" aria-hidden="true"></span>
-          <p class="eyebrow perspective__signature">You. In full.</p>
-          <a class="button" href="/portfolio">Explore the portfolio</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- EXPERIENCE STEPS: full-bleed background image + dark overlay for strong
-         contrast (same treatment as the Inquire "A Simple Beginning" band). The
-         image is CMS-editable (home.json homeExperienceImage). -->
-    <section class="experience section" id="experience" aria-labelledby="experience-title">
-      <img class="experience__photo" src={experienceImage} alt="" aria-hidden="true" />
-      <div class="container experience__inner">
-        <div class="experience__intro">
-          <div data-reveal>
-            <p class="eyebrow">The experience</p>
-            <h2 id="experience-title">Not transformed.<br />revealed.</h2>
+<Base
+  title="Luis Quintana Studio — Photography"
+  description="Life as stories. Wedding, engagement and glam portrait photography by Luis Quintana Studio — honest, artful imagery that captures the people and moments that matter."
+>
+  <main class="lq lq-page" id="main-content">
+    <!-- 1 + 2. HEADER OVER HERO (single static slide) -->
+    <section class="lq-hero">
+      <ApexHeader />
+      <!-- Hero cross-fade carousel: slides stacked, first is active by default
+           so no-JS / reduced-motion shows a static first image. JS cross-fades
+           between them and syncs the dot indicator below. -->
+      <div class="lq-hero__slides" data-hero-carousel data-parallax>
+        {heroSlides.map((slide, i) => (
+          <div class={`lq-hero__slide${i === 0 ? ' is-active' : ''}`} data-hero-slide>
+            <Pic src={slide.src} alt={slide.alt} priority={i === 0} sizes="100vw" />
           </div>
-          <p class="experience__description" data-reveal>Every part of the experience is shaped around you—your personality, your style, your story, and how you want to be seen.</p>
-        </div>
-        <ol class="experience__steps">
-          <li class="experience-step" data-reveal>
-            <span class="experience-step__number" aria-hidden="true">01</span>
-            <span class="short-rule" aria-hidden="true"></span>
-            <h3>Consultation</h3>
-            <p>A personal, in-depth conversation to understand your vision, preferences, and what makes you uniquely you.</p>
-          </li>
-          <li class="experience-step" data-reveal>
-            <span class="experience-step__number" aria-hidden="true">02</span>
-            <span class="short-rule" aria-hidden="true"></span>
-            <h3>Session</h3>
-            <p>A relaxed, guided portrait experience, designed to help you feel confident, empowered, and truly seen.</p>
-          </li>
-          <li class="experience-step" data-reveal>
-            <span class="experience-step__number" aria-hidden="true">03</span>
-            <span class="short-rule" aria-hidden="true"></span>
-            <h3>Reveal</h3>
-            <p>A private, cinematic unveiling of your portraits—a celebration of you, with options for artwork and collections you'll love.</p>
-          </li>
-        </ol>
+        ))}
       </div>
-    </section>
-
-    <!-- STORIES TEASER: shell ready for task 9.2 (getCollection('muses'), 3 cards -> /stories/{id}). -->
-    <section class="stories section" id="stories" aria-labelledby="stories-title">
-      <div class="container stories__inner">
-        <div class="stories__heading" data-reveal>
-          <h2 id="stories-title">Muse stories</h2>
-          <span class="short-rule" aria-hidden="true"></span>
-          <p class="eyebrow">Every woman. A story worth telling.</p>
-        </div>
-        <div class="stories__grid">
-          {muses.map((muse) => (
-            <a class="story-card" href={`/stories/${muse.id}`} data-reveal>
-              <span class="story-card__image image-frame">
-                <Pic
-                  src={muse.data.cardImage}
-                  alt={muse.data.name}
-                  sizes="(max-width:700px) 90vw, 33vw"
-                />
-              </span>
-              <span class="story-card__title">{muse.data.tagline ?? muse.data.name}</span>
-              <span class="short-rule" aria-hidden="true"></span>
-            </a>
+      <div class="lq-container lq-hero__content">
+        <h1 class="lq-display lq-hero__title" data-hero-item>LIFE<br />AS<br />STORIES.</h1>
+      </div>
+      <!-- Carousel indicator: count reflects the active slide; dots are
+           clickable controls the carousel script wires up and keeps in sync. -->
+      <div class="lq-hero__indicator">
+        <span class="lq-hero__count" data-hero-count aria-hidden="true">01 &mdash; 03</span>
+        <div class="lq-hero__dots" role="tablist" aria-label="Hero slides">
+          {heroSlides.map((_, i) => (
+            <button
+              type="button"
+              class={`lq-hero__dot${i === 0 ? ' is-active' : ''}`}
+              data-hero-dot
+              aria-label={`Show slide ${i + 1} of ${heroSlides.length}`}
+              aria-selected={i === 0 ? 'true' : 'false'}
+            ></button>
           ))}
         </div>
-        <div class="stories__more" data-reveal>
-          <a class="text-link" href="/stories">View all stories <span aria-hidden="true">→</span></a>
-        </div>
+      </div>
+      <div class="lq-hero__keywords" aria-hidden="true">
+        <span>People</span>
+        <span>Places</span>
+        <span>Emotions</span>
+        <span>Beauty</span>
+        <span>Forever</span>
+        <span class="lq-rule"></span>
       </div>
     </section>
 
-    <!-- CLOSING / BOOKING: CTA to /inquire (no consultation dialog, no mailto). -->
-    <section class="closing" id="inquire" aria-labelledby="closing-title">
-      <div class="closing__image" data-parallax>
-        <Pic
-          src={closing}
-          alt="A soft portrait from behind of a woman with an elegant updo, wearing an ivory blouse."
-          sizes="100vw"
-        />
+    <!-- 3. INTRO BAND -->
+    <section class="lq-intro" aria-labelledby="lq-inlinetro-">
+      <div class="lq-container" data-reveal>
+        <p class="lq-eyebrow lq-eyebrow--center lq-intro__eyebrow">Life as stories.</p>
+        <h2 id="lq-intro-line" class="lq-display lq-intro__line">Every Life Is <em>a Story</em> Worth Telling.</h2>
+        <span class="lq-rule lq-intro__rule" aria-hidden="true"></span>
       </div>
-      <div class="closing__veil" aria-hidden="true"></div>
-      <div class="container closing__content" data-reveal>
-        <h2 id="closing-title" class="display-title">Your Turn.</h2>
-        <span class="short-rule" aria-hidden="true"></span>
-        <p class="eyebrow">A portrait experience<br />created for you.</p>
-        <a class="button" href="/inquire">Book your consultation</a>
+    </section>
+
+    <!-- 4. TWO BRAND CARDS -->
+    <section class="lq-cards" aria-label="Explore the studio">
+      <article class="lq-card" data-reveal>
+        <div class="lq-card__image"><Pic src={weddingsCardImage} alt="A couple together on their wedding day." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="lq-card__veil" aria-hidden="true"></div>
+        <div class="lq-card__content">
+          <h2 class="lq-display lq-card__title">Weddings &amp;<br />Engagements</h2>
+          <p class="lq-card__sub">The day, as it felt.</p>
+          <a class="lq-textlink" href="/weddings">Explore the experience</a>
+        </div>
+      </article>
+      <article class="lq-card" data-reveal>
+        <div class="lq-card__image"><Pic src={glamCardImage} alt="A woman in a dramatic black gown." sizes="(max-width: 860px) 100vw, 50vw" /></div>
+        <div class="lq-card__veil" aria-hidden="true"></div>
+        <div class="lq-card__content">
+          <h2 class="lq-display lq-card__title">The Glam<br />Muse Series</h2>
+          <p class="lq-card__sub">Your beauty, rediscovered.</p>
+          <a class="lq-textlink" href="/muse">Explore the experience</a>
+        </div>
+      </article>
+    </section>
+
+    <!-- 5. BEAUTY IN REAL MOMENTS -->
+    <section class="lq-beauty" aria-labelledby="lq-beauty-title">
+      <figure class="lq-beauty__media" data-reveal>
+        <Pic src={beautyImage} alt="A bride in a sweeping gown overlooking a lake and mountains." sizes="(max-width: 860px) 100vw, 54vw" />
+      </figure>
+      <div class="lq-beauty__copy" data-reveal>
+        <p class="lq-eyebrow lq-beauty__eyebrow">Authentic emotions</p>
+        <h2 id="lq-beauty-title" class="lq-display lq-beauty__title">Beauty<br />In Real<br />Moments.</h2>
+        <p class="lq-beauty__para">The fleeting, the intimate, the in-between. It’s in these moments that your story truly comes to life.</p>
+        <figure class="lq-beauty__inset">
+          <Pic src={beautyInset} alt="An intimate black-and-white moment between two people." sizes="(max-width: 860px) 100vw, 320px" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- 6. MEET LUIS -->
+    <section class="lq-meet" aria-labelledby="lq-meet-title">
+      <figure class="lq-meet__media" data-reveal>
+        <Pic src={meetImage} alt="A black-and-white portrait of Luis holding a camera." sizes="(max-width: 860px) 100vw, 46vw" />
+      </figure>
+      <div class="lq-meet__copy" data-reveal>
+        <p class="lq-eyebrow lq-meet__eyebrow">The person behind the lens</p>
+        <h2 id="lq-meet-title" class="lq-display lq-meet__title">Meet Luis.</h2>
+        <p class="lq-meet__para">I’m a storyteller at heart, drawn to beauty, human connection, and the quiet moments that often mean the most. Through my lens, I strive to create images that feel honest, artful, and enduring — a reflection of the people and stories that inspire me.</p>
+        <!-- /about may not exist yet on this branch; forward-looking link. -->
+        <a class="lq-textlink" href="/about">Get to know me</a>
+      </div>
+    </section>
+
+    <!-- 7. CLOSING CTA -->
+    <section class="lq-cta" aria-labelledby="lq-cta-eyebrow">
+      <div class="lq-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A warm golden-hour landscape at sunset." sizes="100vw" />
+      </div>
+      <div class="lq-cta__veil" aria-hidden="true"></div>
+      <div class="lq-container lq-cta__content" data-reveal>
+        <p id="lq-cta-eyebrow" class="lq-eyebrow lq-cta__eyebrow">Your story begins here.</p>
+        <span class="lq-rule lq-cta__rule" aria-hidden="true"></span>
+        <a class="lq-outline-btn" href="/muse/inquire">Let’s connect</a>
       </div>
     </section>
   </main>
-  <Footer />
+  <ApexFooter />
   <SiteMotion />
 </Base>
+
+<script>
+  // Hero cross-fade carousel (apex /home). Progressive enhancement:
+  // - First slide is already .is-active in the HTML, so with no JS (or if this
+  //   script fails) the hero shows a static first image.
+  // - Honors prefers-reduced-motion: no auto-advance; dots still let the visitor
+  //   switch slides manually (an explicit choice is not "motion" the user didn't ask for).
+  // - Cross-fade itself is pure CSS opacity transition; this script only toggles
+  //   the .is-active class on slides + dots and updates the "01 — 03" count.
+  (() => {
+    const carousel = document.querySelector<HTMLElement>('[data-hero-carousel]');
+    if (!carousel) return;
+    const slides = [...carousel.querySelectorAll<HTMLElement>('[data-hero-slide]')];
+    const dots = [...document.querySelectorAll<HTMLButtonElement>('[data-hero-dot]')];
+    const count = document.querySelector<HTMLElement>('[data-hero-count]');
+    if (slides.length < 2) return; // nothing to cycle
+
+    const total = slides.length;
+    const pad = (n: number) => String(n).padStart(2, '0');
+    let current = slides.findIndex((s) => s.classList.contains('is-active'));
+    if (current < 0) current = 0;
+
+    const show = (next: number) => {
+      const i = ((next % total) + total) % total;
+      if (i === current) return;
+      slides[current]?.classList.remove('is-active');
+      dots[current]?.classList.remove('is-active');
+      dots[current]?.setAttribute('aria-selected', 'false');
+      slides[i].classList.add('is-active');
+      dots[i]?.classList.add('is-active');
+      dots[i]?.setAttribute('aria-selected', 'true');
+      if (count) count.innerHTML = `${pad(i + 1)} &mdash; ${pad(total)}`;
+      current = i;
+    };
+
+    // Manual control via dots (available regardless of reduced-motion).
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stop(); show(i); }));
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: number | undefined;
+    const SLIDE_MS = 6000; // slow, editorial pacing
+    const start = () => {
+      if (reduce.matches || timer !== undefined || total < 2) return;
+      timer = window.setInterval(() => show(current + 1), SLIDE_MS);
+    };
+    const stop = () => { if (timer !== undefined) { clearInterval(timer); timer = undefined; } };
+
+    // Pause auto-advance when the tab is hidden; resume when visible.
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    // React if the user toggles reduced-motion.
+    reduce.addEventListener?.('change', () => (reduce.matches ? stop() : start()));
+
+    start();
+  })();
+</script>

@@ -10,9 +10,9 @@
 // These match what the Codex js/main.js used, so initNav() can target them unchanged.
 
 const links = [
-  { href: '/portfolio', label: 'Portfolio' },
-  { href: '/experience', label: 'The experience' },
-  { href: '/stories', label: 'Muse stories' }
+  { href: '/muse/portfolio', label: 'Portfolio' },
+  { href: '/muse/experience', label: 'The experience' },
+  { href: '/muse/stories', label: 'Muse stories' }
 ] as const;
 
 
@@ -20,13 +20,13 @@ const links = [
 // Mark the active route so the header renders correctly on every page.
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+  href === '/muse' ? path === '/muse' : path === href || path.startsWith(href + '/');
 ---
 
 <header class="site-header">
 
 
-  <a class="brand" href="/" aria-label="The Glam Muse Experience, home">
+  <a class="brand" href="/muse" aria-label="The Glam Muse Experience, home">
 
     <span class="brand__top">THE</span>
     <span class="brand__name">GLAM MUSE</span>
@@ -47,6 +47,6 @@ const isActive = (href: string) =>
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-    <a class="nav-inquire" href="/inquire" aria-current={isActive('/inquire') ? 'page' : undefined}>Inquire</a>
+    <a class="nav-inquire" href="/muse/inquire" aria-current={isActive('/muse/inquire') ? 'page' : undefined}>Inquire</a>
   </nav>
 </header>

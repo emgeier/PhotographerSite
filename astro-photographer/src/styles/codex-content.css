@@ -783,3 +783,19 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
   .wd-cta__veil { display: none; }
   .wd-cta__content { order: 1; padding-block: 46px 38px; background: var(--ink); }
 }
+
+/* ============================================================= *
+ * Thank-you dialog (inquire form success) — native <dialog> modal
+ * shown after a successful inquiry submission.
+ * ============================================================= */
+.thanks-dialog { width: min(440px, calc(100% - 40px)); padding: 0; border: 0; border-radius: 4px; background: var(--paper); color: var(--ink); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3); }
+.thanks-dialog::backdrop { background: rgba(23, 23, 23, 0.55); backdrop-filter: blur(2px); }
+.thanks-dialog__inner { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 52px 40px 44px; margin: 0; }
+.thanks-dialog__close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; padding: 0; background: transparent; border: 0; font-size: 24px; line-height: 1; color: var(--taupe); cursor: pointer; }
+.thanks-dialog__close:hover { color: var(--ink); }
+.thanks-dialog__logo { width: 72px; height: 72px; margin-bottom: 22px; }
+.thanks-dialog__eyebrow { color: var(--champagne); margin-bottom: 14px; }
+.thanks-dialog__title { font-size: clamp(38px, 6vw, 52px); line-height: 0.98; margin: 0; }
+.thanks-dialog .short-rule { margin: 20px 0; }
+.thanks-dialog__text { max-width: 300px; color: #4a443b; font-size: var(--body-size); line-height: var(--body-leading); margin: 0 0 28px; }
+.thanks-dialog__cta { min-width: 240px; }

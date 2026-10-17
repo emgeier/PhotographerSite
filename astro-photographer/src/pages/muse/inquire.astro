@@ -1,12 +1,13 @@
 ---
-import Base from '../layouts/Base.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SiteMotion from '../components/SiteMotion.astro';
-import Pic from '../components/Pic.astro';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
 import { getEntry } from 'astro:content';
-import '../styles/codex-base.css';
-import '../styles/codex-content.css';
+import { listKeyFor, mailtoHref, STUDIO_EMAIL } from '../../lib/contact';
+import '../../styles/codex-base.css';
+import '../../styles/codex-content.css';
 
 // Page images are CMS-editable via settings/inquire.json; each falls back to
 // its original /images/* path when absent.
@@ -57,6 +58,8 @@ const steps = [
         </figure>
 
         <form class="ct-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
+          <!-- Default campaign -> AC_LIST_ID (see src/lib/contact.ts). -->
+          <input type="hidden" name="list" value={listKeyFor('default')} />
           <div class="ct-form-row">
             <div>
               <label for="ct-first">FIRST NAME *</label>
@@ -108,6 +111,7 @@ const steps = [
           </div>
           <button class="button ct-form-submit" type="submit">START THE CONVERSATION</button>
           <p class="ct-form-note">No pressure. No obligation. Just a conversation about what this experience could look like for you.</p>
+          <p class="ct-form-note ct-form-email">Prefer email? Write to <a href={mailtoHref('The Glam Muse Series — Inquiry')}>{STUDIO_EMAIL}</a>.</p>
           <p class="ct-form-status" role="status" aria-live="polite" hidden></p>
         </form>
       </div>
@@ -147,6 +151,22 @@ const steps = [
         <p class="eyebrow">Not transformed.<br />Revealed.</p>
       </div>
     </section>
+
+    <!-- Thank-you dialog shown on successful inquiry submit (JS) and on the
+         no-JS ?sent=1 return. Native <dialog>; opened by the submit script. -->
+    <dialog class="thanks-dialog" id="ct-thanks" aria-labelledby="ct-thanks-title">
+      <form method="dialog" class="thanks-dialog__inner">
+        <button class="thanks-dialog__close" type="submit" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <img class="thanks-dialog__logo" src="/images/LB.png" alt="Luis Quintana Studio" width="72" height="72" />
+        <p class="eyebrow thanks-dialog__eyebrow">Thank you</p>
+        <h2 id="ct-thanks-title" class="display-title thanks-dialog__title">We’ll contact<br />you soon.</h2>
+        <span class="short-rule" aria-hidden="true"></span>
+        <p class="thanks-dialog__text">Your inquiry is on its way. In the meantime, take a look at the portfolio.</p>
+        <a class="button thanks-dialog__cta" href="/muse/portfolio">Explore the portfolio</a>
+      </form>
+    </dialog>
   </main>
   <Footer/>
   <SiteMotion/>
@@ -157,6 +177,7 @@ const steps = [
     var form = document.querySelector('.ct-form');
     if (!form) return;
     var status = form.querySelector('.ct-form-status');
+    var thanks = document.getElementById('ct-thanks');
 
     function show(state, message) {
       if (!status) return;
@@ -165,13 +186,22 @@ const steps = [
       status.textContent = message;
     }
 
+    // Open the thank-you dialog (native <dialog>); falls back to the inline
+    // status message if <dialog>.showModal isn't supported.
+    function openThanks() {
+      if (thanks && typeof thanks.showModal === 'function') {
+        try { thanks.showModal(); return true; } catch (e) {}
+      }
+      return false;
+    }
+
     // Progressive-enhancement banner for the no-JS native fallback return
     // (?sent=1 / ?sent=0). Reads the query string only; adds no markup/classes
     // beyond the pre-rendered .ct-form-status element.
     try {
       var params = new URLSearchParams(window.location.search);
       if (params.get('sent') === '1') {
-        show('success', 'Thank you — your message is on its way.');
+        if (!openThanks()) show('success', 'Thank you — your message is on its way.');
       } else if (params.get('sent') === '0') {
         show('error', 'Something went wrong sending your message. Please try again.');
       }
@@ -215,8 +245,8 @@ const steps = [
         })
         .then(function (data) {
           if (data && data.ok) {
-            show('success', 'Thank you — your message is on its way.');
             form.reset();
+            if (!openThanks()) show('success', 'Thank you — your message is on its way.');
           } else {
             show('error', 'Something went wrong sending your message. Please try again.');
           }

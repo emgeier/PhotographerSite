@@ -90,19 +90,20 @@ Parameters:
     Type: String
     Default: ''
     Description: >-
-      Optional custom domain (alias) for CloudFront, e.g.
-      muse.luisquintanastudio.com. When empty, the default *.cloudfront.net
-      domain is used and no Aliases are set.
+      Custom domain (alias) for CloudFront — the apex: luisquintanastudio.com.
+      The whole site serves from this one domain with path-based sections
+      (/muse, /weddings). When empty, the default *.cloudfront.net domain is
+      used and no Aliases are set. The ACM cert in AcmCertificateArn must cover
+      this name (a wildcard *.luisquintanastudio.com or an apex SAN cert).
   WeddingsDomainName:
     Type: String
     Default: ''
     Description: >-
-      Optional second alias for the weddings subdomain, e.g.
-      weddings.luisquintanastudio.com. When set (together with an ACM cert that
-      covers it), it is added as a CloudFront alias and the CleanUrlFunction
-      rewrites that host's root to /weddings/index.html. The ACM cert in
-      AcmCertificateArn MUST cover BOTH DomainName and this host (use a SAN cert
-      or a wildcard *.luisquintanastudio.com).
+      DEPRECATED — no longer used. The site moved from subdomains to path-based
+      sections (/muse, /weddings) on the single apex domain, so there is no
+      weddings subdomain alias or host rewrite anymore. Leave empty. (Retained
+      as a no-op parameter so existing deploy scripts that still pass it don't
+      error; it is referenced nowhere in the template.)
   GitHubRepo:
     Type: String
     Default: ''
@@ -135,12 +136,8 @@ Conditions:
   HasDomainName: !And
     - !Not [!Equals [!Ref DomainName, '']]
     - !Not [!Equals [!Ref AcmCertificateArn, '']]
-  # The weddings alias is added only when BOTH custom domains are set alongside
-  # a cert (CloudFront rejects Aliases without a matching ACM cert).
-  HasWeddingsDomain: !And
-    - !Not [!Equals [!Ref DomainName, '']]
-    - !Not [!Equals [!Ref WeddingsDomainName, '']]
-    - !Not [!Equals [!Ref AcmCertificateArn, '']]
+  # (HasWeddingsDomain removed — the weddings subdomain alias no longer exists
+  # after the move to path-based sections.)
   # CI/CD: create the deploy role only when a GitHub repo is supplied.
   HasGitHubRepo: !Not [!Equals [!Ref GitHubRepo, '']]
   # CMS login: create the OAuth relay only when a client id is supplied.
@@ -198,27 +195,17 @@ Resources:
       Name: !Sub '${AWS::StackName}-clean-urls'
       AutoPublish: true
       FunctionConfig:
-        Comment: Clean URLs + weddings-subdomain root rewrite.
+        Comment: Clean URLs (single-domain, path-based sections).
         Runtime: cloudfront-js-2.0
-      # The weddings host name is injected at deploy time via !Sub so the single
-      # distribution can serve a different home page per subdomain:
-      #   weddings.<domain>/  -> /weddings/index.html   (weddings home)
-      #   muse.<domain>/       -> /index.html             (muse home, default)
-      # Everything else (clean URLs for both hosts) is unchanged.
-      FunctionCode: !Sub |
-        var WEDDINGS_HOST = '${WeddingsDomainName}';
+      # Single domain (luisquintanastudio.com), path-based sections:
+      #   /                 -> /index.html          (apex studio hub)
+      #   /muse, /weddings  -> /<path>/index.html   (brand sections)
+      # Pure clean-URL rewrite — no per-host branching. The former
+      # weddings-subdomain root rewrite was removed with the move to paths.
+      FunctionCode: |
         function handler(event) {
           var request = event.request;
           var uri = request.uri;
-          var host = (request.headers.host && request.headers.host.value) || '';
-
-          // Weddings subdomain: map its bare root to the /weddings home page.
-          // Only the root is remapped; deeper paths fall through to the shared
-          // clean-URL logic below (so /inquire etc. still resolve normally).
-          if (WEDDINGS_HOST && host === WEDDINGS_HOST && (uri === '/' || uri === '')) {
-            request.uri = '/weddings/index.html';
-            return request;
-          }
 
           // Pass through any URI that already has a file extension (incl. .html,
           // .css, images), so real assets and /404.html are served untouched.
@@ -242,13 +229,12 @@ Resources:
         Enabled: true
         Comment: !Sub '${AWS::StackName} static site'
         DefaultRootObject: index.html
+        # Single-domain (apex) alias. The former weddings-subdomain alias was
+        # removed with the move to path-based sections (/muse, /weddings).
         Aliases: !If
-          - HasWeddingsDomain
-          - [!Ref DomainName, !Ref WeddingsDomainName]
-          - !If
-            - HasDomainName
-            - [!Ref DomainName]
-            - !Ref AWS::NoValue
+          - HasDomainName
+          - [!Ref DomainName]
+          - !Ref AWS::NoValue
         Origins:
           - Id: site-origin
             DomainName: !GetAtt SiteBucket.RegionalDomainName
