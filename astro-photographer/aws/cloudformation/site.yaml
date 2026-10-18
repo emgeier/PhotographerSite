@@ -24,6 +24,13 @@ Parameters:
       (forms that POST list=giveaway subscribe here instead of AcListId). Leave
       empty to route giveaway entries to the default AcListId until the separate
       list is set up.
+  AcListIdWeddings:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional ActiveCampaign list id for wedding inquiries (the
+      /weddings/inquire form POSTs list=weddings). e.g. 55. Leave empty to route
+      wedding inquiries to the default AcListId until the separate list exists.
   AcTags:
     Type: String
     Default: ''
@@ -380,6 +387,7 @@ Resources:
           AC_API_URL: !Ref AcApiUrl
           AC_LIST_ID: !Ref AcListId
           AC_LIST_ID_GIVEAWAY: !Ref AcListIdGiveaway
+          AC_LIST_ID_WEDDINGS: !Ref AcListIdWeddings
           AC_TAGS: !Ref AcTags
           AC_FIELD_REASON: !Ref AcFieldReason
           AC_FIELD_MORE: !Ref AcFieldMore

@@ -670,7 +670,7 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 }
 
 /* ============================================================= *
- * INSTAGRAM LINK PAGE (/link) — standalone "link in bio" card.
+ * INSTAGRAM LINK PAGE (/connect) — standalone "link in bio" card.
  * Centered column, no site header/footer. Prefixed .link-*.
  * ============================================================= */
 .link-page { min-height: 100vh; padding: 40px 20px 56px; background: var(--ivory); display: flex; justify-content: center; }

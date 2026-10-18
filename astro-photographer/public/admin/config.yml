@@ -67,7 +67,7 @@ collections:
           - { name: storiesCtaImage, label: Closing CTA image, widget: image, required: false }
 
       - name: home
-        label: 'Home page — images'
+        label: 'Muse Home page — images'
         file: astro-photographer/src/content/settings/home.json
         fields:
           - { name: homeHeroImage, label: Hero image, widget: image, required: false }
@@ -76,7 +76,7 @@ collections:
           - { name: homeExperienceImage, label: 'Experience section background', widget: image, required: false }
 
       - name: apexhome
-        label: 'Studio hub (/home) — images'
+        label: 'Studio hub (/) — images'
         file: astro-photographer/src/content/settings/apexhome.json
         fields:
           - { name: apexHeroImage, label: 'Hero slide 1 (main)', widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — El hero rota entre 3 fotos. Recuerda Save y luego Publish.' }
@@ -99,7 +99,7 @@ collections:
           - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
 
       - name: landing
-        label: 'Landing page (/landing) — content'
+        label: 'Landing page (muse/landing) — content'
         file: astro-photographer/src/content/settings/landing.json
         fields:
           - { name: museEyebrow, label: 'Hero eyebrow', widget: string, required: false }
@@ -125,7 +125,7 @@ collections:
           - { name: landingCtaImage, label: 'Closing CTA — background image', widget: image, required: false }
 
       - name: link
-        label: 'Instagram link page (/link) — content'
+        label: 'Instagram link page (/connect) — content'
         file: astro-photographer/src/content/settings/link.json
         fields:
           - { name: linkPortrait, label: 'Portrait (circular)', widget: image, required: false }

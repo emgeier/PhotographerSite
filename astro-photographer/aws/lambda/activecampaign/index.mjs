@@ -197,6 +197,7 @@ function buildFieldValues(data) {
 // env vars — never the raw list id — so a visitor cannot inject an arbitrary
 // AC list. Unknown/absent keys fall back to the default AC_LIST_ID.
 //   list=giveaway -> AC_LIST_ID_GIVEAWAY (the engagement-giveaway list)
+//   list=weddings -> AC_LIST_ID_WEDDINGS (wedding inquiries)
 //   (anything else / absent) -> AC_LIST_ID
 // A mapped-but-unconfigured key also falls back to the default, so the site
 // never fails closed on a list that hasn't been set up yet.
@@ -204,6 +205,7 @@ function resolveListId(listKey) {
   const key = typeof listKey === 'string' ? listKey.trim().toLowerCase() : '';
   const map = {
     giveaway: process.env.AC_LIST_ID_GIVEAWAY,
+    weddings: process.env.AC_LIST_ID_WEDDINGS,
   };
   return map[key] || process.env.AC_LIST_ID;
 }

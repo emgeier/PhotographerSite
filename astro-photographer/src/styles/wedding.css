@@ -528,9 +528,13 @@
   .wd-hero .wd-nav.is-open a, .wd-hero .wd-nav.is-open .wd-nav__discover-toggle { color: var(--wd-ink, #211c15); }
 
 
-  .wd-philo, .wd-cards, .wd-about { grid-template-columns: 1fr; }
+  /* minmax(0, 1fr) (not 1fr) so the single column can shrink below its
+     content's min-content width — otherwise the copy track overflows the
+     viewport (horizontal scroll) on narrow phones. */
+  .wd-philo, .wd-cards, .wd-about { grid-template-columns: minmax(0, 1fr); }
   .wd-philo__photo, .wd-about__photo { min-height: 0; aspect-ratio: 1.1; }
   .wd-philo__copy, .wd-about__copy { padding: 44px 32px; }
+  .wd-philo__para, .wd-about__para { max-width: 100%; }
   .wd-exp__steps { grid-template-columns: 1fr; gap: 34px; }
   .wd-ease__row { grid-template-columns: 1fr; gap: 30px; }
   .wd-ease__photo { width: min(460px, 100%); }

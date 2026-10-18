@@ -11,7 +11,7 @@
  *   - `assets/vendor/gsap`       — gsap is an npm dependency, never vendored.
  *
  * NOTE: the former `mailto:` ban was removed — a mailto inquire flow is now an
- * accepted part of this project (e.g. the /link email button), so it is no
+ * accepted part of this project (e.g. the /connect email button), so it is no
  * longer a forbidden artifact.
  *
  * Zero-false-positive scoping

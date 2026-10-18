@@ -5,6 +5,7 @@ import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
 import { getEntry } from 'astro:content';
+import { listKeyFor, mailtoHref, STUDIO_EMAIL } from '../../lib/contact';
 import '../../styles/wedding.css';
 
 const wed = await getEntry('settings', 'weddings-inquire');
@@ -50,6 +51,10 @@ const steps = [
         </div>
       </div>
       <form class="wd-form" method="POST" action={import.meta.env.PUBLIC_AC_FORM_ENDPOINT}>
+        <!-- Wedding inquiry campaign -> AC_LIST_ID_WEDDINGS (list 55), via the
+             modular registry in src/lib/contact.ts. `name` is the full name;
+             the Lambda splits it into first/last. -->
+        <input type="hidden" name="list" value={listKeyFor('weddings')} />
         <div class="wd-form__grid">
           <div class="wd-form__field">
             <label for="wd-name">Your Full Name *</label>
@@ -101,6 +106,7 @@ const steps = [
             <textarea id="wd-vision" name="vision" placeholder="I’d love to hear about your plans, what’s most important to you, and any details you’d like to share…" required></textarea>
           </div>
           <button class="wd-btn wd-form__submit" type="submit">Send your inquiry <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
+          <p class="wd-give__form-email">Prefer email? Write to <a href={mailtoHref('Wedding Inquiry')}>{STUDIO_EMAIL}</a>.</p>
           <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
         </div>
       </form>

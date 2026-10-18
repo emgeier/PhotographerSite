@@ -33,10 +33,12 @@ export interface Campaign {
  * the Lambda uses AC_LIST_ID. Add new campaigns here (modular by design).
  */
 export const CAMPAIGNS = {
-  // General contact / inquiries -> default AC list (AC_LIST_ID).
+  // General contact / muse inquiries -> default AC list (AC_LIST_ID).
   default: { listKey: '', label: 'General inquiry' },
   // Engagement giveaway -> AC_LIST_ID_GIVEAWAY (list 54).
   giveaway: { listKey: 'giveaway', label: 'Engagement giveaway' },
+  // Wedding inquiries -> AC_LIST_ID_WEDDINGS (list 55).
+  weddings: { listKey: 'weddings', label: 'Wedding inquiry' },
 } as const satisfies Record<string, Campaign>;
 
 export type CampaignName = keyof typeof CAMPAIGNS;

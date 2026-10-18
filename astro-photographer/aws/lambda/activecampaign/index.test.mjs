@@ -55,7 +55,7 @@ const silentLog = { info() {}, warn() {}, error() {} };
 // Clean env between tests so one test's config can't leak into another.
 const SAVED_ENV = {};
 const ENV_KEYS = [
-  'AC_API_URL', 'AC_LIST_ID', 'AC_LIST_ID_GIVEAWAY', 'AC_TAGS',
+  'AC_API_URL', 'AC_LIST_ID', 'AC_LIST_ID_GIVEAWAY', 'AC_LIST_ID_WEDDINGS', 'AC_TAGS',
   'AC_FIELD_REASON', 'AC_FIELD_MORE', 'AC_FIELD_FEEL', 'AC_FIELD_HEAR',
   'CORS_ALLOW_ORIGIN', 'CONTACT_SUCCESS_URL',
 ];
@@ -347,6 +347,22 @@ test('list=giveaway with AC_LIST_ID_GIVEAWAY set -> subscribes to giveaway list'
   assert.equal(res.statusCode, 200);
   // contactLists used the giveaway list id (54), not the default (7).
   assert.equal(fetchMock.calls[1].body.contactList.list, '54');
+  restoreEnv();
+});
+
+test('list=weddings with AC_LIST_ID_WEDDINGS set -> subscribes to weddings list', async () => {
+  process.env.AC_LIST_ID_WEDDINGS = '55';
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ ...VALID_FIELDS, list: 'weddings' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.equal(fetchMock.calls[1].body.contactList.list, '55');
   restoreEnv();
 });
 
