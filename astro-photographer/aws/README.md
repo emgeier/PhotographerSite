@@ -548,3 +548,25 @@ aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
 
 Then smoke-test the affected behavior (submit a form, load the domains, etc.). If a
 redeploy accidentally dropped a parameter, re-run §14c passing the full set.
+
+aws s3 cp ac-lambda.zip s3://muse-photographer-site/ac-lambda.zip --profile muse
+
+aws lambda update-function-code  --function-name photographer-site-AcFunction-uktbwuN6Gf2h --zip-file fileb://aws/ac-lambda.zip --profile muse
+
+contact custom fields in Active Campaign
+
+
+| ID | Field Name | Type |
+|----|-----------|------|
+| 8 | Groom's Name | text |
+| 18 | Date | date |
+| 19 | Venue | text |
+| 20 | Why | text |
+| 21 | Vision | text |
+| 22 | How did you hear about..? | text |
+| 23 | Partner | text |
+| 24 | Reason | text |
+| 25 | More | text |
+| 26 | Feel | text |
+
+So the non-Sakari/messaging field IDs are: **8, 18, 19, 20, 21, 22, 23, 24, 25, 26**.

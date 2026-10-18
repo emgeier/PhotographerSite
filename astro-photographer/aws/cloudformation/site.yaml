@@ -51,6 +51,30 @@ Parameters:
     Type: String
     Default: ''
     Description: Optional AC custom-field id mapped from the form 'hear' field.
+  AcFieldGroom:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the giveaway 'groom' full name.
+  AcFieldPartner:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the weddings 'partner' full name.
+  AcFieldDate:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the weddings 'date' (wedding date).
+  AcFieldVenue:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the weddings 'venue' field.
+  AcFieldWhy:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the weddings 'why' field.
+  AcFieldVision:
+    Type: String
+    Default: ''
+    Description: Optional AC custom-field id for the weddings 'vision' field.
   AllowedOrigin:
     Type: String
     Default: '*'
@@ -393,6 +417,12 @@ Resources:
           AC_FIELD_MORE: !Ref AcFieldMore
           AC_FIELD_FEEL: !Ref AcFieldFeel
           AC_FIELD_HEAR: !Ref AcFieldHear
+          AC_FIELD_GROOM: !Ref AcFieldGroom
+          AC_FIELD_PARTNER: !Ref AcFieldPartner
+          AC_FIELD_DATE: !Ref AcFieldDate
+          AC_FIELD_VENUE: !Ref AcFieldVenue
+          AC_FIELD_WHY: !Ref AcFieldWhy
+          AC_FIELD_VISION: !Ref AcFieldVision
           CORS_ALLOW_ORIGIN: !Ref AllowedOrigin
           CONTACT_SUCCESS_URL: !Ref ContactSuccessUrl
           AC_SECRET_ARN: !Ref AcSecret
