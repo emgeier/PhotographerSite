@@ -57,6 +57,8 @@ const SAVED_ENV = {};
 const ENV_KEYS = [
   'AC_API_URL', 'AC_LIST_ID', 'AC_LIST_ID_GIVEAWAY', 'AC_LIST_ID_WEDDINGS', 'AC_TAGS',
   'AC_FIELD_REASON', 'AC_FIELD_MORE', 'AC_FIELD_FEEL', 'AC_FIELD_HEAR',
+  'AC_FIELD_GROOM', 'AC_FIELD_PARTNER',
+  'AC_FIELD_DATE', 'AC_FIELD_VENUE', 'AC_FIELD_WHY', 'AC_FIELD_VISION',
   'CORS_ALLOW_ORIGIN', 'CONTACT_SUCCESS_URL',
 ];
 
@@ -79,9 +81,9 @@ function restoreEnv() {
 
 // --- Case 1: happy path ----------------------------------------------------
 
-test('happy path: inquire/sync then contactLists, returns 200 {ok:true}', async () => {
+test('happy path: contact/sync then contactLists, returns 200 {ok:true}', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } }, // inquire/sync
+    { status: 200, json: { contact: { id: '42' } } }, // contact/sync
     { status: 200, json: {} }, // contactLists
   ]);
   const res = await handler(
@@ -94,29 +96,29 @@ test('happy path: inquire/sync then contactLists, returns 200 {ok:true}', async 
 
   // Correct call order + URLs.
   assert.equal(fetchMock.calls.length, 2);
-  assert.match(fetchMock.calls[0].url, /\/api\/3\/inquire\/sync$/);
+  assert.match(fetchMock.calls[0].url, /\/api\/3\/contact\/sync$/);
   assert.match(fetchMock.calls[1].url, /\/api\/3\/contactLists$/);
 
-  // inquire/sync body carries standard fields + phone.
+  // contact/sync body carries standard fields + phone.
   const syncBody = fetchMock.calls[0].body;
-  assert.equal(syncBody.inquire.email, 'heather@example.com');
-  assert.equal(syncBody.inquire.firstName, 'Heather');
-  assert.equal(syncBody.inquire.lastName, 'Jones');
-  assert.equal(syncBody.inquire.phone, '(123) 456-7890');
+  assert.equal(syncBody.contact.email, 'heather@example.com');
+  assert.equal(syncBody.contact.firstName, 'Heather');
+  assert.equal(syncBody.contact.lastName, 'Jones');
+  assert.equal(syncBody.contact.phone, '(123) 456-7890');
 
   // Api-Token header present (and equals the injected secret).
   assert.equal(fetchMock.calls[0].opts.headers['Api-Token'], SECRET);
 
-  // contactLists body: status 1, list id, inquire id (coerced to string).
+  // contactLists body: status 1, list id, contact id (coerced to string).
   const listBody = fetchMock.calls[1].body;
-  assert.deepEqual(listBody.contactList, { list: '7', inquire: '42', status: 1 });
+  assert.deepEqual(listBody.contactList, { list: '7', contact: '42', status: 1 });
 
   restoreEnv();
 });
 
 // --- Case 2: AC error on a required call -----------------------------------
 
-test('AC 4xx on inquire/sync -> 502 ac_error', async () => {
+test('AC 4xx on contact/sync -> 502 ac_error', async () => {
   const fetchMock = mockFetch([{ status: 422, json: { errors: [{ title: 'bad' }] } }]);
   const res = await handler(
     makeEvent({ body: JSON.stringify(VALID_FIELDS) }),
@@ -131,7 +133,7 @@ test('AC 4xx on inquire/sync -> 502 ac_error', async () => {
 
 test('AC 5xx on contactLists -> 502 ac_unavailable', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 503, json: {} },
   ]);
   const res = await handler(
@@ -185,7 +187,7 @@ test('OPTIONS preflight -> 204 with CORS headers', async () => {
 test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
   process.env.AC_TAGS = '10, 11';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } }, // sync
+    { status: 200, json: { contact: { id: '42' } } }, // sync
     { status: 200, json: {} }, // contactLists
     { status: 500, json: {} }, // tag 10 fails
     { status: 200, json: {} }, // tag 11 ok
@@ -199,7 +201,7 @@ test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
   assert.deepEqual(JSON.parse(res.body), { ok: true });
   assert.equal(fetchMock.calls.length, 4);
   assert.match(fetchMock.calls[2].url, /\/api\/3\/contactTags$/);
-  assert.deepEqual(fetchMock.calls[2].body.contactTag, { inquire: '42', tag: '10' });
+  assert.deepEqual(fetchMock.calls[2].body.contactTag, { contact: '42', tag: '10' });
   restoreEnv();
 });
 
@@ -208,7 +210,7 @@ test('failing tag call is best-effort -> still 200 {ok:true}', async () => {
 test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
   // Unset case.
   let fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   let res = await handler(
@@ -217,13 +219,13 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(fetchMock.calls[0].body.inquire.fieldValues, []);
+  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, []);
 
   // Set case: two field ids mapped.
   process.env.AC_FIELD_REASON = '1';
   process.env.AC_FIELD_FEEL = '3';
   fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   res = await handler(
@@ -232,7 +234,7 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.deepEqual(fetchMock.calls[0].body.inquire.fieldValues, [
+  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, [
     { field: '1', value: 'A new chapter' },
     { field: '3', value: 'Confident' },
   ]);
@@ -244,7 +246,7 @@ test('AC_FIELD_* unset -> empty fieldValues; set -> included', async () => {
 test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=1 on success', async () => {
   process.env.CONTACT_SUCCESS_URL = 'https://d123.cloudfront.net/inquire';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const form = new URLSearchParams(VALID_FIELDS).toString();
@@ -274,7 +276,7 @@ test('native form POST with CONTACT_SUCCESS_URL -> 303 ?sent=0&error on failure'
 
 test('native form POST with CONTACT_SUCCESS_URL empty -> text/html body', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const form = new URLSearchParams(VALID_FIELDS).toString();
@@ -317,7 +319,7 @@ test('GET method -> 405 method_not_allowed', async () => {
 
 test('base64-encoded JSON body is decoded', async () => {
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const b64 = Buffer.from(JSON.stringify(VALID_FIELDS), 'utf8').toString('base64');
@@ -336,7 +338,7 @@ test('base64-encoded JSON body is decoded', async () => {
 test('list=giveaway with AC_LIST_ID_GIVEAWAY set -> subscribes to giveaway list', async () => {
   process.env.AC_LIST_ID_GIVEAWAY = '54';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } }, // inquire/sync
+    { status: 200, json: { contact: { id: '42' } } }, // contact/sync
     { status: 200, json: {} }, // contactLists
   ]);
   const res = await handler(
@@ -353,7 +355,7 @@ test('list=giveaway with AC_LIST_ID_GIVEAWAY set -> subscribes to giveaway list'
 test('list=weddings with AC_LIST_ID_WEDDINGS set -> subscribes to weddings list', async () => {
   process.env.AC_LIST_ID_WEDDINGS = '55';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const res = await handler(
@@ -369,7 +371,7 @@ test('list=weddings with AC_LIST_ID_WEDDINGS set -> subscribes to weddings list'
 test('list=giveaway but AC_LIST_ID_GIVEAWAY unset -> falls back to default list', async () => {
   // AC_LIST_ID_GIVEAWAY is deliberately not set (cleared in beforeEach).
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const res = await handler(
@@ -386,7 +388,7 @@ test('list=giveaway but AC_LIST_ID_GIVEAWAY unset -> falls back to default list'
 test('unknown list key -> default list (no open relay to arbitrary lists)', async () => {
   process.env.AC_LIST_ID_GIVEAWAY = '54';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const res = await handler(
@@ -436,10 +438,35 @@ test('deriveName: weddings `name` and giveaway `bride` are split', () => {
   assert.deepEqual(deriveName({}), { first: '', last: '' });
 });
 
+test('deriveName: giveaway falls back to groom when bride is blank', () => {
+  // No bride -> contact defaults to groom (same split).
+  assert.deepEqual(deriveName({ groom: 'Alex Lee' }), { first: 'Alex', last: 'Lee' });
+  assert.deepEqual(deriveName({ bride: '', groom: 'Alex Lee' }), { first: 'Alex', last: 'Lee' });
+  // Bride present -> bride wins over groom.
+  assert.deepEqual(deriveName({ bride: 'Jordan Lee', groom: 'Alex Lee' }), { first: 'Jordan', last: 'Lee' });
+});
+
+test('end-to-end: giveaway with no bride -> contact is the groom', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  const fetchMock = mockFetch([
+    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ list: 'giveaway', groom: 'Alex Lee', email: 'alex@example.com' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.equal(fetchMock.calls[0].body.contact.firstName, 'Alex');
+  assert.equal(fetchMock.calls[0].body.contact.lastName, 'Lee');
+  restoreEnv();
+});
+
 test('end-to-end: weddings form (name/partner) -> AC firstName/lastName', async () => {
   process.env.AC_LIST_ID_WEDDINGS = '55';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const res = await handler(
@@ -455,8 +482,8 @@ test('end-to-end: weddings form (name/partner) -> AC firstName/lastName', async 
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.equal(fetchMock.calls[0].body.inquire.firstName, 'Taylor');
-  assert.equal(fetchMock.calls[0].body.inquire.lastName, 'Rivera');
+  assert.equal(fetchMock.calls[0].body.contact.firstName, 'Taylor');
+  assert.equal(fetchMock.calls[0].body.contact.lastName, 'Rivera');
   assert.equal(fetchMock.calls[1].body.contactList.list, '55');
   restoreEnv();
 });
@@ -464,7 +491,7 @@ test('end-to-end: weddings form (name/partner) -> AC firstName/lastName', async 
 test('end-to-end: giveaway form (bride/groom) -> AC firstName/lastName', async () => {
   process.env.AC_LIST_ID_GIVEAWAY = '54';
   const fetchMock = mockFetch([
-    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: { contact: { id: '42' } } },
     { status: 200, json: {} },
   ]);
   const res = await handler(
@@ -480,9 +507,116 @@ test('end-to-end: giveaway form (bride/groom) -> AC firstName/lastName', async (
     { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
   );
   assert.equal(res.statusCode, 200);
-  assert.equal(fetchMock.calls[0].body.inquire.firstName, 'Jordan');
-  assert.equal(fetchMock.calls[0].body.inquire.lastName, 'Lee');
+  assert.equal(fetchMock.calls[0].body.contact.firstName, 'Jordan');
+  assert.equal(fetchMock.calls[0].body.contact.lastName, 'Lee');
   assert.equal(fetchMock.calls[1].body.contactList.list, '54');
+  restoreEnv();
+});
+
+test('giveaway: bride becomes contact (split); groom full name -> Groom custom field', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  process.env.AC_FIELD_GROOM = '21';
+  const fetchMock = mockFetch([
+    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({
+      body: JSON.stringify({
+        list: 'giveaway',
+        bride: 'Jordan Taylor Lee',
+        groom: 'Alex Lee',
+        email: 'jordan@example.com',
+      }),
+    }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  const sync = fetchMock.calls[0].body.contact;
+  // The bride IS the contact: her full name splits into first/last.
+  assert.equal(sync.firstName, 'Jordan');
+  assert.equal(sync.lastName, 'Taylor Lee');
+  // Only the groom has a custom field; bride is not stored separately.
+  assert.deepEqual(sync.fieldValues, [{ field: '21', value: 'Alex Lee' }]);
+  restoreEnv();
+});
+
+test('giveaway: no bride -> groom is the contact AND fills the Groom field', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  process.env.AC_FIELD_GROOM = '21';
+  const fetchMock = mockFetch([
+    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ list: 'giveaway', groom: 'Alex Lee', email: 'alex@example.com' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  const sync = fetchMock.calls[0].body.contact;
+  // Groom promoted to contact (split) when no bride.
+  assert.equal(sync.firstName, 'Alex');
+  assert.equal(sync.lastName, 'Lee');
+  // Groom field still reflects the groom input.
+  assert.deepEqual(sync.fieldValues, [{ field: '21', value: 'Alex Lee' }]);
+  restoreEnv();
+});
+
+test('weddings: detail fields flow to custom fields when ids set', async () => {
+  process.env.AC_LIST_ID_WEDDINGS = '55';
+  process.env.AC_FIELD_PARTNER = '30';
+  process.env.AC_FIELD_DATE = '31';
+  process.env.AC_FIELD_VENUE = '32';
+  process.env.AC_FIELD_WHY = '33';
+  process.env.AC_FIELD_VISION = '34';
+  const fetchMock = mockFetch([
+    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({
+      body: JSON.stringify({
+        list: 'weddings',
+        name: 'Taylor Rivera',
+        partner: 'Sam Rivera',
+        email: 'taylor@example.com',
+        date: '2027-06-12',
+        venue: 'Franklin, TN',
+        why: 'Instagram',
+        vision: 'Golden hour in the hills.',
+      }),
+    }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, [
+    { field: '30', value: 'Sam Rivera' },
+    { field: '31', value: '2027-06-12' },
+    { field: '32', value: 'Franklin, TN' },
+    { field: '33', value: 'Instagram' },
+    { field: '34', value: 'Golden hour in the hills.' },
+  ]);
+  restoreEnv();
+});
+
+test('new custom fields unset -> omitted (forms still work pre-field-creation)', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  // No AC_FIELD_* set.
+  const fetchMock = mockFetch([
+    { status: 200, json: { contact: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ list: 'giveaway', bride: 'Jordan Lee', groom: 'Alex Lee', email: 'j@example.com' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  // Nothing configured -> no custom fields sent, but the contact still syncs.
+  assert.deepEqual(fetchMock.calls[0].body.contact.fieldValues, []);
   restoreEnv();
 });
 

@@ -1,7 +1,7 @@
 // ActiveCampaign lead-capture proxy Lambda (Node.js 20.x).
 //
 // Single HTTP API route handles both the real submission and the CORS preflight:
-//   POST    /ac/subscribe  -> create-or-update AC inquire, subscribe to list, best-effort tags
+//   POST    /ac/subscribe  -> create-or-update AC contact, subscribe to list, best-effort tags
 //   OPTIONS /ac/subscribe  -> 204 preflight
 //
 // Design: ../../.agents/tasks/activecampaign-aws/design.md §1.
@@ -162,14 +162,18 @@ function splitName(full) {
 //   1. explicit first/last (muse inquire)
 //   2. a single full-name field split on the first space:
 //        name    -> weddings inquire
-//        bride   -> engagement giveaway
-// This lets every form post its own natural field names while AC always
-// receives firstName/lastName. Returns { first, last } (either may be '').
+//        bride   -> engagement giveaway primary contact
+//        groom   -> engagement giveaway fallback (when no bride entered)
+// The giveaway's contact defaults to the bride; if the bride field is blank it
+// falls back to the groom, using the same split. This lets every form post its
+// own natural field names while AC always receives firstName/lastName.
+// Returns { first, last } (either may be '').
 function deriveName(fields) {
   const first = str(fields.first);
   const last = str(fields.last);
   if (first || last) return { first, last };
-  const fromFull = splitName(fields.name) || splitName(fields.bride);
+  const fromFull =
+    splitName(fields.name) || splitName(fields.bride) || splitName(fields.groom);
   return fromFull || { first: '', last: '' };
 }
 
@@ -191,10 +195,23 @@ function validate(fields, log) {
     first: truncate(first, 100),
     last: truncate(last, 100),
     phone: truncate(fields.phone, 40),
+    // Muse inquire custom fields.
     reason: truncate(fields.reason, 5000),
     more: truncate(fields.more, 5000),
     feel: truncate(fields.feel, 5000),
     hear: truncate(fields.hear, 5000),
+    // Full names as entered. firstName/lastName above are derived from the
+    // PRIMARY person (bride / weddings `name`); these preserve the complete
+    // names verbatim so nothing is lost to the split, and capture the second
+    // person (groom / partner), which has no home in AC's standard fields.
+    bride: truncate(fields.bride, 200),
+    groom: truncate(fields.groom, 200),
+    partner: truncate(fields.partner, 200),
+    // Weddings inquire detail fields.
+    date: truncate(fields.date, 100),
+    venue: truncate(fields.venue, 500),
+    why: truncate(fields.why, 1000),
+    vision: truncate(fields.vision, 5000),
   };
   return { ok: true, data };
 }
@@ -208,6 +225,16 @@ function buildFieldValues(data) {
     [process.env.AC_FIELD_MORE, data.more],
     [process.env.AC_FIELD_FEEL, data.feel],
     [process.env.AC_FIELD_HEAR, data.hear],
+    // Second-person full name + weddings detail fields. Each is only sent when
+    // its AC_FIELD_* env id is configured, so the forms keep working before the
+    // fields exist in AC. NOTE: there is no bride custom field — the bride is
+    // the contact itself (her name populates firstName/lastName via the split).
+    [process.env.AC_FIELD_GROOM, data.groom],
+    [process.env.AC_FIELD_PARTNER, data.partner],
+    [process.env.AC_FIELD_DATE, data.date],
+    [process.env.AC_FIELD_VENUE, data.venue],
+    [process.env.AC_FIELD_WHY, data.why],
+    [process.env.AC_FIELD_VISION, data.vision],
   ];
   const out = [];
   for (const [fieldId, value] of map) {
@@ -334,36 +361,36 @@ export const handler = async (event = {}, context = {}, deps = {}) => {
   }
   const base = apiUrl.replace(/\/+$/, '');
 
-  // (a) inquire/sync — create-or-update, dedupe on email.
+  // (a) contact/sync — create-or-update, dedupe on email.
   const contactBody = {
-    inquire: {
+    contact: {
       email: data.email,
       firstName: data.first,
       lastName: data.last,
       fieldValues: buildFieldValues(data),
     },
   };
-  if (data.phone) contactBody.inquire.phone = data.phone;
+  if (data.phone) contactBody.contact.phone = data.phone;
 
-  const sync = await acCall(fetchImpl, `${base}/api/3/inquire/sync`, token, contactBody);
-  log.info?.(`inquire/sync: ${sync.status} (${emailDomain(data.email)})`);
+  const sync = await acCall(fetchImpl, `${base}/api/3/contact/sync`, token, contactBody);
+  log.info?.(`contact/sync: ${sync.status} (${emailDomain(data.email)})`);
   if (sync.kind === 'client') {
-    log.error?.(`inquire/sync 4xx ${sync.status}: ${sync.snippet || ''}`);
+    log.error?.(`contact/sync 4xx ${sync.status}: ${sync.snippet || ''}`);
     return respond(mode, 502, 'ac_error');
   }
   if (sync.kind === 'server') {
-    log.error?.(`inquire/sync unavailable ${sync.status}: ${sync.snippet || ''}`);
+    log.error?.(`contact/sync unavailable ${sync.status}: ${sync.snippet || ''}`);
     return respond(mode, 502, 'ac_unavailable');
   }
-  const contactId = sync.json?.inquire?.id != null ? String(sync.json.inquire.id) : '';
+  const contactId = sync.json?.contact?.id != null ? String(sync.json.contact.id) : '';
   if (!contactId) {
-    log.error?.('inquire/sync 2xx without inquire.id');
+    log.error?.('contact/sync 2xx without contact.id');
     return respond(mode, 502, 'ac_no_contact_id');
   }
 
   // (b) contactLists — subscribe (status 1). Required; body uninspected.
   const listRes = await acCall(fetchImpl, `${base}/api/3/contactLists`, token, {
-    contactList: { list: listId, inquire: contactId, status: 1 },
+    contactList: { list: listId, contact: contactId, status: 1 },
   });
   log.info?.(`contactLists: ${listRes.status}`);
   if (listRes.kind === 'client') {
@@ -382,7 +409,7 @@ export const handler = async (event = {}, context = {}, deps = {}) => {
     .filter(Boolean);
   for (const tagId of tags) {
     const tagRes = await acCall(fetchImpl, `${base}/api/3/contactTags`, token, {
-      contactTag: { inquire: contactId, tag: tagId },
+      contactTag: { contact: contactId, tag: tagId },
     });
     if (tagRes.kind !== 'ok') {
       log.warn?.(`tag ${tagId} failed: ${tagRes.status}`);
