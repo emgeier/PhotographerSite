@@ -4,7 +4,7 @@
 
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { handler } from './index.mjs';
+import { handler, _internal } from './index.mjs';
 
 // --- Helpers ---------------------------------------------------------------
 
@@ -397,5 +397,104 @@ test('unknown list key -> default list (no open relay to arbitrary lists)', asyn
   );
   assert.equal(res.statusCode, 200);
   assert.equal(fetchMock.calls[1].body.contactList.list, '7');
+  restoreEnv();
+});
+
+// --- Case 9: name derivation from per-form full-name fields ----------------
+// The muse form sends first/last; weddings sends `name`; giveaway sends `bride`.
+// validate()/deriveName must map all of them to AC firstName/lastName.
+
+const { splitName, deriveName } = _internal;
+
+test('splitName: two words, single word, empty', () => {
+  assert.deepEqual(splitName('Heather Jones'), { first: 'Heather', last: 'Jones' });
+  // Multi-word surname: everything after the first space is the last name.
+  assert.deepEqual(splitName('Mary Anne Van Der Berg'), { first: 'Mary', last: 'Anne Van Der Berg' });
+  // Single word duplicates into both parts.
+  assert.deepEqual(splitName('Cher'), { first: 'Cher', last: 'Cher' });
+  // Surrounding whitespace is trimmed.
+  assert.deepEqual(splitName('  Heather   Jones  '), { first: 'Heather', last: 'Jones' });
+  assert.equal(splitName(''), null);
+  assert.equal(splitName(undefined), null);
+});
+
+test('deriveName: explicit first/last wins over full-name fields', () => {
+  assert.deepEqual(
+    deriveName({ first: 'Heather', last: 'Jones', name: 'Ignore Me', bride: 'Ignore Me Too' }),
+    { first: 'Heather', last: 'Jones' }
+  );
+  // first-only is honored (last stays empty, validate() then rejects missing_last).
+  assert.deepEqual(deriveName({ first: 'Solo' }), { first: 'Solo', last: '' });
+});
+
+test('deriveName: weddings `name` and giveaway `bride` are split', () => {
+  assert.deepEqual(deriveName({ name: 'Taylor Rivera' }), { first: 'Taylor', last: 'Rivera' });
+  assert.deepEqual(deriveName({ bride: 'Jordan Lee' }), { first: 'Jordan', last: 'Lee' });
+  // `name` takes priority over `bride` when both are present.
+  assert.deepEqual(deriveName({ name: 'Taylor Rivera', bride: 'Jordan Lee' }), { first: 'Taylor', last: 'Rivera' });
+  // nothing provided -> empty parts.
+  assert.deepEqual(deriveName({}), { first: '', last: '' });
+});
+
+test('end-to-end: weddings form (name/partner) -> AC firstName/lastName', async () => {
+  process.env.AC_LIST_ID_WEDDINGS = '55';
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({
+      body: JSON.stringify({
+        list: 'weddings',
+        name: 'Taylor Rivera',
+        partner: 'Sam Rivera',
+        email: 'taylor@example.com',
+      }),
+    }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.equal(fetchMock.calls[0].body.inquire.firstName, 'Taylor');
+  assert.equal(fetchMock.calls[0].body.inquire.lastName, 'Rivera');
+  assert.equal(fetchMock.calls[1].body.contactList.list, '55');
+  restoreEnv();
+});
+
+test('end-to-end: giveaway form (bride/groom) -> AC firstName/lastName', async () => {
+  process.env.AC_LIST_ID_GIVEAWAY = '54';
+  const fetchMock = mockFetch([
+    { status: 200, json: { inquire: { id: '42' } } },
+    { status: 200, json: {} },
+  ]);
+  const res = await handler(
+    makeEvent({
+      body: JSON.stringify({
+        list: 'giveaway',
+        bride: 'Jordan Lee',
+        groom: 'Alex Lee',
+        email: 'jordan@example.com',
+      }),
+    }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 200);
+  assert.equal(fetchMock.calls[0].body.inquire.firstName, 'Jordan');
+  assert.equal(fetchMock.calls[0].body.inquire.lastName, 'Lee');
+  assert.equal(fetchMock.calls[1].body.contactList.list, '54');
+  restoreEnv();
+});
+
+test('no name fields at all -> 400 missing_first, no AC call', async () => {
+  const fetchMock = mockFetch([]);
+  const res = await handler(
+    makeEvent({ body: JSON.stringify({ email: 'nobody@example.com', list: 'weddings' }) }),
+    {},
+    { fetch: fetchMock, getSecret: async () => SECRET, log: silentLog }
+  );
+  assert.equal(res.statusCode, 400);
+  assert.deepEqual(JSON.parse(res.body), { ok: false, error: 'missing_first' });
+  assert.equal(fetchMock.calls.length, 0);
   restoreEnv();
 });

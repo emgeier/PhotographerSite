@@ -147,10 +147,35 @@ function truncate(v, max) {
   return s.length > max ? s.slice(0, max) : s;
 }
 
-function validate(fields, log) {
-  const email = str(fields.email);
+// Split a single full-name string into { first, last } on the first space.
+// A single word fills both parts (AC's lastName is effectively required for
+// clean dedupe/greetings). Returns null for an empty input.
+function splitName(full) {
+  const s = str(full);
+  if (!s) return null;
+  const idx = s.indexOf(' ');
+  if (idx === -1) return { first: s, last: s };
+  return { first: s.slice(0, idx).trim(), last: s.slice(idx + 1).trim() };
+}
+
+// Derive first/last from whatever a form sent. Priority:
+//   1. explicit first/last (muse inquire)
+//   2. a single full-name field split on the first space:
+//        name    -> weddings inquire
+//        bride   -> engagement giveaway
+// This lets every form post its own natural field names while AC always
+// receives firstName/lastName. Returns { first, last } (either may be '').
+function deriveName(fields) {
   const first = str(fields.first);
   const last = str(fields.last);
+  if (first || last) return { first, last };
+  const fromFull = splitName(fields.name) || splitName(fields.bride);
+  return fromFull || { first: '', last: '' };
+}
+
+function validate(fields, log) {
+  const email = str(fields.email);
+  const { first, last } = deriveName(fields);
 
   if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
     return { ok: false, error: 'invalid_email' };
@@ -385,4 +410,6 @@ export const _internal = {
   buildFieldValues,
   parseBody,
   resolveListId,
+  splitName,
+  deriveName,
 };

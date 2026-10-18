@@ -52,7 +52,7 @@ const included = [
   {
     n: '03',
     t: '11x14 portrait of your favorite shot',
-    p: 'Additional portraits available for purchase',
+    p: '',
   },
     {
     n: '04',
@@ -109,7 +109,6 @@ const included = [
               <input id="wd-give-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
             </div>
             <button class="wd-btn wd-form__submit" type="submit">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
-            <p class="wd-give__form-email">Prefer email? Write to <a href={mailtoHref('Engagement Giveaway Entry')}>{STUDIO_EMAIL}</a>.</p>
             <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
           </form>
         </section>
@@ -136,9 +135,15 @@ const included = [
           <span class="wd-rule wd-give__gallery-rule" aria-hidden="true"></span>
           <div class="wd-give__gallery">
             {grid.map((src, i) => (
-              <figure class="wd-give__gallery-item" data-reveal>
+              <button
+                type="button"
+                class="wd-give__gallery-item"
+                data-gallery-item
+                data-reveal
+                aria-label={`View engagement photograph ${i + 1} larger`}
+              >
                 <Pic src={src} alt={`Engagement session photograph ${i + 1}.`} sizes="(max-width: 980px) 45vw, 22vw" />
-              </figure>
+              </button>
             ))}
           </div>
         </section>
@@ -196,9 +201,39 @@ const included = [
         <a class="wd-btn thanks-dialog__cta" href="/weddings/portfolio">Explore the portfolio <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </form>
     </dialog>
+
+    <!-- Engagement gallery lightbox — same native-<dialog> mechanism as the
+         portfolio/story galleries (initStoryGallery, driven by
+         [data-gallery-item] triggers + the #st-gallery-* contract). -->
+    <dialog class="dialog gallery-dialog" id="st-gallery-dialog" aria-labelledby="wd-give-gallery-label">
+      <form method="dialog">
+        <button class="dialog-close dialog-close--light" type="submit" aria-label="Close gallery">
+          <span aria-hidden="true">×</span>
+        </button>
+      </form>
+      <div class="gallery-dialog__heading">
+        <p class="eyebrow" id="wd-give-gallery-label">Engagements</p>
+      </div>
+      <div class="gallery-stage">
+        <button class="gallery-arrow" type="button" data-st-gallery-prev aria-label="Previous photograph">
+          <span aria-hidden="true">←</span>
+        </button>
+        <figure>
+          <img id="st-gallery-image" class="gallery-stage__image" src={grid[0]} alt="Engagement session photograph" />
+        </figure>
+        <button class="gallery-arrow" type="button" data-st-gallery-next aria-label="Next photograph">
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+      <p id="st-gallery-count" class="gallery-count" aria-live="polite">01 / {String(grid.length).padStart(2, '0')}</p>
+    </dialog>
   </main>
-  <WeddingsFooter />
+ 
   <SiteMotion />
+  <script>
+    import { initStoryGallery } from '../scripts/portfolio.ts';
+    initStoryGallery();
+  </script>
 </Base>
 
 <script is:inline>

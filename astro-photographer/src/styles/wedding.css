@@ -466,8 +466,39 @@
 .wd-give__gallery-title { margin: 14px 0 0; font-size: clamp(34px, 4vw, 52px); letter-spacing: 1px; text-transform: uppercase; }
 .wd-give__gallery-rule { margin: 16px auto 28px; }
 .wd-give__gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.wd-give__gallery-item { margin: 0; aspect-ratio: 1 / 1; overflow: hidden; background: #e3ded5; }
-.wd-give__gallery-item img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+/* Clickable gallery tiles (open the lightbox) — button reset + hover zoom. */
+.wd-give__gallery-item { display: block; margin: 0; padding: 0; border: 0; aspect-ratio: 1 / 1; overflow: hidden; background: #e3ded5; cursor: pointer; }
+.wd-give__gallery-item img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: scale 600ms var(--ease); }
+.wd-give__gallery-item:hover img { scale: 1.04; }
+.wd-give__gallery-item:focus-visible { outline: 2px solid var(--wd-gold, #b08d57); outline-offset: 2px; }
+
+/* --------------------------------------------------------------- *
+ * Gallery lightbox dialog (ported from codex-base.css, which the weddings
+ * pages don't load). Used by the engagement-giveaway gallery via
+ * initStoryGallery() + the #st-gallery-* contract.
+ * --------------------------------------------------------------- */
+.wd-give__col .dialog, .dialog.gallery-dialog { position: fixed; inset: 0; margin: auto; border: 0; padding: 0; color: var(--ivory); background: #211e19; overflow: auto; overscroll-behavior: contain; }
+.gallery-dialog { width: min(1060px, calc(100% - 48px)); max-height: calc(100dvh - 48px); padding: 30px 42px 22px; }
+.gallery-dialog::backdrop { background: rgba(16, 12, 8, 0.82); backdrop-filter: blur(4px); }
+.dialog-close { position: absolute; z-index: 2; top: 17px; right: 17px; display: grid; place-items: center; width: 39px; height: 39px; padding: 0; border: 1px solid rgba(244, 240, 232, 0.45); border-radius: 50%; background: #211e19; color: var(--ivory); cursor: pointer; transition: background 250ms ease, transform 350ms var(--ease); }
+.dialog-close span { font: 30px/1 var(--serif); }
+.dialog-close:hover { background: #383126; transform: rotate(90deg); }
+.gallery-dialog__heading { text-align: center; padding: 0 35px 24px; }
+.gallery-dialog__heading .eyebrow { font: 600 9px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; color: #c8b598; }
+.gallery-stage { display: grid; grid-template-columns: 42px minmax(0, 1fr) 42px; align-items: center; gap: 28px; }
+.gallery-stage figure { min-width: 0; margin: 0; text-align: center; }
+.gallery-stage__image { width: 100%; height: min(74dvh, 780px); object-fit: contain; }
+.gallery-arrow { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 1px solid rgba(244, 240, 232, 0.4); border-radius: 50%; color: var(--ivory); background: transparent; font: 24px/1 var(--serif); cursor: pointer; transition: border-color 250ms ease, background 250ms ease; }
+.gallery-arrow:hover { border-color: var(--wd-gold, #b08d57); background: #3d3328; }
+.gallery-count { margin-top: 13px; text-align: center; font: 400 10px/1.5 var(--sans); letter-spacing: 3px; color: #c8b598; }
+body.dialog-open { overflow: hidden; }
+
+@media (max-width: 620px) {
+  .gallery-dialog { padding: 56px 13px 24px; }
+  .gallery-stage { grid-template-columns: 30px minmax(0, 1fr) 30px; gap: 8px; }
+  .gallery-arrow { width: 30px; height: 36px; border-radius: 0; font-size: 20px; }
+  .gallery-stage__image { height: min(68dvh, 620px); }
+}
 
 .wd-give__included { padding: 28px clamp(24px, 3vw, 44px); }
 .wd-give__included-eyebrow { color: var(--wd-gold, #b08d57); margin-bottom: 22px; }
@@ -573,6 +604,10 @@
   .wd-container, .wd-header, .wd-footer__inner { width: calc(100% - 40px); }
   .wd-hero { min-height: 0; height: auto; padding: 150px 0 54px; }
   .wd-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  /* Step the big editorial titles down on small phones so they read
+     comfortably instead of sitting at their desktop clamp minimum. */
+  .wd-hero__title { font-size: clamp(44px, 13vw, 60px); }
+  .wd-cta__title, .wd-exp__title { font-size: clamp(32px, 9.5vw, 40px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
