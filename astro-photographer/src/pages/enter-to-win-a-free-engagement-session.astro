@@ -105,8 +105,8 @@ const included = [
               <input id="wd-give-email" name="email" type="email" placeholder="you@example.com" required />
             </div>
             <div class="wd-form__field wd-form__field--full">
-              <label for="wd-give-phone">Phone Number *</label>
-              <input id="wd-give-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+              <label for="wd-give-phone">Phone Number</label>
+              <input id="wd-give-phone" name="phone" type="tel" placeholder="(123) 456-7890" />
             </div>
             <button class="wd-btn wd-form__submit" type="submit">Enter to win <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
             <p class="wd-form__status" role="status" aria-live="polite" hidden></p>
@@ -197,7 +197,7 @@ const included = [
         <p class="wd-eyebrow wd-eyebrow-no-line thanks-dialog__eyebrow">You’re entered</p>
         <h2 id="wd-give-thanks-title" class="wd-display thanks-dialog__title">Thank you!<br/>We will contact<br />you soon.</h2>
         <span class="wd-rule" aria-hidden="true"></span>
-        <p class="thanks-dialog__text">Good luck! Your entry is in.</p>
+        <p class="thanks-dialog__text">Good luck!</p>
       </form>
     </dialog>
 
@@ -249,6 +249,13 @@ const included = [
       status.textContent = message;
     }
 
+    function clearStatus() {
+      if (!status) return;
+      status.hidden = true;
+      status.removeAttribute('data-state');
+      status.textContent = '';
+    }
+
     function openThanks() {
       if (thanks && typeof thanks.showModal === 'function') {
         try { thanks.showModal(); return true; } catch (e) {}
@@ -259,7 +266,8 @@ const included = [
     try {
       var params = new URLSearchParams(window.location.search);
       if (params.get('sent') === '1') {
-        if (!openThanks()) show('success', 'You’re entered — good luck! We’ll be in touch.');
+        if (openThanks()) clearStatus();
+        else show('success', 'You’re entered — good luck! We’ll be in touch.');
       } else if (params.get('sent') === '0') {
         show('error', 'Something went wrong submitting your entry. Please try again.');
       }
@@ -296,7 +304,8 @@ const included = [
         .then(function (data) {
           if (data && data.ok) {
             form.reset();
-            if (!openThanks()) show('success', 'You’re entered — good luck! We’ll be in touch.');
+            if (openThanks()) clearStatus();
+            else show('success', 'You’re entered — good luck! We’ll be in touch.');
           } else {
             show('error', 'Something went wrong submitting your entry. Please try again.');
           }
