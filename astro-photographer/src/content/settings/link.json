@@ -1,7 +1,7 @@
 {
   "linkPortrait": "/images/story-portrait.webp",
-  "linkName": "Luis",
   "linkGreeting": "Hola,",
+  "linkName": "Luis",
   "linkTagline": "Every beautiful connection begins with a conversation.",
   "linkLocation": "Serving Nashville & Beyond",
   "linkPhone": "tel:+10000000000",
@@ -12,6 +12,7 @@
       "image": "/images/ms-muse-1.webp",
       "titleTop": "The",
       "titleMain": "Glam Muse",
+      "titleMain2": "",
       "titleBottom": "Experience",
       "sub": "Your Beauty, Rediscovered.",
       "button": "Book your consultation",
@@ -21,11 +22,13 @@
     {
       "kind": "weddings",
       "image": "/images/portfolio-banner.webp",
+      "titleTop": "",
       "titleMain": "Weddings &",
       "titleMain2": "Engagements",
+      "titleBottom": "",
       "sub": "The Day, As It Felt.",
       "button": "Book your consultation",
-      "href": "/weddings",
+      "href": "/weddings/inquire",
       "external": false
     }
   ],
