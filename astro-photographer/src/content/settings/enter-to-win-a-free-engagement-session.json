@@ -2,5 +2,7 @@
   "wedGiveawayHeroImage": "/images/Engagementportfoliohero.jpg",
   "wedGiveawayClosingImage": "/images/Wcardengagements.jpg",
   "wedGiveawayMeetImage": "/images/Wportrait.jpg",
-  "wedGiveawayGallery": []
+  "wedGiveawayGallery": [
+    "/images/ETW01.jpg"
+  ]
 }
