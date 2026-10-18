@@ -76,13 +76,13 @@ const steps = [
               <input id="ct-email" name="email" type="email" placeholder="you@example.com" required />
             </div>
             <div>
-              <label for="ct-phone">PHONE NUMBER *</label>
-              <input id="ct-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+              <label for="ct-phone">PHONE NUMBER</label>
+              <input id="ct-phone" name="phone" type="tel" placeholder="(123) 456-7890" />
             </div>
           </div>
           <div>
-            <label for="ct-reason">WHAT BROUGHT YOU TO THE GLAM MUSE SERIES AT THIS MOMENT? *</label>
-            <select id="ct-reason" name="reason" required>
+            <label for="ct-reason">WHAT BROUGHT YOU TO THE GLAM MUSE SERIES AT THIS MOMENT?</label>
+            <select id="ct-reason" name="reason">
               <option value="" disabled selected>Select an option</option>
               <option>Celebrating a milestone</option>
               <option>Rediscovering myself</option>
@@ -95,8 +95,8 @@ const steps = [
             <textarea id="ct-more" name="more" placeholder="A celebration, a transition, a new chapter, curiosity — whatever feels true to you."></textarea>
           </div>
           <div>
-            <label for="ct-feel">WHAT WOULD YOU LOVE TO SEE OR FEEL WHEN YOU LOOK AT YOUR PORTRAITS? *</label>
-            <textarea id="ct-feel" name="feel" placeholder="Tell me about how you want to feel and what you hope to see." required></textarea>
+            <label for="ct-feel">WHAT WOULD YOU LOVE TO SEE OR FEEL WHEN YOU LOOK AT YOUR PORTRAITS?</label>
+            <textarea id="ct-feel" name="feel" placeholder="Tell me about how you want to feel and what you hope to see."></textarea>
           </div>
           <div>
             <label for="ct-hear">HOW DID YOU HEAR ABOUT THE GLAM MUSE SERIES?</label>
@@ -186,6 +186,13 @@ const steps = [
       status.textContent = message;
     }
 
+    function clearStatus() {
+      if (!status) return;
+      status.hidden = true;
+      status.removeAttribute('data-state');
+      status.textContent = '';
+    }
+
     // Open the thank-you dialog (native <dialog>); falls back to the inline
     // status message if <dialog>.showModal isn't supported.
     function openThanks() {
@@ -201,7 +208,8 @@ const steps = [
     try {
       var params = new URLSearchParams(window.location.search);
       if (params.get('sent') === '1') {
-        if (!openThanks()) show('success', 'Thank you — your message is on its way.');
+        if (openThanks()) clearStatus();
+        else show('success', 'Thank you — your message is on its way.');
       } else if (params.get('sent') === '0') {
         show('error', 'Something went wrong sending your message. Please try again.');
       }
@@ -246,7 +254,8 @@ const steps = [
         .then(function (data) {
           if (data && data.ok) {
             form.reset();
-            if (!openThanks()) show('success', 'Thank you — your message is on its way.');
+            if (openThanks()) clearStatus();
+            else show('success', 'Thank you — your message is on its way.');
           } else {
             show('error', 'Something went wrong sending your message. Please try again.');
           }

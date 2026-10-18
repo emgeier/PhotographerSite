@@ -61,28 +61,28 @@ const steps = [
             <input id="wd-name" name="name" type="text" placeholder="Your full name" required />
           </div>
           <div class="wd-form__field">
-            <label for="wd-partner">Partner’s Full Name *</label>
-            <input id="wd-partner" name="partner" type="text" placeholder="Partner’s full name" required />
+            <label for="wd-partner">Partner’s Full Name</label>
+            <input id="wd-partner" name="partner" type="text" placeholder="Partner’s full name" />
           </div>
           <div class="wd-form__field">
             <label for="wd-email">Email Address *</label>
             <input id="wd-email" name="email" type="email" placeholder="you@example.com" required />
           </div>
           <div class="wd-form__field">
-            <label for="wd-phone">Phone Number *</label>
-            <input id="wd-phone" name="phone" type="tel" placeholder="(123) 456-7890" required />
+            <label for="wd-phone">Phone Number</label>
+            <input id="wd-phone" name="phone" type="tel" placeholder="(123) 456-7890" />
           </div>
           <div class="wd-form__field">
-            <label for="wd-date">Wedding Date *</label>
-            <input id="wd-date" name="date" type="date" required />
+            <label for="wd-date">Wedding Date</label>
+            <input id="wd-date" name="date" type="date" />
           </div>
           <div class="wd-form__field">
-            <label for="wd-venue">Wedding Location / Venue *</label>
-            <input id="wd-venue" name="venue" type="text" placeholder="City or venue" required />
+            <label for="wd-venue">Wedding Location / Venue</label>
+            <input id="wd-venue" name="venue" type="text" placeholder="City or venue" />
           </div>
           <div class="wd-form__field wd-form__field--full">
-            <label for="wd-hear">How did you hear about us? *</label>
-            <select id="wd-hear" name="hear" required>
+            <label for="wd-hear">How did you hear about us?</label>
+            <select id="wd-hear" name="hear">
               <option value="" disabled selected>Select an option</option>
               <option>Instagram</option>
               <option>Pinterest</option>
@@ -92,8 +92,8 @@ const steps = [
             </select>
           </div>
           <div class="wd-form__field wd-form__field--full">
-            <label for="wd-why">Why are you interested in Luis Quintana Studio? *</label>
-            <select id="wd-why" name="why" required>
+            <label for="wd-why">Why are you interested in Luis Quintana Studio?</label>
+            <select id="wd-why" name="why">
               <option value="" disabled selected>Select an option</option>
               <option>The storytelling style</option>
               <option>The editorial look</option>
@@ -102,8 +102,8 @@ const steps = [
             </select>
           </div>
           <div class="wd-form__field wd-form__field--full">
-            <label for="wd-vision">Share your vision for your celebration. *</label>
-            <textarea id="wd-vision" name="vision" placeholder="I’d love to hear about your plans, what’s most important to you, and any details you’d like to share…" required></textarea>
+            <label for="wd-vision">Share your vision for your celebration.</label>
+            <textarea id="wd-vision" name="vision" placeholder="I’d love to hear about your plans, what’s most important to you, and any details you’d like to share…"></textarea>
           </div>
           <button class="wd-btn wd-form__submit" type="submit">Send your inquiry <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
           <p class="wd-give__form-email">Prefer email? Write to <a href={mailtoHref('Wedding Inquiry')}>{STUDIO_EMAIL}</a>.</p>
