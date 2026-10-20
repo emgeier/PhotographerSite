@@ -10,12 +10,10 @@
     {
       "kind": "glam",
       "image": "/images/ms-muse-1.webp",
-      "titleLogo": "/images/glam-muse-experience-white.png",
-      "titleTop": "The",
-      "titleMain": "Glam Muse",
+      "titleTop": "Glam",
+      "titleMain": "Muse",
       "titleMain2": "",
-      "titleBottom": "Experience",
-      "sub": "Your Beauty, Rediscovered.",
+      "sub": "Your Beauty, Reveal.",
       "button": "Book your consultation",
       "href": "/muse/inquire",
       "external": false

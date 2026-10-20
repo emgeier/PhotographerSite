@@ -226,10 +226,6 @@ const settings = defineCollection({
       .array(
         z.object({
           image: z.string().optional(),
-          // When set, the card renders this logo image in place of the stacked
-          // text title (titleTop/Main/Bottom). Alt text comes from the joined
-          // title fields, so keep them filled for accessibility/SEO.
-          titleLogo: z.string().optional(),
           titleTop: z.string().optional(),
           titleMain: z.string().optional(),
           titleMain2: z.string().optional(),
