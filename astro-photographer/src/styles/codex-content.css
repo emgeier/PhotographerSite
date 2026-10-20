@@ -715,7 +715,11 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 .link-footer { font-family: var(--serif); font-weight: 100; font-style: italic; font-size: clamp(18px, 2.6vw, 24px); color: #2e2a24; }
 
 @media (max-width: 520px) {
-  .link-inquire { grid-template-columns: 1fr; gap: 14px; }
+  /* Keep Call + Email side by side on phones; shrink the pills so both fit on
+     one line instead of stacking. minmax(0, 1fr) lets each cell shrink below
+     its content width. */
+  .link-inquire { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+  .link-pill { gap: 8px; padding: 13px 10px; letter-spacing: 1.5px; }
   .link-card__content { padding: 26px 24px; }
 }
 

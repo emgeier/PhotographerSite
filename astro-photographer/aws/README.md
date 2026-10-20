@@ -551,7 +551,8 @@ redeploy accidentally dropped a parameter, re-run §14c passing the full set.
 
 aws s3 cp ac-lambda.zip s3://muse-photographer-site/ac-lambda.zip --profile muse
 
-aws lambda update-function-code  --function-name photographer-site-AcFunction-uktbwuN6Gf2h --zip-file fileb://aws/ac-lambda.zip --profile muse
+aws lambda update-function-code  --function-name photographer-site-AcFunction-uktbwuN6Gf2h --zip-file fileb://ac-lambda.zip --profile muse
+aws logs tail "/aws/lambda/photographer-site-AcFunction-uktbwuN6Gf2h" --since 5m --profile muse --format short | grep -Ei 'contact/sync|validation'
 
 contact custom fields in Active Campaign
 
