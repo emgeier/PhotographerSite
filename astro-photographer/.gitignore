@@ -4,3 +4,7 @@ dist/
 .env
 .DS_Store
 visual/*
+
+# Originals saved by `npm run optimize:images` before in-place conversion.
+# Kept locally for restore; never committed or shipped to the site bucket.
+public/images-original-backup/

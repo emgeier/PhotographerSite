@@ -61,11 +61,25 @@ Casi todas las fotos del sitio se cambian igual:
 > Importante: **Save** solo guarda un borrador. Tienes que hacer **Publish** para
 > que el cambio aparezca en el sitio real.
 
-### Consejos para las fotos
-- Sube fotos de buena calidad pero no gigantes. Lo ideal es alrededor de
-  **2000 px** en el lado más largo. Fotos de la cámara sin reducir (muy pesadas)
-  hacen el sitio lento.
-- Usa formato **JPG** o **WebP** para fotos.
+### Consejos para las fotos (IMPORTANTE para la velocidad del sitio)
+
+Las fotos pesadas son la causa #1 de que un sitio vaya lento, sobre todo en
+celulares. Antes de subir una foto, prepárala así:
+
+- **Tamaño:** reduce la foto a unos **2000 px** en el lado más largo. Una foto
+  directa de la cámara (4000–6000 px) es enorme e innecesaria para la web.
+- **Formato:** usa **JPG** o **WebP** para fotografías. (WebP pesa menos con la
+  misma calidad.) No subas PNG para fotos; el PNG es para logos.
+- **Peso:** apunta a **menos de 400 KB** por foto, idealmente ~200 KB. Puedes ver
+  el peso del archivo en tu computadora antes de subirlo.
+- Cómo reducirla: en Mac, abre la foto en **Vista Previa (Preview) → Herramientas
+  → Ajustar tamaño** y pon 2000 px de ancho, o en la app **Fotos** usa
+  **Archivo → Exportar** y elige un tamaño menor. Cualquier editor sirve.
+
+> Si olvidas reducir una foto y el sitio queda lento, avisa a tu desarrollador:
+> existe un comando (`npm run optimize:images`) que reduce todas las fotos del
+> sitio de una sola vez y guarda una copia de las originales por si acaso.
+
 - Si dejas un campo de imagen **vacío**, el sitio usa la foto que ya tenía por
   defecto. No se rompe nada.
 
@@ -113,6 +127,14 @@ Página de inicio de Bodas.
 - **Hero image** — foto principal.
 - **Video testimonial image** — imagen del testimonio en video.
 - **Closing CTA background** — fondo de la sección final.
+- **Gallery photos** — la galería de fotos de la página (la cuadrícula que al
+  hacer clic se abre en grande). Es una **lista**: usa **"Add Photo"** (Agregar)
+  para añadir cada foto, y arrastra para **reordenar** (el orden en la lista es
+  el orden en la página y en la ventana ampliada). Cada foto tiene:
+  - **Photo** — la imagen (súbela ya reducida, ver "Consejos para las fotos").
+  - **Alt text** — una breve descripción de la foto (para accesibilidad y Google).
+  - Si dejas la lista **vacía**, el sitio muestra una galería de ejemplo por
+    defecto. En cuanto agregas tus propias fotos, estas reemplazan las de ejemplo.
 
 ### Weddings — Engagements images (/weddings/engagements)
 - **Hero image** — foto principal.
@@ -155,6 +177,17 @@ Funcionan igual: entra a la página en **Settings**, cambia los campos de imagen
 (**Hero image**, **Closing image**, etc.) y publica. En **Landing** y
 **Instagram link** también hay campos de **texto** (títulos, descripciones) que
 puedes editar escribiendo directamente.
+
+En **Portfolio page — images** (la página /muse/portfolio) además de las fotos de
+fondo tienes **Portrait gallery**: la cuadrícula de retratos que al hacer clic se
+abren en grande. Es una **lista** igual que la galería de bodas — usa **"Add
+Portrait"** para añadir, arrastra para reordenar, y cada retrato tiene:
+- **Photo** — la imagen (ya reducida).
+- **Alt text** — descripción breve.
+- **Title** — título que se muestra en la ventana ampliada (opcional).
+- **Caption** — frase que se muestra en la ventana ampliada (opcional).
+
+Si dejas la lista vacía, el sitio usa los retratos de ejemplo por defecto.
 
 ---
 

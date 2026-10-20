@@ -12,8 +12,11 @@ const heroImage = wed?.data.wedEngagementsHeroImage ?? '/images/ms-muse-2.webp';
 const videoImage = wed?.data.wedEngagementsVideoImage ?? '/images/story-portrait.webp';
 const ctaImage = wed?.data.wedEngagementsCtaImage ?? '/images/portfolio-closing.webp';
 
+// Gallery photos. Prefer the CMS-managed list (settings/weddings-engagements.json
+// → wedEngagementsGallery); fall back to the built-in placeholder set when the
+// CMS list is empty/absent. CMS items are { image, alt } string paths.
 const P = (n) => `/images/muses/portrait-0${n}.webp`;
-const gallery = [
+const fallbackGallery = [
   { src: P(5), alt: 'A couple sharing a quiet moment at golden hour.' },
   { src: '/images/ms-muse-2.webp', alt: 'A couple walking through a colonnade.' },
   { src: P(6), alt: 'A black-and-white embrace.' },
@@ -27,6 +30,10 @@ const gallery = [
   { src: P(9), alt: 'A black-and-white tender moment.' },
   { src: '/images/portfolio-film.webp', alt: 'A couple in a field at dusk.' },
 ];
+const gallery =
+  wed?.data.wedEngagementsGallery && wed.data.wedEngagementsGallery.length > 0
+    ? wed.data.wedEngagementsGallery.map((g) => ({ src: g.image, alt: g.alt ?? '' }))
+    : fallbackGallery;
 ---
 <Base
   title="The Engagement Portfolio — Luis Quintana Studio"
@@ -57,10 +64,16 @@ const gallery = [
           <p class="wd-collhead__intro">A look into a collection of real engagement sessions, each one unique, each one a true reflection of the couples I have the honor to photograph. Real moments. Real people. Real love.</p>
         </div>
         <div class="wd-gallery__grid" style="margin-top: 46px;">
-          {gallery.map((g) => (
-            <figure class="wd-gallery__item" data-reveal>
+          {gallery.map((g, i) => (
+            <button
+              type="button"
+              class="wd-gallery__item"
+              data-gallery-item
+              data-reveal
+              aria-label={`View engagement photograph ${i + 1} larger`}
+            >
               <Pic src={g.src} alt={g.alt} sizes="(max-width: 620px) 50vw, 33vw" />
-            </figure>
+            </button>
           ))}
         </div>
       </div>
@@ -95,5 +108,37 @@ const gallery = [
     </section>
   </main>
   <WeddingsFooter />
+
+  <!-- Engagement gallery lightbox — same native-<dialog> mechanism as the muse
+       portfolio / wedding portfolio galleries (initStoryGallery, driven by
+       [data-gallery-item] triggers + the #st-gallery-* contract). The
+       gallery-dialog styles live in wedding.css. -->
+  <dialog class="dialog gallery-dialog" id="st-gallery-dialog" aria-labelledby="wd-eng-gallery-label">
+    <form method="dialog">
+      <button class="dialog-close dialog-close--light" type="submit" aria-label="Close gallery">
+        <span aria-hidden="true">×</span>
+      </button>
+    </form>
+    <div class="gallery-dialog__heading">
+      <p class="eyebrow" id="wd-eng-gallery-label">Of beginnings</p>
+    </div>
+    <div class="gallery-stage">
+      <button class="gallery-arrow" type="button" data-st-gallery-prev aria-label="Previous photograph">
+        <span aria-hidden="true">←</span>
+      </button>
+      <figure>
+        <img id="st-gallery-image" class="gallery-stage__image" src={gallery[0].src} alt="An engagement photograph from the collection." />
+      </figure>
+      <button class="gallery-arrow" type="button" data-st-gallery-next aria-label="Next photograph">
+        <span aria-hidden="true">→</span>
+      </button>
+    </div>
+    <p id="st-gallery-count" class="gallery-count" aria-live="polite">01 / {String(gallery.length).padStart(2, '0')}</p>
+  </dialog>
+
   <SiteMotion />
+  <script>
+    import { initStoryGallery } from '../../scripts/portfolio.ts';
+    initStoryGallery();
+  </script>
 </Base>

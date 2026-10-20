@@ -151,10 +151,13 @@
       </div>
       <h3>Consejos para las fotos</h3>
       <ul>
-        <li>Sube fotos de buena calidad pero no gigantes: lo ideal es alrededor de <strong>2000 px</strong> en el lado más largo. Las fotos sin reducir hacen el sitio lento.</li>
-        <li>Usa formato <strong>JPG</strong> o <strong>WebP</strong>.</li>
+        <li><strong>Tamaño:</strong> reduce la foto a unos <strong>2000 px</strong> en el lado más largo. Una foto directa de la cámara (4000–6000 px) es enorme e innecesaria para la web y hace el sitio lento, sobre todo en celulares.</li>
+        <li><strong>Formato:</strong> usa <strong>JPG</strong> o <strong>WebP</strong> para fotografías (WebP pesa menos). El PNG es solo para logos, no para fotos.</li>
+        <li><strong>Peso:</strong> apunta a <strong>menos de 400 KB</strong> por foto (ideal ~200 KB). Puedes ver el peso del archivo en tu computadora antes de subirlo.</li>
+        <li><strong>Cómo reducirla (Mac):</strong> abre la foto en <strong>Vista Previa → Herramientas → Ajustar tamaño</strong> y pon 2000 px de ancho; o en la app <strong>Fotos</strong>, <strong>Archivo → Exportar</strong> con un tamaño menor.</li>
         <li>Si dejas un campo de imagen <strong>vacío</strong>, el sitio usa la foto por defecto. No se rompe nada.</li>
       </ul>
+      <p class="tip">¿Olvidaste reducir una foto y el sitio va lento? Avisa a tu desarrollador: hay un comando que reduce todas las fotos del sitio de una vez (<code>npm&nbsp;run&nbsp;optimize:images</code>) y guarda copia de las originales.</p>
     </section>
 
     <section id="botones">
@@ -192,9 +195,11 @@
 
       <h3>Resto de páginas de Bodas (Experience, Portfolio, Engagements, Testimonials, About, FAQ, Inquire, Love Stories)</h3>
       <p>Funcionan igual: cada una tiene su <strong>Hero image</strong> (foto principal), fotos de secciones intermedias, y un <strong>Closing CTA background</strong> (fondo final). En <strong>Inquire</strong> está también el retrato "A note from Luis" y la foto junto al formulario. En <strong>Love Stories</strong> hay fotos del listado y de la sección final de cada historia.</p>
+      <p>En <strong>Weddings — Portfolio</strong> hay además <strong>Gallery photos</strong>: la cuadrícula de fotos que al hacer clic se abren en grande. Es una <strong>lista</strong> — usa <strong>Add Photo</strong> para añadir cada foto, arrastra para reordenar (el orden en la lista es el orden en la página y en la ventana ampliada), y pon un <strong>Alt text</strong> (descripción breve) en cada una. Si la dejas vacía, se muestra una galería de ejemplo por defecto.</p>
 
       <h3>Lado Glam Muse (Home, Portfolio, Experience, Inquire, Muse Stories, Landing, Instagram link)</h3>
       <p>Igual: entra a la página en <span class="btn">Settings</span>, cambia los campos de imagen y publica. En <strong>Landing</strong> e <strong>Instagram link</strong> también hay campos de <strong>texto</strong> (títulos, descripciones) que editas escribiendo directamente.</p>
+      <p>En <strong>Portfolio page — images</strong> (/muse/portfolio) hay además <strong>Portrait gallery</strong>: la cuadrícula de retratos que se abren en grande. Es una lista como la de bodas; cada retrato tiene <strong>Photo</strong>, <strong>Alt text</strong>, y opcionalmente <strong>Title</strong> y <strong>Caption</strong> (se muestran en la ventana ampliada). Vacía = retratos de ejemplo por defecto.</p>
     </section>
 
     <section id="bodas">

@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:images": "node scripts/check-images.mjs",
+    "optimize:images": "node scripts/optimize-images.mjs",
     "visual:capture": "node visual/capture.mjs",
     "visual:report": "node visual/report.mjs",
     "test:lambda": "node --test \"aws/lambda/activecampaign/**/*.test.mjs\"",

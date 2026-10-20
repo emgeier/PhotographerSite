@@ -313,6 +313,10 @@ const settings = defineCollection({
     wedEngagementsHeroImage: optionalText,
     wedEngagementsVideoImage: optionalText,
     wedEngagementsCtaImage: optionalText,
+    // Gallery photos (CMS-managed, independent of the wedding portfolio and the
+    // Wedding Stories collection). Each item: image path + alt text. Render
+    // order == lightbox navigation order. Empty/absent -> page fallback list.
+    wedEngagementsGallery: galleryItemList,
 
     // weddings-inquire.json — Inquire (/weddings/inquire) images.
     wedInquireHeroImage: optionalText,

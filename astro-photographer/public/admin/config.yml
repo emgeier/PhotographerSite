@@ -220,6 +220,15 @@ collections:
           - { name: wedEngagementsHeroImage, label: Hero image, widget: image, required: false }
           - { name: wedEngagementsVideoImage, label: Featured session image, widget: image, required: false }
           - { name: wedEngagementsCtaImage, label: Closing CTA background, widget: image, required: false }
+          - name: wedEngagementsGallery
+            label: 'Gallery photos (add, remove, reorder; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Photo
+            required: false
+            summary: '{{fields.alt}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-inquire
         label: 'Weddings — Inquire images'
