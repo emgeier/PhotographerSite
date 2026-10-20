@@ -2,5 +2,6 @@
   "portfolioHeroImage": "/images/portfolio-hero.webp",
   "portfolioBannerImage": "/images/portfolio-banner.webp",
   "portfolioFilmImage": "/images/portfolio-film.webp",
-  "portfolioClosingImage": "/images/portfolio-closing.webp"
+  "portfolioClosingImage": "/images/portfolio-closing.webp",
+  "portfolioGallery": []
 }

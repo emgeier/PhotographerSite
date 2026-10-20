@@ -34,13 +34,13 @@ import portrait09 from '../../assets/images/portfolio/portrait-09.webp';
 // [data-portfolio-index] cards and reads each card's inner <img>, data-title,
 // and data-caption. Do NOT reorder without reordering the grid intentionally.
 interface PortfolioCard {
-  src: ImageMetadata;
-  title: string;
+  src: ImageMetadata | string;
+  title?: string;
   caption: string;
   alt: string;
 }
 
-const cards: PortfolioCard[] = [
+const fallbackCards: PortfolioCard[] = [
   {
     src: portrait01,
     caption: 'Quiet confidence',
@@ -95,6 +95,20 @@ const cards: PortfolioCard[] = [
     alt: 'A blonde woman with loose wavy hair looks toward the camera in an ivory blouse.',
   },
 ];
+
+// Prefer the CMS-managed grid (settings/portfolio.json → portfolioGallery) when
+// present; otherwise use the built-in optimized portrait set above. CMS items
+// are { image, alt?, title?, caption? } with string image paths (public/ or a
+// CloudFront URL) — <Pic> renders those as passthrough <img>.
+const cards: PortfolioCard[] =
+  pf?.data.portfolioGallery && pf.data.portfolioGallery.length > 0
+    ? pf.data.portfolioGallery.map((g) => ({
+        src: g.image,
+        alt: g.alt ?? '',
+        title: g.title,
+        caption: g.caption ?? '',
+      }))
+    : fallbackCards;
 
 const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
 ---
@@ -284,7 +298,7 @@ const gridSizes = '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw';
         <span aria-hidden="true">→</span>
       </button>
     </div>
-    <p id="gallery-count" class="gallery-count" aria-live="polite">01 / 09</p>
+    <p id="gallery-count" class="gallery-count" aria-live="polite">01 / {String(cards.length).padStart(2, '0')}</p>
   </dialog>
 
   <!-- Experience film — exact DOM contract initExperienceVideo() in portfolio.ts requires.

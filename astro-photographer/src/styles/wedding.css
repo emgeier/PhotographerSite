@@ -276,6 +276,10 @@
 .wd-gallery__item { overflow: hidden; background: #ddd6c9; aspect-ratio: 1; }
 .wd-gallery__item img { width: 100%; height: 100%; object-fit: cover; transition: scale 900ms var(--ease); }
 .wd-gallery__item:hover img { scale: 1.04; }
+/* Gallery tiles are <button>s (open the lightbox); reset button chrome and
+   signal interactivity. */
+button.wd-gallery__item { display: block; padding: 0; border: 0; cursor: pointer; }
+button.wd-gallery__item:focus-visible { outline: 2px solid var(--wd-gold, #b08d57); outline-offset: 3px; }
 .wd-gallery__item--tall { aspect-ratio: 0.74; }
 .wd-gallery__item--wide { grid-column: span 2; aspect-ratio: 2.03; }
 

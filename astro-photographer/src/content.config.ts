@@ -50,6 +50,43 @@ const optionalList = z.preprocess((v) => {
   return cleaned.length ? cleaned : undefined;
 }, z.array(z.string()).optional());
 
+// A CMS-managed gallery item: an image path plus alt text. Items missing an
+// image are dropped; an empty/absent list becomes undefined so the page's
+// built-in fallback gallery applies. Used by the weddings portfolio gallery.
+const galleryItemList = z.preprocess((v) => {
+  if (!Array.isArray(v)) return undefined;
+  const cleaned = v.filter(
+    (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
+  );
+  return cleaned.length ? cleaned : undefined;
+}, z
+  .array(
+    z.object({
+      image: z.string(),
+      alt: z.string().optional(),
+    }),
+  )
+  .optional());
+
+// A CMS-managed portfolio portrait: image + alt plus optional title/caption
+// shown in the muse portfolio lightbox. Same drop/fallback semantics.
+const portfolioItemList = z.preprocess((v) => {
+  if (!Array.isArray(v)) return undefined;
+  const cleaned = v.filter(
+    (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
+  );
+  return cleaned.length ? cleaned : undefined;
+}, z
+  .array(
+    z.object({
+      image: z.string(),
+      alt: z.string().optional(),
+      title: z.string().optional(),
+      caption: z.string().optional(),
+    }),
+  )
+  .optional());
+
 const muses = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/muses' }),
   schema: z.object({
@@ -193,6 +230,10 @@ const settings = defineCollection({
     portfolioBannerImage: optionalText,
     portfolioFilmImage: optionalText,
     portfolioClosingImage: optionalText,
+    // Grid portraits (CMS-managed). Each item: image + alt + optional title +
+    // optional caption (shown in the lightbox). Render/navigation order follows
+    // the list. Empty/absent -> the page's built-in optimized portrait set.
+    portfolioGallery: portfolioItemList,
 
     // landing.json — the /landing single-muse feature page.
     museEyebrow: optionalText,
@@ -260,6 +301,9 @@ const settings = defineCollection({
     wedPortfolioHeroImage: optionalText,
     wedPortfolioVideoImage: optionalText,
     wedPortfolioCtaImage: optionalText,
+    // Gallery photos (CMS-managed). Each item: image path + alt text. Render
+    // order == lightbox navigation order. Empty/absent -> page fallback list.
+    wedPortfolioGallery: galleryItemList,
 
     // weddings-faq.json — Weddings FAQ (/weddings/faq) images.
     wedFaqHeroImage: optionalText,

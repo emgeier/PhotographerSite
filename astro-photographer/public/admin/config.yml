@@ -97,6 +97,17 @@ collections:
           - { name: portfolioBannerImage, label: Manifesto banner image, widget: image, required: false }
           - { name: portfolioFilmImage, label: Experience film still, widget: image, required: false }
           - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
+          - name: portfolioGallery
+            label: 'Portrait gallery (grid photos — add, remove, reorder; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Portrait
+            required: false
+            summary: '{{fields.title}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
+              - { name: title, label: 'Title (shown in the popup, optional)', widget: string, required: false }
+              - { name: caption, label: 'Caption (shown in the popup, optional)', widget: string, required: false }
 
       - name: landing
         label: 'Landing page (muse/landing) — content'
@@ -185,6 +196,15 @@ collections:
           - { name: wedPortfolioHeroImage, label: Hero image, widget: image, required: false }
           - { name: wedPortfolioVideoImage, label: Video testimonial image, widget: image, required: false }
           - { name: wedPortfolioCtaImage, label: Closing CTA background, widget: image, required: false }
+          - name: wedPortfolioGallery
+            label: 'Gallery photos (add, remove, reorder; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Photo
+            required: false
+            summary: '{{fields.alt}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-faq
         label: 'Weddings — FAQ images'
