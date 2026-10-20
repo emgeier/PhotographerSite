@@ -1,10 +1,10 @@
 {
-  "linkPortrait": "/images/story-portrait.webp",
+  "linkPortrait": "/images/Instagramportrait.jpg",
   "linkGreeting": "Hola,",
   "linkName": "Luis",
   "linkTagline": "Every beautiful connection begins with a conversation.",
   "linkLocation": "Serving Nashville & Beyond",
-  "linkPhone": "tel:+10000000000",
+  "linkPhone": "tel:+16154951261",
   "linkEmail": "mailto:hello@luisquintanastudio.com",
   "linkCards": [
     {
@@ -13,9 +13,10 @@
       "titleTop": "Glam",
       "titleMain": "Muse",
       "titleMain2": "",
+      "titleBottom": "",
       "sub": "Your Beauty, Revealed.",
       "button": "Book your consultation",
-      "href": "/muse/inquire",
+      "href": "https://calendly.com/luisquintanastudio/the-glam-muse-experience",
       "external": false
     },
     {
@@ -27,7 +28,7 @@
       "titleBottom": "",
       "sub": "The Day, As It Felt.",
       "button": "Book your consultation",
-      "href": "/weddings/inquire",
+      "href": "https://calendly.com/luisquintanastudio/wedding-consultation",
       "external": false
     }
   ],
