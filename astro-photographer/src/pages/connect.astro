@@ -57,7 +57,7 @@ const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
 
       <h1 class="link-name"><em>{greeting}</em> I’m {name}.</h1>
       <p class="link-tagline">{tagline}</p>
-      <p class="eyebrow link-location">{location}</p>
+      
 
       <div class="link-inquire">
         <a class="link-pill" href={phone} aria-label="Call the studio">
@@ -100,9 +100,12 @@ const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
           </a>
         ))}
       </div>
-
+      <br/>
+<p class="eyebrow link-location">{location}</p>
       <span class="short-rule link-divider" aria-hidden="true"></span>
       <p class="link-footer">{footer}</p>
+      <span class="short-rule link-divider" aria-hidden="true"></span>
+
     </div>
   </main>
 </Base>
