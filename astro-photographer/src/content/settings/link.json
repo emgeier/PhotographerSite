@@ -1,5 +1,5 @@
 {
-  "linkPortrait": "/images/story-portrait.webp",
+  "linkPortrait": "/images/Instagramportrait.jpg",
   "linkGreeting": "Hola,",
   "linkName": "Luis",
   "linkTagline": "Every beautiful connection begins with a conversation.",
@@ -9,25 +9,26 @@
   "linkCards": [
     {
       "kind": "glam",
-      "image": "/images/ms-muse-1.webp",
+      "image": "/images/Insta12.jpg",
       "titleTop": "Glam",
       "titleMain": "Muse",
       "titleMain2": "",
+      "titleBottom": "",
       "sub": "Your Beauty, Revealed.",
       "button": "Book your consultation",
-      "href": "/muse/inquire",
+      "href": "https://calendly.com/luisquintanastudio/the-glam-muse-experience",
       "external": false
     },
     {
       "kind": "weddings",
-      "image": "/images/portfolio-banner.webp",
+      "image": "/images/17 copy.jpg",
       "titleTop": "",
       "titleMain": "Weddings &",
       "titleMain2": "Engagements",
       "titleBottom": "",
       "sub": "The Day, As It Felt.",
       "button": "Book your consultation",
-      "href": "/weddings/inquire",
+      "href": "https://calendly.com/luisquintanastudio/wedding-consultation",
       "external": false
     }
   ],
