@@ -706,6 +706,9 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 .link-card__title-top { display: block; font-size: 15px; letter-spacing: 5px; }
 .link-card__title-main { display: block; font-size: clamp(30px, 6vw, 42px); letter-spacing: 1px; }
 .link-card__title-bottom { display: block; font-size: 18px; letter-spacing: 8px; }
+/* Brand wordmark used in place of the stacked text title on a link card.
+   Wide lockup (~3.5:1); cap the width so it scales down cleanly on phones. */
+.link-card__title-logo { display: block; width: 100%; max-width: 260px; height: auto; }
 .link-card .short-rule { width: 48px; margin: 16px 0; background: var(--champagne); }
 .link-card__sub { font-family: var(--serif); font-weight: 100; font-style: italic; font-size: clamp(16px, 2.4vw, 20px); }
 .link-card__button { display: inline-flex; align-items: center; justify-content: center; margin-top: auto; padding: 15px 30px; border-radius: 999px; background: rgba(184, 156, 116, 0.92); color: var(--ivory); font: 600 11px/1 var(--sans); letter-spacing: 2.5px; text-transform: uppercase; transition: background 250ms ease, transform 350ms var(--ease); }

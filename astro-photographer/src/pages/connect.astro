@@ -22,6 +22,7 @@ const defaultCards = [
   {
     kind: 'glam',
     image: '/images/ms-muse-1.webp',
+    titleLogo: '/images/glam-muse-experience-white.png',
     titleTop: 'The',
     titleMain: 'Glam Muse',
     titleBottom: 'Experience',
@@ -57,7 +58,6 @@ const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
 
       <h1 class="link-name"><em>{greeting}</em> I’m {name}.</h1>
       <p class="link-tagline">{tagline}</p>
-      <p class="eyebrow link-location">{location}</p>
 
       <div class="link-inquire">
         <a class="link-pill" href={phone} aria-label="Call the studio">
@@ -86,12 +86,21 @@ const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
             </div>
             <div class="link-card__veil" aria-hidden="true"></div>
             <div class="link-card__content">
-              <p class="link-card__title">
-                {c.titleTop && <span class="link-card__title-top">{c.titleTop}</span>}
-                <span class="link-card__title-main">{c.titleMain}</span>
-                {c.titleMain2 && <span class="link-card__title-main">{c.titleMain2}</span>}
-                {c.titleBottom && <span class="link-card__title-bottom">{c.titleBottom}</span>}
-              </p>
+              {c.titleLogo ? (
+                <img
+                  class="link-card__title-logo"
+                  src={c.titleLogo}
+                  alt={[c.titleTop, c.titleMain, c.titleMain2, c.titleBottom].filter(Boolean).join(' ')}
+                  loading="lazy"
+                />
+              ) : (
+                <p class="link-card__title">
+                  {c.titleTop && <span class="link-card__title-top">{c.titleTop}</span>}
+                  <span class="link-card__title-main">{c.titleMain}</span>
+                  {c.titleMain2 && <span class="link-card__title-main">{c.titleMain2}</span>}
+                  {c.titleBottom && <span class="link-card__title-bottom">{c.titleBottom}</span>}
+                </p>
+              )}
               <span class="short-rule" aria-hidden="true"></span>
               <p class="link-card__sub">{c.sub}</p>
               <br/>
@@ -100,9 +109,13 @@ const cards = (ln?.data.linkCards && ln.data.linkCards.length > 0)
           </a>
         ))}
       </div>
-
+      <br/>
+ <p class="eyebrow link-location">{location}</p>
       <span class="short-rule link-divider" aria-hidden="true"></span>
-      <p class="link-footer">{footer}</p>
+        <p class="link-footer">{footer}</p>
+        <span class="short-rule link-divider" aria-hidden="true"></span>
+       
+
     </div>
   </main>
 </Base>

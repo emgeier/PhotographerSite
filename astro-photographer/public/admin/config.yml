@@ -143,6 +143,7 @@ collections:
             fields:
               - { name: kind, label: 'Kind (glam or weddings — controls image crop)', widget: string, required: false }
               - { name: image, label: 'Image', widget: image, required: false }
+              - { name: titleLogo, label: 'Title logo (optional — shown instead of the text title below; leave the title lines filled for accessibility)', widget: image, required: false }
               - { name: titleTop, label: 'Title — top line (small, optional)', widget: string, required: false }
               - { name: titleMain, label: 'Title — main line', widget: string, required: false }
               - { name: titleMain2, label: 'Title — second main line (optional)', widget: string, required: false }
