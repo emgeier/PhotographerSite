@@ -59,7 +59,7 @@
 /* --------------------------------------------------------------- *
  * 1 + 2. Hero (single static slide; portrait right, copy left)
  * --------------------------------------------------------------- */
-.lq-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
+.lq-hero { position: relative; min-height: 640px; height: 100svh; overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
 .lq-hero__image { position: absolute; inset: 0; }
 .lq-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 
@@ -80,10 +80,9 @@
 .lq-hero__rule { margin: 16px 0 30px; background: rgba(244, 240, 232, 0.7); }
 .lq-hero__title { font-size: clamp(68px, 9vw, 150px); line-height: 0.9; letter-spacing: -2px; color: var(--ivory); }
 
-/* 01 — 03 carousel indicator (static/decorative — no JS carousel). */
+/* Carousel indicator — clickable slide dots. */
 .lq-hero__indicator { position: absolute; left: 0; bottom: 54px; z-index: 2; width: min(1600px, calc(100% - 120px)); left: 50%; transform: translateX(-50%); }
-.lq-hero__count { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3px; color: #efe8dd; display: inline-flex; align-items: center; gap: 10px; }
-.lq-hero__dots { display: flex; gap: 10px; margin-top: 14px; }
+.lq-hero__dots { display: flex; gap: 10px; }
 .lq-hero__dot { width: 7px; height: 7px; padding: 0; border-radius: 50%; border: 1px solid rgba(244, 240, 232, 0.7); background: transparent; cursor: pointer; transition: background 400ms ease, border-color 400ms ease, transform 400ms ease; }
 .lq-hero__dot:hover { border-color: var(--ivory); transform: scale(1.15); }
 .lq-hero__dot.is-active { background: var(--ivory); border-color: var(--ivory); }
@@ -194,7 +193,7 @@
 
 @media (max-width: 560px) {
   .lq-container, .lq-header, .lq-footer__inner { width: calc(100% - 40px); }
-  .lq-hero { min-height: 0; height: auto; padding: 150px 0 90px; }
+  .lq-hero { min-height: 560px; height: 100svh; padding: 150px 0 90px; }
   .lq-hero__title { font-size: clamp(54px, 18vw, 76px); }
   .lq-hero__indicator { bottom: 32px; }
   .lq-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }

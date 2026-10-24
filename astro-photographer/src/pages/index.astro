@@ -58,10 +58,9 @@ const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  //
       <div class="lq-container lq-hero__content">
         <h1 class="lq-display lq-hero__title" data-hero-item>LIFE<br />AS<br />STORIES.</h1>
       </div>
-      <!-- Carousel indicator: count reflects the active slide; dots are
-           clickable controls the carousel script wires up and keeps in sync. -->
+      <!-- Carousel indicator: clickable dots the carousel script wires up and
+           keeps in sync with the active slide. -->
       <div class="lq-hero__indicator">
-        <span class="lq-hero__count" data-hero-count aria-hidden="true">01 &mdash; 03</span>
         <div class="lq-hero__dots" role="tablist" aria-label="Hero slides">
           {heroSlides.map((_, i) => (
             <button
@@ -168,17 +167,15 @@ const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  //
   // - Honors prefers-reduced-motion: no auto-advance; dots still let the visitor
   //   switch slides manually (an explicit choice is not "motion" the user didn't ask for).
   // - Cross-fade itself is pure CSS opacity transition; this script only toggles
-  //   the .is-active class on slides + dots and updates the "01 — 03" count.
+  //   the .is-active class on slides + dots.
   (() => {
     const carousel = document.querySelector<HTMLElement>('[data-hero-carousel]');
     if (!carousel) return;
     const slides = [...carousel.querySelectorAll<HTMLElement>('[data-hero-slide]')];
     const dots = [...document.querySelectorAll<HTMLButtonElement>('[data-hero-dot]')];
-    const count = document.querySelector<HTMLElement>('[data-hero-count]');
     if (slides.length < 2) return; // nothing to cycle
 
     const total = slides.length;
-    const pad = (n: number) => String(n).padStart(2, '0');
     let current = slides.findIndex((s) => s.classList.contains('is-active'));
     if (current < 0) current = 0;
 
@@ -191,7 +188,6 @@ const ctaImage = apex?.data.apexCtaImage ?? '/images/portfolio-banner.webp';  //
       slides[i].classList.add('is-active');
       dots[i]?.classList.add('is-active');
       dots[i]?.setAttribute('aria-selected', 'true');
-      if (count) count.innerHTML = `${pad(i + 1)} &mdash; ${pad(total)}`;
       current = i;
     };
 

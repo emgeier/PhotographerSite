@@ -52,7 +52,7 @@ button { border: 0; }
 .menu-toggle { display: none; }
 
 /* Hero layout and motion hooks. Motion is an enhancement: nothing starts hidden. */
-.hero { position: relative; display: flex; align-items: center; min-height: 710px; height: min(760px, 58vw); overflow: hidden; background: #e7ded0; }
+.hero { position: relative; display: flex; align-items: center; min-height: 640px; height: 100svh; overflow: hidden; background: #e7ded0; }
 .hero__image, .closing__image { position: absolute; inset: -3% 0; }
 .hero__image { top: var(--header-h); }
 .hero__image img { object-position: center top; }
@@ -211,7 +211,7 @@ button { border: 0; }
 
 /* Tablet proportions preserve the composition before the page stacks. */
 @media (min-width: 1441px) {
-  .hero { height: 790px; }
+  .hero { height: 100svh; }
   .hero__title { font-size: 94px; }
 }
 @media (max-width: 1199px) {
@@ -224,7 +224,7 @@ button { border: 0; }
   .brand__top, .brand__bottom { font-size: 11px; }
   .primary-nav { gap: 21px; font-size: 8px; letter-spacing: 1.3px; }
   .primary-nav .nav-inquire { padding: 10px 15px; }
-  .hero { min-height: 600px; height: 62vw; }
+  .hero { min-height: 560px; height: 100svh; }
   .hero__title { font-size: 76px; letter-spacing: -3px; }
   .hero__subtitle { font-size: 13px; }
   .perspective__grid { grid-template-columns: 36% 1fr; gap: 62px; }
@@ -250,7 +250,7 @@ button { border: 0; }
   .brand__name { font-size: 27px; }
   .primary-nav { gap: 16px; font-size: 6px; letter-spacing: 1.3px; }
   .primary-nav .nav-inquire { padding: 9px 13px; }
-  .hero { min-height: 520px; height: 57vw; }
+  .hero { min-height: 520px; height: 100svh; }
   .hero__title { font-size: 62px; max-width: 380px; letter-spacing: -2.5px; }
   .hero__content { padding-top: 62px; padding-bottom: 10px; }
   .hero__subtitle { margin-top: 23px; margin-bottom: 24px; font-size: 13px; letter-spacing: 1.8px; }
@@ -306,11 +306,15 @@ button { border: 0; }
   .primary-nav a { padding: 14px 0; }
   .primary-nav a::after { bottom: 10px; }
   .primary-nav .nav-inquire { align-self: start; margin-top: 8px; padding: 12px 18px; }
-  .hero { display: flex; flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ivory); }
-  .hero__image { position: relative; order: 2; inset: auto; width: 100%; height: 450px; flex-shrink: 0; }
-  .hero__image img { object-position: right top; }
-  .hero__veil { display: none; }
-  .hero__content { order: 1; padding-top: 25px; padding-bottom: 36px; }
+  /* Full-viewport hero on mobile: full-bleed photo with the copy overlaid near
+     the bottom. A dark bottom-up veil + white text keeps it legible on every
+     page regardless of the desktop color treatment. */
+  .hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 560px; height: 100svh; padding-top: 106px; padding-bottom: 0; }
+  .hero__image { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero__image img { object-position: center top; }
+  .hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
+  .hero__content { position: relative; z-index: 1; padding-top: 25px; padding-bottom: 48px; color: var(--ivory); }
+  .hero__title, .hero__subtitle { color: var(--ivory); }
   .hero__title { max-width: 375px; font-size: clamp(55px, 11.8vw, 79px); line-height: 0.93; letter-spacing: -2.4px; }
   .hero__subtitle { margin: 24px 0 23px; font-size: 13px; letter-spacing: 1.8px; }
   .hero__content .button { min-width: 258px; }

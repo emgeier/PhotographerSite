@@ -85,7 +85,7 @@
 /* --------------------------------------------------------------- *
  * HOME — Hero
  * --------------------------------------------------------------- */
-.wd-hero { position: relative; min-height: 760px; height: min(820px, 60vw); overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
+.wd-hero { position: relative; min-height: 640px; height: 100svh; overflow: hidden; display: flex; align-items: center; color: var(--ivory); }
 .wd-hero__image { position: absolute; inset: 0; }
 .wd-hero__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
 
@@ -176,7 +176,7 @@
 /* --------------------------------------------------------------- *
  * SUB-PAGE HERO (The Experience etc.) — "THE / EXPERIENCE" lockup
  * --------------------------------------------------------------- */
-.wd-subhero { min-height: 560px; height: min(640px, 48vw); }
+.wd-subhero { min-height: 640px; height: 100svh; }
 .wd-subhero__kicker { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 6px; text-transform: uppercase; color: #e6d4b8; }
 
 .wd-subhero__title { margin-top: 6px; font-size: clamp(64px, 8vw, 128px); letter-spacing: 1px; text-transform: uppercase; color: var(--ivory); text-shadow: 0 2px 30px rgba(0,0,0,0.45); }
@@ -606,7 +606,7 @@ body.dialog-open { overflow: hidden; }
 
 @media (max-width: 560px) {
   .wd-container, .wd-header, .wd-footer__inner { width: calc(100% - 40px); }
-  .wd-hero { min-height: 0; height: auto; padding: 150px 0 54px; }
+  .wd-hero { min-height: 560px; height: 100svh; padding: 150px 0 54px; }
   .wd-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
   /* Step the big editorial titles down on small phones so they read
      comfortably instead of sitting at their desktop clamp minimum. */

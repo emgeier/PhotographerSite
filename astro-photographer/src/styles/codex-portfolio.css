@@ -6,7 +6,7 @@
 
 /* Quiet, spacious opening. The model is kept below the masthead. */
 /* Match the home hero's dimensions so the hero image isn't cropped. */
-.portfolio-hero { position: relative; display: flex; align-items: center; min-height: 710px; height: min(760px, 58vw); overflow: hidden; background: #e9e2d7; }
+.portfolio-hero { position: relative; display: flex; align-items: center; min-height: 640px; height: 100svh; overflow: hidden; background: #e9e2d7; }
 .portfolio-hero__image.hero__image { inset: -3% 0; top: var(--header-h); }
 .portfolio-hero__image img { object-position: center top; }
 .portfolio-hero__veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(244, 240, 232, 0.26), rgba(244, 240, 232, 0.06) 42%, transparent 64%); pointer-events: none; }
@@ -18,7 +18,7 @@
 
 /* Largest screens — match the home hero height. */
 @media (min-width: 1441px) {
-  .portfolio-hero { height: 790px; }
+  .portfolio-hero { height: 100svh; }
 }
 
 /* Photography leads the collection: generous tiles, fine gutters, no chrome. */
@@ -104,7 +104,7 @@
 
 @media (max-width: 1199px) and (min-width: 769px) {
   /* Mirror the home hero's responsive height so the image stays uncropped. */
-  .portfolio-hero { min-height: 600px; height: 62vw; }
+  .portfolio-hero { min-height: 560px; height: 100svh; }
   .portfolio-hero__content { padding-top: 125px; }
   .portfolio-hero h1 { font-size: 91px; letter-spacing: -3.8px; }
   .portfolio-hero__intro { font-size: var(--body-size); }
@@ -125,14 +125,16 @@
 @media (max-width: 768px) {
   .portfolio-container { width: calc(100% - 48px); }
   .portfolio-page .eyebrow { font-size: 9px; letter-spacing: 2.6px; }
-  .portfolio-hero { display: flex; flex-direction: column; height: auto; padding-top: 105px; background: var(--ivory); }
-  .portfolio-hero__content { order: 1; padding-top: 30px; padding-bottom: 35px; }
+  /* Full-viewport overlay hero on mobile (full-bleed photo, white copy). */
+  .portfolio-hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 560px; height: 100svh; padding-top: 105px; }
+  .portfolio-hero__content { position: relative; z-index: 1; padding-top: 30px; padding-bottom: 48px; color: var(--ivory); }
+  .portfolio-hero h1, .portfolio-hero__intro { color: var(--ivory); }
   .portfolio-hero__content .eyebrow { margin-bottom: 19px; }
   .portfolio-hero h1 { font-size: clamp(73px, 17vw, 106px); line-height: 0.86; letter-spacing: -3.8px; }
   .portfolio-hero__intro { max-width: 420px; margin-top: 25px; font-size: var(--body-size); line-height: var(--body-leading); }
-  .portfolio-hero__image.hero__image { position: relative; order: 2; inset: auto; width: 100%; height: clamp(290px, 72vw, 470px); }
-  .portfolio-hero__image img { object-position: right top; }
-  .portfolio-hero__veil { display: none; }
+  .portfolio-hero__image.hero__image { position: absolute; inset: 0; top: 0; width: 100%; height: 100%; }
+  .portfolio-hero__image img { object-position: center top; }
+  .portfolio-hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
   .portfolio-collection { padding-block: 10px; }
   .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); width: calc(100% - 20px); gap: 10px; }
   .portfolio-card__frame { aspect-ratio: 0.81; }

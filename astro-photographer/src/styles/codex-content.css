@@ -108,7 +108,7 @@
 /* Match the home hero style: same dimensions, image position, and the plain
  * `.hero__title` treatment (serif, not uppercase). Pin the home dimensions so
  * the box can't fall back to the legacy global.css `.hero{height:765px}`. */
-.ms2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: #e7ded0; }
+.ms2-hero.hero { min-height: 640px; height: 100svh; background: #e7ded0; }
 .ms2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
 /* Set the hero portrait further right, into the clear side of the veil. */
 .ms2-hero .hero__image img { object-position: 88% top; }
@@ -367,7 +367,7 @@
 /* Same box dimensions + image inset as the home hero (the dark color treatment
  * is intentional for story detail). Pin so it can't fall back to the legacy
  * global.css `.hero{height:765px}`. */
-.st2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: var(--ink); color: var(--ivory); }
+.st2-hero.hero { min-height: 640px; height: 100svh; background: var(--ink); color: var(--ivory); }
 .st2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
 /* Dark veil: solid on the left (behind header + copy), clearing to the right so
  * the muse portrait reads through. */
@@ -451,22 +451,24 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
  * global.css `.hero{height:765px}` and the codex-base `.hero`).
  * ============================================================= */
 @media (min-width: 1441px) {
-  .ct2-hero.hero { height: 790px; }
+  .ct2-hero.hero { height: 100svh; }
 }
 @media (max-width: 1199px) {
-  .ct2-hero.hero { min-height: 600px; height: 62vw; }
+  .ct2-hero.hero { min-height: 560px; height: 100svh; }
 }
 @media (max-width: 960px) and (min-width: 769px) {
-  .ct2-hero.hero { min-height: 520px; height: 57vw; }
+  .ct2-hero.hero { min-height: 520px; height: 100svh; }
 }
 @media (max-width: 768px) {
-  /* Stacked like the home hero on mobile: image below the copy, auto height. */
-  .ct2-hero.hero { flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ivory); }
-  .ct2-hero.hero .hero__image { position: relative; order: 2; inset: auto; top: auto; width: 100%; height: 450px; flex-shrink: 0; }
-  .ct2-hero.hero .hero__content { order: 1; }
+  /* Full-viewport overlay on mobile (full-bleed photo, white copy). */
+  .ct2-hero.hero { flex-direction: column; justify-content: flex-end; min-height: 560px; height: 100svh; padding-top: 106px; padding-bottom: 0; }
+  .ct2-hero.hero .hero__image { position: absolute; inset: 0; top: 0; width: 100%; height: 100%; }
+  .ct2-hero.hero .hero__content { position: relative; z-index: 1; padding-bottom: 48px; color: var(--ivory); }
+  .ct2-hero.hero .hero__title, .ct2-hero.hero .eyebrow { color: var(--ivory); }
+  .ct2-hero.hero .hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
 }
 @media (max-width: 380px) {
-  .ct2-hero.hero .hero__image { height: 420px; }
+  .ct2-hero.hero .hero__image { height: 100%; }
 }
 
 /* ============================================================= *
@@ -494,13 +496,13 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
  * background is flipped above.
  * ============================================================= */
 @media (min-width: 1441px) {
-  .ms2-hero.hero { height: 790px; }
+  .ms2-hero.hero { height: 100svh; }
 }
 @media (max-width: 1199px) {
-  .ms2-hero.hero { min-height: 600px; height: 62vw; }
+  .ms2-hero.hero { min-height: 560px; height: 100svh; }
 }
 @media (max-width: 960px) and (min-width: 769px) {
-  .ms2-hero.hero { min-height: 520px; height: 57vw; }
+  .ms2-hero.hero { min-height: 520px; height: 100svh; }
 }
 
 /* ============================================================= *
@@ -509,13 +511,13 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
  * ≤768px stacked layout is inherited from the shared `.hero` mobile rules.
  * ============================================================= */
 @media (min-width: 1441px) {
-  .st2-hero.hero { height: 790px; }
+  .st2-hero.hero { height: 100svh; }
 }
 @media (max-width: 1199px) {
-  .st2-hero.hero { min-height: 600px; height: 62vw; }
+  .st2-hero.hero { min-height: 560px; height: 100svh; }
 }
 @media (max-width: 960px) and (min-width: 769px) {
-  .st2-hero.hero { min-height: 520px; height: 57vw; }
+  .st2-hero.hero { min-height: 520px; height: 100svh; }
 }
 
 /* ============================================================= *
@@ -557,7 +559,7 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
  * ============================================================= */
 
 /* Hero — masthead with eyebrow + big name + sub + lede + CTA, portrait right. */
-.lp-hero.hero { min-height: 710px; height: min(760px, 58vw); background: #efe9df; }
+.lp-hero.hero { min-height: 640px; height: 100svh; background: #efe9df; }
 .lp-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); left: auto; width: 56%; }
 .lp-hero__image img { object-position: center 22%; }
 .lp-hero__veil { background: linear-gradient(90deg, #efe9df 0%, rgba(239, 233, 223, 0.86) 34%, rgba(239, 233, 223, 0.3) 50%, transparent 60%); }
@@ -629,7 +631,7 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 .lp-cta__content .button { margin-top: 26px; min-width: 272px; }
 
 @media (max-width: 1199px) {
-  .lp-hero.hero { min-height: 600px; height: 62vw; }
+  .lp-hero.hero { min-height: 560px; height: 100svh; }
   .lp-portraits__head { gap: 28px; }
   .lp-deserve__row { gap: 56px; }
   .lp-process__steps { gap: 50px; }
@@ -637,11 +639,12 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 }
 
 @media (max-width: 768px) {
-  .lp-hero.hero { flex-direction: column; min-height: 0; height: auto; padding-top: 106px; padding-bottom: 0; background: var(--ivory); }
-  .lp-hero.hero .hero__image { position: relative; order: 2; inset: auto; top: auto; width: 100%; height: clamp(320px, 80vw, 480px); }
+  .lp-hero.hero { flex-direction: column; justify-content: flex-end; min-height: 560px; height: 100svh; padding-top: 106px; padding-bottom: 0; }
+  .lp-hero.hero .hero__image { position: absolute; inset: 0; top: 0; left: 0; width: 100%; height: 100%; }
   .lp-hero__image img { object-position: center top; }
-  .lp-hero__veil { display: none; }
-  .lp-hero__content { order: 1; padding-bottom: 34px; }
+  .lp-hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
+  .lp-hero__content { position: relative; z-index: 1; padding-bottom: 48px; color: var(--ivory); }
+  .lp-hero__name, .lp-hero__eyebrow { color: var(--ivory); }
 
   .lp-film { min-height: 0; }
   .lp-film__content { padding-block: 54px; }
