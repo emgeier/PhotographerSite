@@ -7,19 +7,20 @@ const links = [
   { href: '/weddings/engagements', label: 'Engagements' },
   // Love Stories hidden for now — no real galleries yet. Restore when ready:
   // { href: '/weddings/stories', label: 'Love Stories' },
+  { href: '/weddings/about', label: 'About' },
 ] as const;
 
-const discover = [
-  { href: '/weddings/about', label: 'About' },
-  { href: '/weddings/faq', label: 'FAQ' },
-  { href: '/weddings/testimonials', label: 'Testimonials' },
-  { href: '/weddings/experience', label: 'The Experience' },
-] as const;
+// const discover = [
+//  { href: '/weddings/about', label: 'About' },
+//  { href: '/weddings/faq', label: 'FAQ' },
+//  { href: '/weddings/testimonials', label: 'Testimonials' },
+//  { href: '/weddings/experience', label: 'The Experience' },
+//] as const;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) =>
   path === href || path.startsWith(href + '/');
-const discoverActive = discover.some((d) => isActive(d.href));
+// const discoverActive = discover.some((d) => isActive(d.href));
 ---
 <header class="wd-header">
   <a class="brand" href="/" aria-label="LQ, home">
@@ -39,19 +40,6 @@ const discoverActive = discover.some((d) => isActive(d.href));
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-    <div class="wd-nav__discover">
-      <button
-        type="button"
-        class="wd-nav__discover-toggle"
-        aria-expanded="false"
-        aria-current={discoverActive ? 'page' : undefined}
-      >Discover <span class="wd-nav__caret" aria-hidden="true">▾</span></button>
-      <div class="wd-nav__menu">
-        {discover.map(({ href, label }) => (
-          <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
-        ))}
-      </div>
-    </div>
     <a class="wd-nav__inquire" href="/weddings/inquire">Inquire</a>
   </nav>
 </header>

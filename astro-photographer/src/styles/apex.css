@@ -141,7 +141,7 @@
 /* --------------------------------------------------------------- *
  * 7. Closing CTA (full-bleed warm golden-hour landscape)
  * --------------------------------------------------------------- */
-.lq-cta { position: relative; min-height: 420px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ivory); }
+.lq-cta { position: relative; min-height: max(420px, min(42vw, 620px)); overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ivory); }
 .lq-cta__image { position: absolute; inset: 0; }
 .lq-cta__image img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
 .lq-cta__veil { position: absolute; inset: 0; pointer-events: none; background: rgba(22, 16, 10, 0.3); }
@@ -155,7 +155,7 @@
 /* --------------------------------------------------------------- *
  * 8. Footer
  * --------------------------------------------------------------- */
-.lq-footer { padding: 34px 0 30px; color: var(--ivory); background: #1b1710; }
+.lq-footer { padding: 34px 0 30px; color: var(--ivory); background: #000; }
 .lq-footer__inner { width: min(1600px, calc(100% - 120px)); margin-inline: auto; }
 .lq-footer__top { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 40px; padding-bottom: 24px; }
 .lq-footer .lq-brand__name { font-size: 17px; letter-spacing: 3px; }
@@ -175,7 +175,7 @@
 
 @media (max-width: 860px) {
   .lq-nav { display: none; }
-  .lq-menu-toggle { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 44px; height: 44px; background: transparent; z-index: 6; }
+  .lq-menu-toggle { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: 44px; height: 44px; padding: 0; border: 0; appearance: none; -webkit-appearance: none; background: transparent; z-index: 6; }
   .lq-menu-toggle span { width: 25px; height: 1px; background: var(--lq-ink); }
   .lq-nav.is-open { display: flex; position: absolute; top: 86px; right: 0; left: 0; flex-direction: column; align-items: stretch; gap: 2px; padding: 18px 24px; background: rgba(244, 240, 232, 0.98); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
   .lq-nav.is-open a { padding: 13px 0; color: var(--lq-ink); }

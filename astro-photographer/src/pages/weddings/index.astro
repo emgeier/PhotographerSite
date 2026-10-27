@@ -65,7 +65,6 @@ const loveStories = (await getCollection('weddingStories'))
         <p class="wd-eyebrow">Our philosophy</p>
         <h2 id="wd-philo-title" class="wd-display wd-philo__title">Some moments<br />stay <em>forever.</em></h2>
         <p class="wd-philo__para">Photographs are more than images — they are a way to relive what matters most. My approach is guided by connection, intention, and the beauty of real moments.</p>
-        <a class="wd-textlink" href="/weddings/experience">Learn more</a>
       </div>
     </section>
 
@@ -92,31 +91,21 @@ const loveStories = (await getCollection('weddingStories'))
         </div>
       </article>
     </section>
-
-    <!-- THE EXPERIENCE -->
-    <section class="wd-exp" aria-labelledby="wd-exp-title">
+    <!-- OUR APPROACH -->
+    <section class="wd-approach" aria-labelledby="wd-approach-title">
       <div class="wd-container">
-        <div class="wd-exp__head" data-reveal>
-          <div>
-            <p class="wd-eyebrow">The experience</p>
-            <h2 id="wd-exp-title" class="wd-display wd-exp__title">From first conversation to the <em>day itself.</em></h2>
-          </div>
-          <div class="wd-exp__intro">
-            <p>A simple, thoughtful process designed to make your experience effortless and meaningful.</p>
-            <a class="wd-textlink" href="/weddings/experience">View the experience</a>
-          </div>
+        <div class="wd-approach__head" data-reveal>
+          <p class="wd-eyebrow wd-approach__eyebrow">Our approach</p>
+          <h2 id="wd-approach-title" class="wd-display wd-approach__title">A thoughtful approach,<br />from the very beginning.</h2>
+          <p class="wd-approach__intro">Your wedding experience is more than just a day of photographs. It’s a journey we take together — built on connection, thoughtful planning, and a shared vision, so you can be fully present while we preserve it all beautifully.</p>
         </div>
-        <ol class="wd-exp__steps">
+        <ol class="wd-approach__steps">
           {steps.map((s) => (
-            <li class="wd-step" data-reveal>
-              <figure class="wd-exp__photo"><Pic src={s.img} alt={`${s.t} — a moment from the process.`} sizes="(max-width: 860px) 100vw, 33vw" /></figure>
-              <div class="wd-step__row">
-                <span class="wd-step__num" aria-hidden="true">{s.n}</span>
-                <div>
-                  <h3 class="wd-step__h">{s.t}</h3>
-                  <p class="wd-step__p">{s.p}</p>
-                </div>
-              </div>
+            <li class="wd-acard" data-reveal>
+              <figure class="wd-acard__photo"><Pic src={s.img} alt={`${s.t} — part of the experience.`} sizes="(max-width: 900px) 100vw, 33vw" /></figure>
+              <p class="wd-acard__num"><span>{s.n}</span><span class="wd-acard__dash" aria-hidden="true"></span></p>
+              <h3 class="wd-acard__h">{s.t}</h3>
+              <p class="wd-acard__p">{s.p}</p>
             </li>
           ))}
         </ol>

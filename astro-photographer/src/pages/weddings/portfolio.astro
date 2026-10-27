@@ -67,7 +67,7 @@ const gallery =
           {gallery.map((g, i) => (
             <button
               type="button"
-              class={`wd-gallery__item${i === 0 ? ' wd-gallery__item--tall' : ''}`}
+              class="wd-gallery__item"
               data-gallery-item
               data-reveal
               aria-label={`View wedding photograph ${i + 1} larger`}
@@ -79,7 +79,7 @@ const gallery =
       </div>
     </section>
 
-    <!-- VIDEO TESTIMONIAL BAND -->
+    <!-- 
     <section class="wd-videoquote" aria-labelledby="wd-vq-title">
       <div class="wd-videoquote__media">
         <Pic src={videoImage} alt="A couple in a tender embrace, veil catching the light." sizes="(max-width: 860px) 100vw, 50vw" />
@@ -92,7 +92,7 @@ const gallery =
         <a class="wd-textlink" href="/weddings/testimonials">Watch more testimonials</a>
       </div>
     </section>
-
+VIDEO TESTIMONIAL BAND -->
     <!-- CLOSING CTA -->
     <section class="wd-cta" aria-labelledby="wd-cta-title">
       <div class="wd-cta__image" data-parallax>
@@ -106,6 +106,7 @@ const gallery =
         <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
+    
   </main>
   <WeddingsFooter />
 
