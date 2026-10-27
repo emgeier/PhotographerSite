@@ -1,6 +1,191 @@
 {
   "wedPortfolioHeroImage": "/images/WeddingPortfoliohero.jpg",
-  "wedPortfolioVideoImage": "/images/portfolio-closing.webp",
-  "wedPortfolioCtaImage": "/images/portfolio-hero.webp",
-  "wedPortfolioGallery": []
+  "wedPortfolioVideoImage": "",
+  "wedPortfolioCtaImage": "/images/WH02.jpg",
+  "wedPortfolioGallery": [
+    {
+      "image": "/images/WPortfolio23.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio20.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio21.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio22.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio24.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio25.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio26.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio27.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio28.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio29.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio30.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio31.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio32.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio33.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio34.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio35.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio36.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio37.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio38.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio39.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio40.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio41.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio42.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio43.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio44.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio45.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio46.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio47.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio48.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio49.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio50.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio51.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio52.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio53.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio54.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio55.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio56.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio57.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio58.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio59.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio60.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio61.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio62.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio63.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio64.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/WPortfolio65.jpg",
+      "alt": ""
+    }
+  ]
 }

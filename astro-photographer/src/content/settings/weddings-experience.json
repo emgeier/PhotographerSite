@@ -2,9 +2,9 @@
   "wedExperienceHeroImage": "/images/portfolio-banner.webp",
   "wedExperienceEasePhoto": "/images/story-portrait.webp",
   "wedExperienceStepImages": [
-    "/images/muses/portrait-01.webp",
-    "/images/muses/portrait-02.webp",
-    "/images/muses/portrait-03.webp"
+    "/images/Ex01.jpg",
+    "/images/Ex02.jpg",
+    "/images/Ex03.jpg"
   ],
   "wedExperienceCtaImage": "/images/portfolio-closing.webp"
 }

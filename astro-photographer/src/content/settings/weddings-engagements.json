@@ -1,6 +1,195 @@
 {
   "wedEngagementsHeroImage": "/images/Engagementportfoliohero.jpg",
   "wedEngagementsVideoImage": "/images/story-portrait.webp",
-  "wedEngagementsCtaImage": "/images/portfolio-closing.webp",
-  "wedEngagementsGallery": []
+  "wedEngagementsCtaImage": "/images/ETW07.jpg",
+  "wedEngagementsGallery": [
+    {
+      "image": "/images/EPortfolio66.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio67.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio68.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio69.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio70.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio71.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio72.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio73.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio74.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio75.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio76.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio77.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio78.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio79.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio80.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio81.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio82.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio83.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio84.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio85.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio86.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio87.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio88.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio89.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio90.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio91.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio92.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio93.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio94.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio95.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio96.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio97.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio98.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio99.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio100.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio101.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio102.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio103.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio104.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio105.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio106.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio107.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio108.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio109.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio110.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio111.jpg",
+      "alt": ""
+    },
+    {
+      "image": "/images/EPortfolio112.jpg",
+      "alt": ""
+    }
+  ]
 }
