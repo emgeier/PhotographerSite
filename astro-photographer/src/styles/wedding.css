@@ -372,10 +372,10 @@ button.wd-gallery__item:focus-visible { outline: 2px solid var(--wd-gold, #b08d5
 .wd-inquire__aside-para { margin-top: 16px; max-width: 300px; color: #efe8dd; font-size: 14px; line-height: 1.6; }
 .wd-form { padding: 60px clamp(36px, 5vw, 90px); }
 .wd-form__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 30px; }
-.wd-form__field { display: flex; flex-direction: column; }
+.wd-form__field { display: flex; flex-direction: column; min-width: 0; }
 .wd-form__field--full { grid-column: 1 / -1; }
 .wd-form label { font: 600 10px/1 var(--sans); letter-spacing: 1.6px; text-transform: uppercase; color: var(--wd-body, #5a5247); }
-.wd-form input, .wd-form select, .wd-form textarea { margin-top: 10px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(33,28,21,0.3); background: transparent; font: 400 15px/1.4 var(--serif); color: var(--wd-ink, #211c15); }
+.wd-form input, .wd-form select, .wd-form textarea { width: 100%; max-width: 100%; box-sizing: border-box; margin-top: 10px; padding: 10px 2px; border: none; border-bottom: 1px solid rgba(33,28,21,0.3); background: transparent; font: 400 15px/1.4 var(--serif); color: var(--wd-ink, #211c15); }
 .wd-form textarea { min-height: 96px; resize: vertical; }
 .wd-form input:focus, .wd-form select:focus, .wd-form textarea:focus { outline: none; border-bottom-color: var(--wd-gold, #b08d57); }
 .wd-form__submit { grid-column: 1 / -1; justify-content: center; width: 100%; margin-top: 6px; border: none; cursor: pointer; }
