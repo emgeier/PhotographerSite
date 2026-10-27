@@ -583,12 +583,12 @@ body.dialog-open { overflow: hidden; }
 @media (max-width: 620px) {
 
 
-  .wd-videoquote, .wd-inquire { grid-template-columns: 1fr; }
+  .wd-videoquote, .wd-inquire { grid-template-columns: minmax(0, 1fr); }
   .wd-videoquote__media { min-height: 320px; }
   .wd-quotes__grid { grid-template-columns: 1fr; gap: 36px; max-width: 460px; margin-inline: auto; }
   .wd-quotecards__grid { grid-template-columns: 1fr; gap: 32px; }
   .wd-inquire__aside { min-height: 360px; }
-  .wd-note .wd-featured__row { grid-template-columns: 1fr; }
+  .wd-note .wd-featured__row { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 620px) {
@@ -599,7 +599,7 @@ body.dialog-open { overflow: hidden; }
   /* Show each photo in full (no square crop): image keeps its natural ratio. */
   .wd-gallery__item img { height: auto; object-fit: contain; }
   .wd-gallery__item:hover img { scale: 1; }
-  .wd-form__grid { grid-template-columns: 1fr; }
+  .wd-form__grid { grid-template-columns: minmax(0, 1fr); }
   .wd-faq__cat { grid-template-columns: 1fr; gap: 24px; }
   .wd-traits { grid-template-columns: 1fr 1fr; }
   .wd-quotecard { grid-template-columns: 110px 1fr; gap: 18px; }

@@ -112,26 +112,6 @@ const steps = [
       </form>
     </section>
 
-    <!-- THE EXPERIENCE STEPS -->
-    <section class="wd-approach" aria-labelledby="wd-exp-title">
-      <div class="wd-container">
-        <div class="wd-approach__head" data-reveal>
-          <p class="wd-eyebrow wd-approach__eyebrow">The experience</p>
-          <h2 id="wd-exp-title" class="wd-display wd-approach__title">From our first conversation to the day itself.</h2>
-        </div>
-        <ol class="wd-approach__steps">
-          {steps.map((s) => (
-            <li class="wd-acard" data-reveal>
-              <figure class="wd-acard__photo"><Pic src={s.img} alt={`${s.t} — part of the experience.`} sizes="(max-width: 900px) 100vw, 33vw" /></figure>
-              <p class="wd-acard__num"><span>{s.n}</span><span class="wd-acard__dash" aria-hidden="true"></span></p>
-              <h3 class="wd-acard__h">{s.t}</h3>
-              <p class="wd-acard__p">{s.p}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
     <!-- A NOTE FROM LUIS -->
     <section class="wd-note wd-featured" aria-labelledby="wd-note-title">
       <div class="wd-container wd-featured__row">

@@ -55,9 +55,13 @@ const optionalList = z.preprocess((v) => {
 // built-in fallback gallery applies. Used by the weddings portfolio gallery.
 const galleryItemList = z.preprocess((v) => {
   if (!Array.isArray(v)) return undefined;
-  const cleaned = v.filter(
-    (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
-  );
+  // Accept a bare string path (from the CMS multiple-image bulk field) or a
+  // legacy { image, alt } object; normalize both to { image, alt? }.
+  const cleaned = v
+    .map((x) => (typeof x === 'string' ? { image: x } : x))
+    .filter(
+      (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
+    );
   return cleaned.length ? cleaned : undefined;
 }, z
   .array(
@@ -72,9 +76,13 @@ const galleryItemList = z.preprocess((v) => {
 // shown in the muse portfolio lightbox. Same drop/fallback semantics.
 const portfolioItemList = z.preprocess((v) => {
   if (!Array.isArray(v)) return undefined;
-  const cleaned = v.filter(
-    (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
-  );
+  // Accept a bare string path (from the CMS multiple-image bulk field) or a
+  // legacy { image, alt, title?, caption? } object; normalize both.
+  const cleaned = v
+    .map((x) => (typeof x === 'string' ? { image: x } : x))
+    .filter(
+      (x) => x && typeof x === 'object' && typeof (x as any).image === 'string' && (x as any).image.trim() !== '',
+    );
   return cleaned.length ? cleaned : undefined;
 }, z
   .array(

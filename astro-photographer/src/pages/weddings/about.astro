@@ -8,7 +8,7 @@ import { getEntry } from 'astro:content';
 import '../../styles/wedding.css';
 
 const wed = await getEntry('settings', 'weddings-about');
-const heroImage = wed?.data.wedAboutHeroImage ?? '/images/portrait.webp';
+const heroImage = wed?.data.wedAboutHeroImage ?? '/images/Wportrait.jpg';
 const lifeImage = wed?.data.wedAboutLifeImage ?? '/images/ms-muse-2.webp';
 const philoImage = wed?.data.wedAboutPhiloImage ?? '/images/portfolio-banner.webp';
 const videoImage = wed?.data.wedAboutVideoImage ?? '/images/story-portrait.webp';

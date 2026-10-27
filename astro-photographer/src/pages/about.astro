@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import WeddingsHeader from '../components/WeddingsHeader.astro';
+import WeddingsFooter from '../components/WeddingsFooter.astro';
+import SiteMotion from '../components/SiteMotion.astro';
+import Pic from '../components/Pic.astro';
+import { getEntry } from 'astro:content';
+import '../styles/wedding.css';
+
+const wed = await getEntry('settings', 'weddings-about');
+const heroImage = wed?.data.wedAboutHeroImage ?? '/images/Wportrait.jpg';
+const lifeImage = wed?.data.wedAboutLifeImage ?? '/images/ms-muse-2.webp';
+const philoImage = wed?.data.wedAboutPhiloImage ?? '/images/portfolio-banner.webp';
+const videoImage = wed?.data.wedAboutVideoImage ?? '/images/story-portrait.webp';
+const ctaImage = wed?.data.wedAboutCtaImage ?? '/images/portfolio-closing.webp';
+
+const traits = [
+  { h: 'Travel & Discovery', p: 'New places, new perspectives, endless inspiration.', icon: 'mountain' },
+  { h: 'People & Connection', p: 'Meaningful conversations and stories that inspire.', icon: 'people' },
+  { h: 'Peruvian Food', p: 'Ceviche, good food, and unforgettable conversations.', icon: 'food' },
+  { h: 'Art & Creativity', p: 'I’ve always loved drawing and creating beautiful things.', icon: 'camera' },
+  { h: 'Dance', p: 'Salsa and sensual bachata — connection through movement.', icon: 'music' },
+  { h: 'Nature', p: 'I love being outdoors, walking and exploring.', icon: 'leaf' },
+];
+---
+<Base
+  title="About Luis — Luis Quintana Studio"
+  description="A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully."
+>
+  <main class="wd wd-page" id="main-content">
+    <!-- HERO (full-bleed portrait of Luis with overlaid copy — mirrors the
+         portfolio / engagements subhero so every page opens with the same
+         top-of-page hero treatment). -->
+    <section class="wd-hero wd-subhero">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A portrait of Luis holding a camera." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-subhero__kicker" data-hero-item>About</p>
+        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>Luis Quintana</h1>
+        <p class="wd-hero__lede" data-hero-item>A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully.</p>
+      </div>
+    </section>
+
+    <!-- A LIFE INSPIRED (copy left + photo right + trait grid) -->
+    <section class="wd-ease" id="wd-life" aria-labelledby="wd-life-title" style="padding-top: 20px;">
+      <div class="wd-container wd-ease__row">
+        <div class="wd-ease__copy" data-reveal>
+          <p class="wd-eyebrow">More than a photographer</p>
+          <h2 id="wd-life-title" class="wd-display wd-ease__title">A life inspired by people, beauty and <em>everyday moments.</em></h2>
+          <p class="wd-ease__para">I’m Luis Quintana Ticona, a photographer, artist, and storyteller born in Lima, Peru. Since I was a kid, I’ve been drawn to art — drawing, and finding beauty in the little things.</p>
+          <p class="wd-ease__para">Life has always inspired me: meaningful connections, new places, good food, and the joy of being present. Photography allows me to combine everything I love — people, emotion, art, and real moments — and turn them into something timeless.</p>
+          <div class="wd-traits">
+            {traits.map((t) => (
+              <div class="wd-trait">
+                <span class="wd-trait__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+                    {t.icon === 'mountain' && <path d="M3 19 9 8l4 6 2-3 6 8z" />}
+                    {t.icon === 'people' && <g><circle cx="8" cy="9" r="2.4" /><circle cx="16" cy="9" r="2.4" /><path d="M4 19c0-2.5 2-4 4-4s4 1.5 4 4M12 19c0-2.5 2-4 4-4s4 1.5 4 4" /></g>}
+                    {t.icon === 'food' && <g><path d="M6 3v8M9 3v8M7.5 11v10M6 3a1.5 1.5 0 0 0-1.5 1.5M9 3a1.5 1.5 0 0 1 1.5 1.5M16 3c-1.5 0-2.5 2-2.5 5s1 4 2.5 4v9" /></g>}
+                    {t.icon === 'camera' && <g><rect x="3" y="7" width="18" height="13" rx="2" /><circle cx="12" cy="13.5" r="3.2" /><path d="M8 7l1.5-2h5L16 7" /></g>}
+                    {t.icon === 'music' && <g><path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" /></g>}
+                    {t.icon === 'leaf' && <path d="M4 20c0-9 7-14 16-15C19 14 13 20 4 20Zm0 0C8 15 12 12 17 10" />}
+                  </svg>
+                </span>
+                <p class="wd-trait__h">{t.h}</p>
+                <p class="wd-trait__p">{t.p}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <figure class="wd-ease__photo" data-reveal>
+          <Pic src={lifeImage} alt="A couple dancing in a city square at golden hour." sizes="(max-width: 900px) 100vw, 46vw" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- MY PHILOSOPHY (dark band) -->
+    <section class="wd-philoband" aria-labelledby="wd-phil-title">
+      <div class="wd-philoband__image" data-parallax>
+        <Pic src={philoImage} alt="A misty mountain lake at dusk." sizes="100vw" />
+      </div>
+      <div class="wd-philoband__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-philoband__inner" data-reveal>
+        <p class="wd-eyebrow wd-philoband__eyebrow">My philosophy</p>
+        <h2 id="wd-phil-title" class="wd-display wd-philoband__title">Not just how it looked. How it felt.</h2>
+        <p class="wd-philoband__para">I believe the most meaningful photographs do more than show what happened. They bring you back to the emotion, the atmosphere, and the people who mattered. My approach blends thoughtful artistry and genuine connection — so you can remember not only the moment, but exactly how it felt.</p>
+      </div>
+    </section>
+
+    <!-- A FEW WORDS (video band) -->
+    <section class="wd-videoquote" aria-labelledby="wd-few-title">
+      <div class="wd-videoquote__media">
+        <Pic src={videoImage} alt="Luis seated in warm light, camera in hand." sizes="(max-width: 860px) 100vw, 50vw" />
+        <span class="wd-videoquote__play" aria-hidden="true"></span>
+      </div>
+      <div class="wd-videoquote__copy" data-reveal>
+        <p class="wd-eyebrow">A few words</p>
+        <h2 id="wd-few-title" class="wd-display" style="font-size: clamp(32px, 3.4vw, 48px); text-transform: uppercase; margin-top: 14px;">A few words from me.</h2>
+        <p class="wd-videoquote__para" style="font-style: normal;">In this short video, I share a bit about who I am, what inspires me, and what you can expect when we work together. It’s a more personal look into my approach, my values, and my passion for telling your story.</p>
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section class="wd-cta" aria-labelledby="wd-cta-title">
+      <div class="wd-cta__image" data-parallax>
+        <Pic src={ctaImage} alt="A couple overlooking a mountain lake at sunset." sizes="100vw" />
+      </div>
+      <div class="wd-cta__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-cta__content" data-reveal>
+        <p class="wd-eyebrow wd-cta__eyebrow">Beyond the photos</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Your story starts here.</h2>
+        <p class="wd-cta__para">Every meaningful chapter begins with a conversation. I would love to hear about your wedding, your vision, and the moments you cannot wait to remember.</p>
+        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>
