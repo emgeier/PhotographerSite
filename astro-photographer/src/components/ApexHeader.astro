@@ -5,7 +5,7 @@
 // (#menu-toggle, #primary-nav, body.menu-open). Rendered light over the dark hero.
 const links = [
   { href: '/weddings', label: 'Weddings & Engagements' },
-  { href: '/muse', label: 'The Glam Muse Series' },
+  { href: '/muse', label: 'Glam Muse' },
 ] as const;
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
@@ -31,6 +31,5 @@ const isActive = (href: string) => path === href || path.startsWith(href + '/');
     {links.map(({ href, label }) => (
       <a href={href} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>
     ))}
-    <a class="lq-nav__inquire" href="/weddings/inquire">Inquire</a>
   </nav>
 </header>
