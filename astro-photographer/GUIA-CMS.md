@@ -128,12 +128,15 @@ Página de inicio de Bodas.
 - **Video testimonial image** — imagen del testimonio en video.
 - **Closing CTA background** — fondo de la sección final.
 - **Gallery photos** — la galería de fotos de la página (la cuadrícula que al
-  hacer clic se abre en grande). Es una **lista**: usa **"Add Photo"** (Agregar)
-  para añadir cada foto, y arrastra para **reordenar** (el orden en la lista es
-  el orden en la página y en la ventana ampliada). Cada foto tiene:
-  - **Photo** — la imagen (súbela ya reducida, ver "Consejos para las fotos").
-  - **Alt text** — una breve descripción de la foto (para accesibilidad y Google).
-  - Si dejas la lista **vacía**, el sitio muestra una galería de ejemplo por
+  hacer clic se abre en grande). Ahora puedes **subir MUCHAS fotos a la vez**:
+  haz clic en el campo, y en la ventana de medios **selecciona varios archivos
+  juntos** (mantén presionada la tecla Cmd en Mac o Ctrl en Windows para marcar
+  varias, o arrástralas todas juntas desde una carpeta). Se agregan todas de una
+  sola vez. Luego puedes **arrastrar para reordenar** (el orden es el que se ve
+  en la página y en la ventana ampliada) y quitar las que no quieras.
+  - Súbelas **ya reducidas** (ver "Consejos para las fotos"), porque subir muchas
+    fotos pesadas de golpe hace el sitio muy lento.
+  - Si dejas la galería **vacía**, el sitio muestra una galería de ejemplo por
     defecto. En cuanto agregas tus propias fotos, estas reemplazan las de ejemplo.
 
 ### Weddings — Engagements images (/weddings/engagements)
@@ -180,14 +183,12 @@ puedes editar escribiendo directamente.
 
 En **Portfolio page — images** (la página /muse/portfolio) además de las fotos de
 fondo tienes **Portrait gallery**: la cuadrícula de retratos que al hacer clic se
-abren en grande. Es una **lista** igual que la galería de bodas — usa **"Add
-Portrait"** para añadir, arrastra para reordenar, y cada retrato tiene:
-- **Photo** — la imagen (ya reducida).
-- **Alt text** — descripción breve.
-- **Title** — título que se muestra en la ventana ampliada (opcional).
-- **Caption** — frase que se muestra en la ventana ampliada (opcional).
+abren en grande. Igual que la galería de bodas, puedes **subir MUCHOS retratos a
+la vez**: haz clic en el campo y **selecciona varios archivos juntos** (Cmd en
+Mac / Ctrl en Windows, o arrástralos todos juntos desde una carpeta). Después
+**arrastra para reordenar** y quita los que no quieras. Súbelos ya reducidos.
 
-Si dejas la lista vacía, el sitio usa los retratos de ejemplo por defecto.
+Si dejas la galería vacía, el sitio usa los retratos de ejemplo por defecto.
 
 ---
 
@@ -212,7 +213,9 @@ Aquí puedes agregar bodas o compromisos nuevos que aparecen en la página
    - **Intro title** — título de la introducción.
    - **Intro paragraphs** — párrafos de la introducción. Usa **"Add"** (Agregar)
      para añadir más de uno.
-   - **Gallery** — galería de fotos. Usa **"Add"** para agregar cada foto.
+   - **Gallery** — galería de fotos. Puedes **subir muchas a la vez**:
+     selecciona varios archivos juntos (Cmd en Mac / Ctrl en Windows) o
+     arrástralos desde una carpeta, y luego arrastra para reordenar.
    - **Quote text** — la cita/testimonio de la pareja.
    - **Quote attribution** — de quién es la cita (ej. "Alex & Taylor").
 4. **Save** y luego **Publish → Publish now**.
@@ -233,7 +236,9 @@ Igual que las historias de boda, pero para el lado Glam Muse. Campos principales
 - **Featured** — actívalo solo en UNA musa (la destacada). Si lo activas, llena
   también **Featured paragraph**.
 - **Card image / Hero image** — fotos de la tarjeta y de la página.
-- **Gallery** — galería de fotos (usa **"Add"**).
+- **Gallery** — galería de fotos. Puedes **subir muchas a la vez**: selecciona
+  varios archivos juntos (Cmd en Mac / Ctrl en Windows) o arrástralos desde una
+  carpeta; luego arrastra para reordenar.
 - **Before / After** — fotos de antes y después.
 - **In Motion — video link** — enlace del video (opcional). Déjalo vacío si no
   hay video. Debe ser un enlace que contenga `/media/`; si no estás segura,
@@ -270,6 +275,25 @@ de **Muses** y **Wedding Stories** se pueden crear y borrar.
 Reduce la foto antes de subirla (alrededor de 2000 px en el lado largo) y vuelve
 a subirla. Puedes usar la app de Fotos o cualquier editor para exportarla más
 pequeña.
+
+**¿Puedo subir varias fotos de la galería al mismo tiempo?**
+Sí. Los campos de galería (la de /weddings/portfolio, /weddings/engagements, la
+de /muse/portfolio, la de cada Musa y la de cada Historia de Boda) ahora aceptan
+**muchas fotos a la vez**. Haz clic en el campo de galería y, en la ventana de
+medios:
+- **Subir varias nuevas:** haz clic en **"Upload"** y en el selector de archivos
+  marca varias (mantén **Cmd** en Mac o **Ctrl** en Windows para elegir varias),
+  o **arrastra** un grupo de fotos desde una carpeta.
+- Se agregan todas de una sola vez a la galería.
+- Después puedes **arrastrar para reordenar** y quitar las que no quieras; el
+  orden en la lista es el orden en que se ven en la página.
+
+Dos recordatorios:
+- **Redúcelas antes** (ver "Consejos para las fotos"): subir muchas fotos pesadas
+  de golpe hace el sitio lento y la subida tarda mucho.
+- Con la subida múltiple, las fotos **ya no llevan texto alternativo (Alt)**
+  individual; el sitio les pone una descripción general automática. Es un cambio
+  a propósito para que subir galerías completas sea rápido y sencillo.
 
 **Me salió un error al iniciar sesión.**
 No es culpa tuya. Avisa a tu desarrollador: suele ser un ajuste de configuración
