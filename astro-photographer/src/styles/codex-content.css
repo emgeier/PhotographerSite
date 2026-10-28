@@ -251,8 +251,8 @@
   /* Subject sits right of center; shift the mobile crop rightward so the
    * person stays in frame (desktop framing is unchanged). */
   .ex2-hero .hero__image img { object-position: 72% top; }
-  .ct2-hero .hero__image img { object-position: 100% top; }
-  .ct2-hero .hero__image.has-mobile-hero img { object-position: center top; }
+  .ct2-hero .hero__image img { object-fit: cover; object-position: 78% 18%; }
+  .ct2-hero .hero__image.has-mobile-hero img { object-fit: cover; object-position: center top; }
   /* Narrower bottom veil on inquire: the dark wash clears sooner so more of
    * the photo is visible; still dark enough behind the bottom copy. */
   .ct2-hero .hero__veil { background: linear-gradient(0deg, rgba(16,12,8,0.6) 0%, rgba(16,12,8,0.2) 20%, transparent 40%); }
@@ -427,7 +427,7 @@
  * order) so the inquire hero box matches the home page at every breakpoint. */
 .ct2-hero.hero { min-height: 710px; height: min(760px, 58vw); background: #e7ded0; }
 .ct2-hero.hero .hero__image { inset: -3% 0; top: var(--header-h); }
-.ct2-hero .hero__image img { object-position: center top; }
+.ct2-hero .hero__image img { object-fit: cover; object-position: 78% 18%; }
 .ct2-hero .hero__content { max-width: var(--content-width); }
 .ct2-hero__title { max-width: 560px; }
 .ct2-hero__lede { max-width: 430px; margin-top: 28px; color: #4a443b; font-size: var(--body-size); line-height: var(--body-leading); }
@@ -826,3 +826,12 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 .thanks-dialog .short-rule { margin: 20px 0; }
 .thanks-dialog__text { max-width: 300px; color: #4a443b; font-size: var(--body-size); line-height: var(--body-leading); margin: 0 0 28px; }
 .thanks-dialog__cta { min-width: 240px; }
+
+/* ============================================================= *
+ * Phones (<=560px): narrow the inquire hero veil further so even more of
+ * the photo shows. Scoped to .ct2-hero (muse/inquire only). The dark wash
+ * clears by ~26% — just enough to keep the bottom copy legible.
+ * ============================================================= */
+@media (max-width: 560px) {
+  .ct2-hero.hero .hero__veil { background: linear-gradient(0deg, rgba(16,12,8,0.58) 0%, rgba(16,12,8,0.15) 12%, transparent 26%); }
+}
