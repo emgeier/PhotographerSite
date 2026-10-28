@@ -171,7 +171,6 @@ collections:
         file: astro-photographer/src/content/settings/weddings-home.json
         fields:
           - { name: wedHomeHeroImage, label: Hero image, widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — Recuerda hacer Save y luego Publish.' }
-          - { name: wedHomeHeroImageMobile, label: 'Hero image — mobile version (optional; used on phones for better framing)', widget: image, required: false }
           - { name: wedHomePhiloImage, label: Philosophy photo, widget: image, required: false }
           - { name: wedHomeWeddingsCardImage, label: Weddings card image, widget: image, required: false }
           - { name: wedHomeEngagementsCardImage, label: Engagements card image, widget: image, required: false }

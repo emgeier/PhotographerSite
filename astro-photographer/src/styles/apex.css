@@ -194,6 +194,8 @@
 @media (max-width: 560px) {
   .lq-container, .lq-header, .lq-footer__inner { width: calc(100% - 40px); }
   .lq-hero { min-height: 560px; height: 100svh; padding: 150px 0 90px; }
+  /* Subject sits right of center; shift the mobile crop rightward. */
+  /* .lq-hero__image img, .lq-hero__slide img { object-position: 78% top; } */
   .lq-hero__title { font-size: clamp(54px, 18vw, 76px); }
   .lq-hero__indicator { bottom: 32px; }
   .lq-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }

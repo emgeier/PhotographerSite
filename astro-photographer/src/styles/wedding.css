@@ -612,9 +612,10 @@ body.dialog-open { overflow: hidden; }
 @media (max-width: 560px) {
   .wd-container, .wd-header, .wd-footer__inner { width: calc(100% - 40px); }
   .wd-hero { min-height: 560px; height: 100svh; padding: 150px 0 54px; }
-  /* Subject sits right of center; shift the mobile crop rightward. */
-  .wd-hero__image img { object-position: 90% 40%; }
-  .wd-hero__image.has-mobile-hero img { object-position: center center; }
+  .wd-hero__image img { object-position: 65% top; }
+
+  /* Inquire subject sits right of center; shift its mobile crop rightward. */
+  .wd-hero--inquire .wd-hero__image img { object-position: 85% 40%; }
   .wd-footer__bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
   /* Step the big editorial titles down on small phones so they read
      comfortably instead of sitting at their desktop clamp minimum. */

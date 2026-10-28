@@ -293,7 +293,6 @@ const settings = defineCollection({
 
     // weddings-home.json — Weddings home (/weddings) section images.
     wedHomeHeroImage: optionalText,
-    wedHomeHeroImageMobile: optionalText,
     wedHomePhiloImage: optionalText,
     wedHomeWeddingsCardImage: optionalText,
     wedHomeEngagementsCardImage: optionalText,
