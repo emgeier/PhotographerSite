@@ -253,6 +253,9 @@
   .ex2-hero .hero__image img { object-position: 72% top; }
   .ct2-hero .hero__image img { object-position: 100% top; }
   .ct2-hero .hero__image.has-mobile-hero img { object-position: center top; }
+  /* Narrower bottom veil on inquire: the dark wash clears sooner so more of
+   * the photo is visible; still dark enough behind the bottom copy. */
+  .ct2-hero .hero__veil { background: linear-gradient(0deg, rgba(16,12,8,0.6) 0%, rgba(16,12,8,0.2) 20%, transparent 40%); }
 
   .ex2-process, .ex2-inside, .ms2-featured, .ms2-meet, .ms2-look, .ms2-motion { padding-block: 42px; }
 
