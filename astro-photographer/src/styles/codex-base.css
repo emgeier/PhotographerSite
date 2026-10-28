@@ -311,8 +311,7 @@ button { border: 0; }
      page regardless of the desktop color treatment. */
   .hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 560px; height: 100svh; padding-top: 106px; padding-bottom: 0; }
   .hero__image { position: absolute; inset: 0; width: 100%; height: 100%; }
-  /* Subject sits right of center; shift the mobile crop rightward. */
-  .hero__image img { object-position: 90% top; }
+  .hero__image img { object-position: center top; }
   /* A purpose-cropped mobile image is already framed; show it centered. */
   .hero__image.has-mobile-hero img { object-position: center top; }
   .hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
