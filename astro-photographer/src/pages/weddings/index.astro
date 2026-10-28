@@ -13,6 +13,7 @@ import '../../styles/wedding.css';
 // each falls back to its original path so the page renders identically absent.
 const wed = await getEntry('settings', 'weddings-home');
 const heroImage = wed?.data.wedHomeHeroImage ?? '/images/home-hero.webp';
+const heroImageMobile = wed?.data.wedHomeHeroImageMobile ?? '';
 const philoImage = wed?.data.wedHomePhiloImage ?? '/images/story-portrait.webp';
 const weddingsCardImage = wed?.data.wedHomeWeddingsCardImage ?? '/images/portfolio-closing.webp';
 const engagementsCardImage = wed?.data.wedHomeEngagementsCardImage ?? '/images/ms-muse-2.webp';
@@ -45,8 +46,15 @@ const loveStories = (await getCollection('weddingStories'))
     <!-- HERO -->
     <section class="wd-hero">
       <WeddingsHeader />
-      <div class="wd-hero__image" data-parallax>
-        <Pic src={heroImage} alt="A couple at golden hour overlooking a lake and mountains." priority sizes="100vw" />
+      <div class:list={["wd-hero__image", heroImageMobile && "has-mobile-hero"]} data-parallax>
+        {heroImageMobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcset={heroImageMobile} />
+            <img src={heroImage} alt="A couple at golden hour overlooking a lake and mountains." loading="eager" fetchpriority="high" decoding="auto" />
+          </picture>
+        ) : (
+          <Pic src={heroImage} alt="A couple at golden hour overlooking a lake and mountains." priority sizes="100vw" />
+        )}
       </div>
       <div class="wd-hero__veil" aria-hidden="true"></div>
       <div class="wd-container wd-hero__content">

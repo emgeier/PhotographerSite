@@ -17,6 +17,7 @@ const muses = (await getCollection('muses')).sort((a, b) => a.data.order - b.dat
 // CMS can swap them per page — the heroes are no longer a shared placeholder.
 const home = await getEntry('settings', 'home');
 const hero = home?.data.homeHeroImage ?? '/images/home-hero.webp';
+const heroMobile = home?.data.homeHeroImageMobile ?? '';
 const portrait = home?.data.homePortraitImage ?? '/images/home-portrait.webp';
 const closing = home?.data.homeClosingImage ?? '/images/home-closing.webp';
 const experienceImage = home?.data.homeExperienceImage ?? '/images/home-experience-bg.webp';
@@ -26,13 +27,26 @@ const experienceImage = home?.data.homeExperienceImage ?? '/images/home-experien
     <!-- HERO: Codex markup with data-hero-* motion hooks; hero image via Pic (priority/LCP). -->
     <section class="hero" id="home" aria-labelledby="hero-title">
       <Header />
-      <div class="hero__image" data-hero-image data-parallax>
-        <Pic
-          src={hero}
-          alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
-          priority
-          sizes="100vw"
-        />
+      <div class:list={["hero__image", heroMobile && "has-mobile-hero"]} data-hero-image data-parallax>
+        {heroMobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcset={heroMobile} />
+            <img
+              src={hero}
+              alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+              loading="eager"
+              fetchpriority="high"
+              decoding="auto"
+            />
+          </picture>
+        ) : (
+          <Pic
+            src={hero}
+            alt="A softly lit editorial portrait of a brunette woman seated in an ivory dress."
+            priority
+            sizes="100vw"
+          />
+        )}
       </div>
       <div class="hero__veil" aria-hidden="true"></div>
       <div class="container hero__content">

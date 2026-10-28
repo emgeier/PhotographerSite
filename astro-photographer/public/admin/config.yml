@@ -53,6 +53,7 @@ collections:
         file: astro-photographer/src/content/settings/inquire.json
         fields:
           - { name: contactHeroImage, label: Hero image, widget: image, required: false }
+          - { name: contactHeroImageMobile, label: 'Hero image — mobile version (optional; used on phones for better framing)', widget: image, required: false }
           - { name: contactAboutImage, label: 'About (black-and-white portrait)', widget: image, required: false }
           - { name: contactStepsImage, label: 'Steps band image', widget: image, required: false }
           - { name: contactCloseImage, label: Closing image, widget: image, required: false }
@@ -71,6 +72,7 @@ collections:
         file: astro-photographer/src/content/settings/home.json
         fields:
           - { name: homeHeroImage, label: Hero image, widget: image, required: false }
+          - { name: homeHeroImageMobile, label: 'Hero image — mobile version (optional; used on phones for better framing)', widget: image, required: false }
           - { name: homePortraitImage, label: '“Look again” portrait', widget: image, required: false }
           - { name: homeClosingImage, label: Closing image, widget: image, required: false }
           - { name: homeExperienceImage, label: 'Experience section background', widget: image, required: false }
@@ -98,10 +100,16 @@ collections:
           - { name: portfolioFilmImage, label: Experience film still, widget: image, required: false }
           - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
           - name: portfolioGallery
-            label: 'Portrait gallery — select or drag MANY photos at once (leave empty to use the built-in set)'
-            widget: image
-            multiple: true
+            label: 'Portrait gallery (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Portrait
             required: false
+            summary: '{{fields.title | default(fields.image)}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
+              - { name: title, label: 'Title (shown in the popup, optional)', widget: string, required: false }
+              - { name: caption, label: 'Caption (shown in the popup, optional)', widget: string, required: false }
 
       - name: landing
         label: 'Landing page (muse/landing) — content'
@@ -163,6 +171,7 @@ collections:
         file: astro-photographer/src/content/settings/weddings-home.json
         fields:
           - { name: wedHomeHeroImage, label: Hero image, widget: image, required: false, hint: '¿Necesitas ayuda? Lee la guía: /admin/guia.html — Recuerda hacer Save y luego Publish.' }
+          - { name: wedHomeHeroImageMobile, label: 'Hero image — mobile version (optional; used on phones for better framing)', widget: image, required: false }
           - { name: wedHomePhiloImage, label: Philosophy photo, widget: image, required: false }
           - { name: wedHomeWeddingsCardImage, label: Weddings card image, widget: image, required: false }
           - { name: wedHomeEngagementsCardImage, label: Engagements card image, widget: image, required: false }
@@ -191,10 +200,14 @@ collections:
           - { name: wedPortfolioVideoImage, label: Video testimonial image, widget: image, required: false }
           - { name: wedPortfolioCtaImage, label: Closing CTA background, widget: image, required: false }
           - name: wedPortfolioGallery
-            label: 'Gallery photos — select or drag MANY at once (leave empty to use the built-in set)'
-            widget: image
-            multiple: true
+            label: 'Gallery photos (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Photo
             required: false
+            summary: '{{fields.alt | default(fields.image)}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-faq
         label: 'Weddings — FAQ images'
@@ -211,10 +224,14 @@ collections:
           - { name: wedEngagementsVideoImage, label: Featured session image, widget: image, required: false }
           - { name: wedEngagementsCtaImage, label: Closing CTA background, widget: image, required: false }
           - name: wedEngagementsGallery
-            label: 'Gallery photos — select or drag MANY at once (leave empty to use the built-in set)'
-            widget: image
-            multiple: true
+            label: 'Gallery photos (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
+            widget: list
+            label_singular: Photo
             required: false
+            summary: '{{fields.alt | default(fields.image)}}'
+            fields:
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-inquire
         label: 'Weddings — Inquire images'
@@ -260,10 +277,10 @@ collections:
           - { name: wedGiveawayClosingImage, label: Closing couple image, widget: image, required: false }
           - { name: wedGiveawayMeetImage, label: Meet Luis portrait, widget: image, required: false }
           - name: wedGiveawayGallery
-            label: 'Engagements gallery — select or drag MANY at once (leave empty to use placeholders)'
-            widget: image
-            multiple: true
+            label: 'Engagements gallery (up to 10 — leave empty to use placeholders)'
+            widget: list
             required: false
+            field: { name: image, label: Image, widget: image }
 
   - name: muses
     label: Muses
@@ -279,10 +296,14 @@ collections:
       - { name: cardImage, label: Card image, widget: image, required: false }
       - { name: heroImage, label: Hero image, widget: image, required: false }
       - name: gallery
-        label: 'Gallery — select or drag MANY photos at once'
-        widget: image
-        multiple: true
+        label: Gallery
+        widget: list
         required: false
+        label_singular: Photo
+        summary: '{{fields.caption | default(fields.image)}}'
+        fields:
+          - { name: image, label: Image, widget: image }
+          - { name: caption, label: Caption (optional — defaults to the shared editorial pool), widget: string, required: false }
       - { name: beforeImage, label: Before, widget: image, required: false }
       - { name: afterImage, label: After, widget: image, required: false }
       - { name: motionImage, label: 'In Motion — poster image', widget: image, required: false, hint: 'Poster frame for the "In motion" section. Leave blank to use the shared placeholder.' }

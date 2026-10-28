@@ -13,6 +13,7 @@ import '../../styles/codex-content.css';
 // its original /images/* path when absent.
 const ct = await getEntry('settings', 'inquire');
 const heroImage = ct?.data.contactHeroImage ?? '/images/ct-hero.webp';
+const heroImageMobile = ct?.data.contactHeroImageMobile ?? '';
 const aboutImage = ct?.data.contactAboutImage ?? '/images/ct-about.webp';
 const stepsImage = ct?.data.contactStepsImage ?? '/images/ct-steps-band.webp';
 const closeImage = ct?.data.contactCloseImage ?? '/images/ct-close.webp';
@@ -30,8 +31,15 @@ const steps = [
          Styled by `.ct2-hero` in codex-content.css. Movement via SiteMotion. -->
     <section class="ct2-hero hero" aria-labelledby="ct-hero-title">
       <Header/>
-      <div class="hero__image" data-hero-image data-parallax>
-        <Pic src={heroImage} alt="A softly lit editorial portrait inviting you to start the conversation." priority sizes="100vw" />
+      <div class:list={["hero__image", heroImageMobile && "has-mobile-hero"]} data-hero-image data-parallax>
+        {heroImageMobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcset={heroImageMobile} />
+            <img src={heroImage} alt="A softly lit editorial portrait inviting you to start the conversation." loading="eager" fetchpriority="high" decoding="auto" />
+          </picture>
+        ) : (
+          <Pic src={heroImage} alt="A softly lit editorial portrait inviting you to start the conversation." priority sizes="100vw" />
+        )}
       </div>
       <div class="hero__veil" aria-hidden="true"></div>
       <div class="container hero__content">

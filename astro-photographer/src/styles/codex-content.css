@@ -56,6 +56,9 @@
 .ex2-hero .primary-nav .nav-inquire { border-color: rgba(244, 240, 232, 0.5); }
 .ex2-hero .primary-nav .nav-inquire:hover { color: var(--ink); background: var(--ivory); }
 .ex2-hero .menu-toggle span { background: var(--ivory); }
+/* Open mobile menu panel is light, so its links must be dark to stay readable. */
+.ex2-hero .primary-nav.is-open a { color: var(--black); }
+.ex2-hero .primary-nav.is-open .nav-inquire { border-color: var(--black); }
 
 /* Process — section rhythm like home .experience / portfolio .portfolio-process:
  * an eyebrow + display-title heading row with an intro, then a 3-up grid of
@@ -234,12 +237,22 @@
 @media (max-width: 768px) {
   .content-container { width: calc(100% - 48px); }
   .ms2-hero.hero { background: var(--ivory); }
+  /* On mobile the copy stacks over a full-bleed photo (no left veil to dodge),
+   * so bring the subject back toward center — the desktop 88%/78% push would
+   * crop the person off the right edge on a narrow screen. */
+  .ms2-hero .hero__image img { object-position: center 26%; }
+  .st2-hero .hero__image img { object-position: center 26%; }
   /* Experience hero stays the dark masthead on mobile too (matches the
    * original .ex-hero). The stacked hero image sits below; the content
    * area keeps the ink background + light text. */
   .ex2-hero.hero { background: var(--ink); color: var(--ivory); }
   .ex2-hero .hero__content, .ex2-hero .site-header, .ex2-hero .site-header a, .ex2-hero .text-link { color: var(--ivory); }
   .ex2-hero__lede { color: #e7e2d9; }
+  /* Subject sits right of center; shift the mobile crop rightward so the
+   * person stays in frame (desktop framing is unchanged). */
+  .ex2-hero .hero__image img { object-position: 72% top; }
+  .ct2-hero .hero__image img { object-position: 100% top; }
+  .ct2-hero .hero__image.has-mobile-hero img { object-position: center top; }
 
   .ex2-process, .ex2-inside, .ms2-featured, .ms2-meet, .ms2-look, .ms2-motion { padding-block: 42px; }
 
@@ -387,6 +400,8 @@
 .st2-hero .primary-nav .nav-inquire { border-color: rgba(244, 240, 232, 0.5); }
 .st2-hero .primary-nav .nav-inquire:hover { color: var(--ink); background: var(--ivory); }
 .st2-hero .menu-toggle span { background: var(--ivory); }
+.st2-hero .primary-nav.is-open a { color: var(--black); }
+.st2-hero .primary-nav.is-open .nav-inquire { border-color: var(--black); }
 
 @media (max-width: 768px) {
   /* Keep the story-detail hero dark on mobile (stacked image below the copy). */
@@ -749,6 +764,8 @@ button.st-tile:focus-visible { outline: 2px solid var(--champagne); outline-offs
 .wd-hero .primary-nav .nav-inquire { border-color: rgba(244, 240, 232, 0.5); }
 .wd-hero .primary-nav .nav-inquire:hover { color: var(--ink); background: var(--ivory); }
 .wd-hero .menu-toggle span { background: var(--ivory); }
+.wd-hero .primary-nav.is-open a { color: var(--black); }
+.wd-hero .primary-nav.is-open .nav-inquire { border-color: var(--black); }
 
 /* Intro — editorial two-column. */
 .wd-intro { padding-block: 64px; background: var(--paper); }

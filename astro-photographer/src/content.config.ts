@@ -197,6 +197,7 @@ const settings = defineCollection({
 
     // inquire.json — Inquire page images.
     contactHeroImage: optionalText,
+    contactHeroImageMobile: optionalText,
     contactAboutImage: optionalText,
     contactStepsImage: optionalText,
     contactCloseImage: optionalText,
@@ -220,6 +221,7 @@ const settings = defineCollection({
 
     // home.json — Home page images.
     homeHeroImage: optionalText,
+    homeHeroImageMobile: optionalText,
     homePortraitImage: optionalText,
     homeClosingImage: optionalText,
     homeExperienceImage: optionalText,
@@ -291,6 +293,7 @@ const settings = defineCollection({
 
     // weddings-home.json — Weddings home (/weddings) section images.
     wedHomeHeroImage: optionalText,
+    wedHomeHeroImageMobile: optionalText,
     wedHomePhiloImage: optionalText,
     wedHomeWeddingsCardImage: optionalText,
     wedHomeEngagementsCardImage: optionalText,
