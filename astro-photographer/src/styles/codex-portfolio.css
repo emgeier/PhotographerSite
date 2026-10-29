@@ -136,10 +136,10 @@
   .portfolio-hero__image img { object-position: center top; }
   .portfolio-hero__veil { display: block; inset: 0; background: linear-gradient(0deg, rgba(16,12,8,0.62) 0%, rgba(16,12,8,0.28) 32%, rgba(16,12,8,0.05) 58%, transparent 78%); }
   .portfolio-collection { padding-block: 10px; }
-  .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); width: calc(100% - 20px); gap: 10px; }
+  .portfolio-grid { grid-template-columns: 1fr; width: calc(100% - 28px); gap: 10px; }
   .portfolio-card__frame { aspect-ratio: 0.81; }
   .portfolio-card__frame img { inset: -20px -6px; width: calc(100% + 12px); height: calc(100% + 40px); }
-  .portfolio-card:nth-child(9) { grid-column: 1 / -1; width: calc(50% - 5px); justify-self: center; }
+  .portfolio-card:nth-child(9) { grid-column: auto; width: 100%; justify-self: stretch; }
   .portfolio-card__caption { padding: 36px 13px 15px; font-size: 7px; letter-spacing: 1.2px; }
   .portfolio-manifesto { height: 380px; }
   .portfolio-manifesto__image { inset: -20px 0; }

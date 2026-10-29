@@ -3,189 +3,51 @@
   "wedPortfolioVideoImage": "",
   "wedPortfolioCtaImage": "/images/WH02.jpg",
   "wedPortfolioGallery": [
-    {
-      "image": "/images/WPortfolio23.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio20.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio21.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio22.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio24.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio25.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio26.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio27.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio28.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio29.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio30.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio31.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio32.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio33.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio34.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio35.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio36.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio37.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio38.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio39.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio40.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio41.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio42.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio43.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio44.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio45.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio46.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio47.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio48.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio49.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio50.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio51.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio52.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio53.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio54.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio55.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio56.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio57.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio58.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio59.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio60.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio61.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio62.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio63.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio64.jpg",
-      "alt": ""
-    },
-    {
-      "image": "/images/WPortfolio65.jpg",
-      "alt": ""
-    }
+    "/images/WPortfolio23.jpg",
+    "/images/WPortfolio20.jpg",
+    "/images/WPortfolio21.jpg",
+    "/images/WPortfolio22.jpg",
+    "/images/WPortfolio24.jpg",
+    "/images/WPortfolio25.jpg",
+    "/images/WPortfolio26.jpg",
+    "/images/WPortfolio27.jpg",
+    "/images/WPortfolio28.jpg",
+    "/images/WPortfolio29.jpg",
+    "/images/WPortfolio30.jpg",
+    "/images/WPortfolio31.jpg",
+    "/images/WPortfolio32.jpg",
+    "/images/WPortfolio33.jpg",
+    "/images/WPortfolio34.jpg",
+    "/images/WPortfolio35.jpg",
+    "/images/WPortfolio36.jpg",
+    "/images/WPortfolio37.jpg",
+    "/images/WPortfolio38.jpg",
+    "/images/WPortfolio39.jpg",
+    "/images/WPortfolio40.jpg",
+    "/images/WPortfolio41.jpg",
+    "/images/WPortfolio42.jpg",
+    "/images/WPortfolio43.jpg",
+    "/images/WPortfolio44.jpg",
+    "/images/WPortfolio45.jpg",
+    "/images/WPortfolio46.jpg",
+    "/images/WPortfolio47.jpg",
+    "/images/WPortfolio48.jpg",
+    "/images/WPortfolio49.jpg",
+    "/images/WPortfolio50.jpg",
+    "/images/WPortfolio51.jpg",
+    "/images/WPortfolio52.jpg",
+    "/images/WPortfolio53.jpg",
+    "/images/WPortfolio54.jpg",
+    "/images/WPortfolio55.jpg",
+    "/images/WPortfolio56.jpg",
+    "/images/WPortfolio57.jpg",
+    "/images/WPortfolio58.jpg",
+    "/images/WPortfolio59.jpg",
+    "/images/WPortfolio60.jpg",
+    "/images/WPortfolio61.jpg",
+    "/images/WPortfolio62.jpg",
+    "/images/WPortfolio63.jpg",
+    "/images/WPortfolio64.jpg",
+    "/images/WPortfolio65.jpg"
   ]
 }

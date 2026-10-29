@@ -199,14 +199,10 @@ collections:
           - { name: wedPortfolioVideoImage, label: Video testimonial image, widget: image, required: false }
           - { name: wedPortfolioCtaImage, label: Closing CTA background, widget: image, required: false }
           - name: wedPortfolioGallery
-            label: 'Gallery photos (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
-            widget: list
-            label_singular: Photo
+            label: 'Gallery photos — select or drag MANY at once (or a whole folder). Leave empty to use the built-in set.'
+            widget: image
+            multiple: true
             required: false
-            summary: '{{fields.alt | default(fields.image)}}'
-            fields:
-              - { name: image, label: Photo, widget: image }
-              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-faq
         label: 'Weddings — FAQ images'
@@ -223,14 +219,10 @@ collections:
           - { name: wedEngagementsVideoImage, label: Featured session image, widget: image, required: false }
           - { name: wedEngagementsCtaImage, label: Closing CTA background, widget: image, required: false }
           - name: wedEngagementsGallery
-            label: 'Gallery photos (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
-            widget: list
-            label_singular: Photo
+            label: 'Gallery photos — select or drag MANY at once (or a whole folder). Leave empty to use the built-in set.'
+            widget: image
+            multiple: true
             required: false
-            summary: '{{fields.alt | default(fields.image)}}'
-            fields:
-              - { name: image, label: Photo, widget: image }
-              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
 
       - name: weddings-inquire
         label: 'Weddings — Inquire images'
@@ -276,10 +268,10 @@ collections:
           - { name: wedGiveawayClosingImage, label: Closing couple image, widget: image, required: false }
           - { name: wedGiveawayMeetImage, label: Meet Luis portrait, widget: image, required: false }
           - name: wedGiveawayGallery
-            label: 'Engagements gallery (up to 10 — leave empty to use placeholders)'
-            widget: list
+            label: 'Engagements gallery — select or drag MANY at once (or a whole folder). Leave empty to use placeholders.'
+            widget: image
+            multiple: true
             required: false
-            field: { name: image, label: Image, widget: image }
 
   - name: muses
     label: Muses
