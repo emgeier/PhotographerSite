@@ -14,7 +14,7 @@
   --wd-sans: var(--sans);
 }
 
-.wd-page { background: var(--wd-cream, #f4f0e7); color: var(--wd-ink, #211c15); font-family: var(--sans); overflow-x: clip; }
+.wd-page { background: var(--wd-cream, #f4f0e7); color: var(--wd-ink, #211c15); font-family: var(--sans); }
 .wd-container { width: min(1600px, calc(100% - 120px)); margin-inline: auto; }
 .wd-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--wd-gold, #b08d57); display: inline-flex; align-items: center; gap: 14px; }
 .wd-eyebrow::after { content: ""; width: 34px; height: 1px; background: currentColor; opacity: 0.6; }
