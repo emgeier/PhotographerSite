@@ -132,7 +132,7 @@ const ctaImage = lp?.data.landingCtaImage ?? '/images/home-closing.webp';
               data-reveal
               aria-label={`View ${galleryName} portrait ${i + 1} of ${gallery.length}`}
             >
-              <img src={src} alt={`${galleryName} portrait ${i + 1}`} />
+              <img src={src} alt={`${galleryName} portrait ${i + 1}`} loading="lazy" decoding="async" />
             </button>
           ))}
         </div>

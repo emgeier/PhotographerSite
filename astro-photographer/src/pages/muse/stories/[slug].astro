@@ -109,7 +109,7 @@ const captionFor = (i: number): string =>
             data-reveal
             aria-label={`View ${first} portrait ${i+1} of ${gallery.length}`}
           >
-            <img src={photo.image} alt={`${first} gallery portrait ${i+1}`} />
+            <img src={photo.image} alt={`${first} gallery portrait ${i+1}`} loading="lazy" decoding="async" />
           </button>
         ))}
         <div class="st-caption st-caption-a">
