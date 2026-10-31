@@ -62,6 +62,8 @@ button { border: 0; }
 .line-mask { display: block; padding: 3px 0 7px; margin-bottom: -7px; }
 .line-mask > span { display: block; }
 .hero__subtitle { margin-top: 34px; margin-bottom: 29px; font-size: 13px; line-height: var(--body-leading); letter-spacing: 2.4px; text-transform: uppercase; }
+/* Muse home: keep the long tagline in a column beside the headline so it never runs into the photo. */
+.hero__subtitle--home { max-width: min(440px, 100%); }
 .hero__content .button { min-width: 272px; }
 
 /* Portfolio introduction. The asymmetry keeps the photography editorial. */
@@ -254,6 +256,7 @@ button { border: 0; }
   .hero__title { font-size: 62px; max-width: 380px; letter-spacing: -2.5px; }
   .hero__content { padding-top: 62px; padding-bottom: 10px; }
   .hero__subtitle { margin-top: 23px; margin-bottom: 24px; font-size: 13px; letter-spacing: 1.8px; }
+  .hero__subtitle--home { max-width: min(380px, 100%); }
   .button { min-height: 45px; padding: 15px 21px; font-size: 8px; letter-spacing: 1.7px; }
   .hero__content .button { min-width: 225px; }
   .perspective { padding-block: 39px; }

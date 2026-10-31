@@ -100,16 +100,10 @@ collections:
           - { name: portfolioFilmImage, label: Experience film still, widget: image, required: false }
           - { name: portfolioClosingImage, label: Closing image, widget: image, required: false }
           - name: portfolioGallery
-            label: 'Portrait gallery (add photos — you can select several at once in the media window; leave empty to use the built-in set)'
-            widget: list
-            label_singular: Portrait
+            label: 'Portrait gallery — select or drag MANY at once (or a whole folder). Leave empty to use the built-in set.'
+            widget: image
+            multiple: true
             required: false
-            summary: '{{fields.title | default(fields.image)}}'
-            fields:
-              - { name: image, label: Photo, widget: image }
-              - { name: alt, label: 'Alt text (describe the photo for accessibility/SEO)', widget: string, required: false }
-              - { name: title, label: 'Title (shown in the popup, optional)', widget: string, required: false }
-              - { name: caption, label: 'Caption (shown in the popup, optional)', widget: string, required: false }
 
       - name: landing
         label: 'Landing page (muse/landing) — content'
