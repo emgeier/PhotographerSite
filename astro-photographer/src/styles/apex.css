@@ -97,14 +97,18 @@
  * --------------------------------------------------------------- */
 .lq-intro { background: var(--lq-cream); text-align: center; padding: 86px 0 78px; }
 .lq-intro__eyebrow { justify-content: center; color: var(--lq-gold); }
-.lq-intro__line { margin: 26px auto 0; font-size: clamp(34px, 4vw, 58px); line-height: 1.1; max-width: 16ch; }
+.lq-intro__line { margin: 26px auto 0; line-height: 1.1; }
+/* Lead line: larger and wide on desktop (was capped at 16ch). */
+.lq-intro__line--lead { font-size: clamp(36px, 4.8vw, 74px); max-width: 24ch; }
+/* Supporting line: clearly smaller than the lead, one line on desktop. */
+.lq-intro__line--sub { margin-top: 22px; font-size: clamp(24px, 2.6vw, 40px); max-width: 32ch; }
 .lq-intro__rule { margin: 24px auto 0; }
 
 /* --------------------------------------------------------------- *
  * 4. Two brand cards (full-bleed photo, dark bottom gradient)
  * --------------------------------------------------------------- */
 .lq-cards { display: grid; grid-template-columns: 1fr 1fr; }
-.lq-card { position: relative; min-height: 520px; overflow: hidden; display: flex; align-items: flex-end; color: var(--ivory); }
+.lq-card { position: relative; min-height: clamp(520px, 56vw, 900px); overflow: hidden; display: flex; align-items: flex-end; color: var(--ivory); }
 .lq-card__image { position: absolute; inset: 0; }
 .lq-card__image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: scale 900ms var(--ease); }
 .lq-card:hover .lq-card__image img { scale: 1.03; }
@@ -183,6 +187,7 @@
 
   .lq-hero__keywords { display: none; }
   .lq-cards { grid-template-columns: 1fr; }
+  .lq-card { min-height: 520px; }
   .lq-beauty, .lq-meet { grid-template-columns: 1fr; gap: 32px; padding: 56px 0; }
   .lq-beauty__copy, .lq-meet__copy { padding: 0 clamp(32px, 6vw, 80px); }
   .lq-beauty__media img { height: 460px; }
