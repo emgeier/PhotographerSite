@@ -26,9 +26,9 @@ const expSettings = await getEntry('settings', 'weddings-experience');
 const stepImageDefaults = ['/images/muses/portrait-01.webp', '/images/muses/portrait-02.webp', '/images/muses/portrait-03.webp'];
 const stepImages = expSettings?.data.wedExperienceStepImages?.length ? expSettings.data.wedExperienceStepImages : stepImageDefaults;
 const steps = [
-  { n: '01', t: 'Consultation', p: 'We’ll connect, learn about your vision, and ensure we’re the right fit.', img: stepImages[0] ?? stepImageDefaults[0] },
-  { n: '02', t: 'Planning', p: 'We’ll plan the details, location and timeline so everything feels seamless.', img: stepImages[1] ?? stepImageDefaults[1] },
-  { n: '03', t: 'Your Day', p: 'You’ll be present and enjoy every moment while I capture your story as it unfolds.', img: stepImages[2] ?? stepImageDefaults[2] },
+  { n: '01', t: 'Consultation', p: 'It begins with a conversation. I want to understand your vision, the people closest to you, and the personal details that make your celebration unique.', img: stepImages[0] ?? stepImageDefaults[0] },
+  { n: '02', t: 'Planning', p: 'Every celebration has its own rhythm. Together, we will shape a photography timeline that complements the flow of your day, making room for beautiful portraits and spontaneity.', img: stepImages[1] ?? stepImageDefaults[1] },
+  { n: '03', t: 'Your Day', p: 'Enjoy the celebration you have imagined. I will offer guidance when needed and work unobtrusively as the day unfolds, preserving the genuine connections and emotions that make it unforgettable.', img: stepImages[2] ?? stepImageDefaults[2] },
 ];
 
 const loveStories = (await getCollection('weddingStories'))
@@ -51,7 +51,9 @@ const loveStories = (await getCollection('weddingStories'))
       <div class="wd-hero__veil" aria-hidden="true"></div>
       <div class="wd-container wd-hero__content">
         <h1 class="wd-display wd-hero__title" data-hero-item>The day,<br /><em>as it felt.</em></h1>
-        <p class="wd-hero__lede" data-hero-item>Honest moments, meaningful connections and a story told with intention.</p>
+        <p class="wd-hero__lede" data-hero-item>Elegant, real, unmistakably yours.</p>
+        <p class="wd-hero__lede" data-hero-item>The anticipation, the celebration, and the moments you never saw coming.</p>
+        <p class="wd-hero__lede" data-hero-item>Beautifully captured. Deeply felt. Forever remembered.</p>
         <a class="wd-btn" href="/weddings/inquire" data-hero-item>Inquire <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
@@ -64,7 +66,7 @@ const loveStories = (await getCollection('weddingStories'))
       <div class="wd-philo__copy" data-reveal>
         <p class="wd-eyebrow">Our philosophy</p>
         <h2 id="wd-philo-title" class="wd-display wd-philo__title">Some moments<br />stay <em>forever.</em></h2>
-        <p class="wd-philo__para">Photographs are more than images — they are a way to relive what matters most. My approach is guided by connection, intention, and the beauty of real moments.</p>
+        <p class="wd-philo__para">There is beauty in every detail, but the true essence of a wedding lives in the people, the connections, and the emotions that make it unforgettable. I approach each celebration with an editorial eye and a deep appreciation for what is genuine, creating photographs that are as personal as they are timeless.</p>
       </div>
     </section>
 
@@ -76,7 +78,7 @@ const loveStories = (await getCollection('weddingStories'))
         <div class="wd-card__content">
           <p class="wd-eyebrow wd-card__eyebrow">Weddings</p>
           <h2 class="wd-display wd-card__title">A day<br />unlike any other.</h2>
-          <p class="wd-card__para">A celebration of love, surrounded by the people who matter most. I capture the moments, the emotions and the details that make your wedding day truly yours.</p>
+          <p class="wd-card__para">Your wedding is an expression of your love, your vision, and the people closest to you. From the atmosphere you've imagined to the emotions that unfold, every detail becomes part of a celebration that is entirely his own.</p>
           <a class="wd-textlink" href="/weddings/portfolio">Explore weddings</a>
         </div>
       </article>
@@ -86,7 +88,7 @@ const loveStories = (await getCollection('weddingStories'))
         <div class="wd-card__content">
           <p class="wd-eyebrow wd-card__eyebrow">Engagements</p>
           <h2 class="wd-display wd-card__title">Before<br />the vows.</h2>
-          <p class="wd-card__para">A time to slow down, be present and celebrate this chapter together. Engagement sessions are a chance to create beautiful, relaxed images in a meaningful setting.</p>
+          <p class="wd-card__para">Before the wedding day, there is a chapter worth celebrating in its own right. An opportunity to slow down, enjoy being together, and create beautful portraits that reflect you connection, your personalities, and the excitement of everything still to come.</p>
           <a class="wd-textlink" href="/weddings/engagements">Explore engagements</a>
         </div>
       </article>
@@ -96,8 +98,9 @@ const loveStories = (await getCollection('weddingStories'))
       <div class="wd-container">
         <div class="wd-approach__head" data-reveal>
           <p class="wd-eyebrow wd-approach__eyebrow">Our approach</p>
-          <h2 id="wd-approach-title" class="wd-display wd-approach__title">A thoughtful approach,<br />from the very beginning.</h2>
-          <p class="wd-approach__intro">Your wedding experience is more than just a day of photographs. It’s a journey we take together — built on connection, thoughtful planning, and a shared vision, so you can be fully present while we preserve it all beautifully.</p>
+          <h2 id="wd-approach-title" class="wd-display wd-approach__title">An artistic approach,<br />to every detail.</h2>
+          <p class="wd-approach__intro">A beautfully photographed wedding begins long before the day itself. I take the time to understand your vision, anticipate what matters, and approach each celebration with preparation and intention.</p>
+          <p class="wd-approach__intro">There is an art to knowing when to offer direction and when to let moments unfold naturally. My intention is to create an experience that feels effortless to be fully present while I document your celebration with artistry and care.</p>
         </div>
         <ol class="wd-approach__steps">
           {steps.map((s) => (
@@ -112,7 +115,7 @@ const loveStories = (await getCollection('weddingStories'))
       </div>
     </section>
 
-    <!-- ABOUT 
+    <!-- ABOUT -->
     <section class="wd-about" aria-labelledby="wd-about-title">
       <figure class="wd-about__photo" data-reveal>
         <Pic src={aboutImage} alt="A portrait of Luis." sizes="(max-width: 860px) 100vw, 50vw" />
@@ -120,10 +123,10 @@ const loveStories = (await getCollection('weddingStories'))
       <div class="wd-about__copy" data-reveal>
         <p class="wd-eyebrow">About</p>
         <h2 id="wd-about-title" class="wd-display wd-about__title">About Luis.</h2>
-        <p class="wd-about__para">I’m Luis, a wedding and engagement photographer with a deep appreciation for meaningful moments, beautiful places and genuine connections. My approach is calm, intentional and focused on telling your story authentically.</p>
+        <p class="wd-about__para">I love the beauty of a wedding day, the style, the energy, and all the little details. But what I enjoy most is getting to know the people. Every couple is different, and I want the photographs we create to reflect that: elegant, genuine, and true to who you are.</p>
         <a class="wd-textlink" href="/about">Meet Luis</a>
       </div>
-    </section>-->
+    </section>
 
     {/* LOVE STORIES — hidden for now (no real galleries yet). To restore, remove
         this comment wrapper; the `loveStories` data is still computed above. Swap
@@ -153,8 +156,10 @@ const loveStories = (await getCollection('weddingStories'))
       </div>
       <div class="wd-cta__veil" aria-hidden="true"></div>
       <div class="wd-container wd-cta__content" data-reveal>
-        <p class="wd-eyebrow wd-cta__eyebrow">Your story starts here</p>
-        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Let’s create something meaningful together.</h2>
+        <p class="wd-eyebrow wd-cta__eyebrow">An Invitation</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">I'd love to hear your love story.</h2>
+        <p class="wd-about__para">Tell me what you're envisioning for your wedding. I'd love to get to know you both and explore how we can bring it to life.</p>
+
         <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
