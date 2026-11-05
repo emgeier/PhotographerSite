@@ -236,15 +236,41 @@ collections:
           - { name: wedTestimonialsVideoImage, label: Video testimonial image, widget: image, required: false }
           - { name: wedTestimonialsCtaImage, label: Closing CTA background, widget: image, required: false }
 
-      - name: weddings-about
-        label: 'Weddings — About images'
-        file: astro-photographer/src/content/settings/weddings-about.json
+      - name: about
+        label: 'About Luis page — text & images'
+        file: astro-photographer/src/content/settings/about.json
         fields:
-          - { name: wedAboutHeroImage, label: Hero portrait, widget: image, required: false }
-          - { name: wedAboutLifeImage, label: '“A life inspired” photo', widget: image, required: false }
-          - { name: wedAboutPhiloImage, label: Philosophy band image, widget: image, required: false }
-          - { name: wedAboutVideoImage, label: '“A few words” video image', widget: image, required: false }
-          - { name: wedAboutCtaImage, label: Closing CTA background, widget: image, required: false }
+          - { name: aboutSeoTitle, label: 'Browser tab title (optional)', widget: string, required: false }
+          - { name: aboutSeoDescription, label: 'Search/social description (optional)', widget: text, required: false }
+          # Hero
+          - { name: aboutHeroImage, label: Hero portrait, widget: image, required: false }
+          - { name: aboutHeroImageMobile, label: 'Hero portrait — mobile version (optional)', widget: image, required: false }
+          - { name: aboutHeroKicker, label: 'Hero — small label above the name', widget: string, required: false }
+          - { name: aboutHeroTitle, label: 'Hero — big name/title', widget: string, required: false }
+          - { name: aboutHeroLede, label: 'Hero — intro sentence', widget: text, required: false }
+          # "A life inspired" section
+          - { name: aboutLifeImage, label: '“A life inspired” photo', widget: image, required: false }
+          - { name: aboutLifeEyebrow, label: '“A life inspired” — small label', widget: string, required: false }
+          - { name: aboutLifeTitle, label: '“A life inspired” — heading (use <em>…</em> for an italic accent)', widget: string, required: false }
+          - { name: aboutLifePara1, label: '“A life inspired” — paragraph 1', widget: text, required: false }
+          - { name: aboutLifePara2, label: '“A life inspired” — paragraph 2', widget: text, required: false }
+          # Philosophy band
+          - { name: aboutPhiloImage, label: Philosophy band image, widget: image, required: false }
+          - { name: aboutPhiloEyebrow, label: 'Philosophy — small label', widget: string, required: false }
+          - { name: aboutPhiloTitle, label: 'Philosophy — heading', widget: string, required: false }
+          - { name: aboutPhiloPara, label: 'Philosophy — paragraph', widget: text, required: false }
+          # "A few words" video band
+          - { name: aboutVideoImage, label: '“A few words” video image', widget: image, required: false }
+          - { name: aboutVideoEyebrow, label: '“A few words” — small label', widget: string, required: false }
+          - { name: aboutVideoTitle, label: '“A few words” — heading', widget: string, required: false }
+          - { name: aboutVideoPara, label: '“A few words” — paragraph', widget: text, required: false }
+          # Closing CTA
+          - { name: aboutCtaImage, label: Closing CTA background, widget: image, required: false }
+          - { name: aboutCtaEyebrow, label: 'Closing — small label', widget: string, required: false }
+          - { name: aboutCtaTitle, label: 'Closing — heading', widget: string, required: false }
+          - { name: aboutCtaPara, label: 'Closing — paragraph', widget: text, required: false }
+          - { name: aboutCtaButtonLabel, label: 'Closing — button text', widget: string, required: false }
+          - { name: aboutCtaButtonHref, label: 'Closing — button link (e.g. /weddings/inquire)', widget: string, required: false }
 
       - name: weddings-stories
         label: 'Weddings — Love Stories images'

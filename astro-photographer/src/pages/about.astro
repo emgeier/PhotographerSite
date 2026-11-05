@@ -7,12 +7,42 @@ import Pic from '../components/Pic.astro';
 import { getEntry } from 'astro:content';
 import '../styles/wedding.css';
 
-const wed = await getEntry('settings', 'weddings-about');
-const heroImage = wed?.data.wedAboutHeroImage ?? '/images/Wportrait.jpg';
-const lifeImage = wed?.data.wedAboutLifeImage ?? '/images/ms-muse-2.webp';
-const philoImage = wed?.data.wedAboutPhiloImage ?? '/images/portfolio-banner.webp';
-const videoImage = wed?.data.wedAboutVideoImage ?? '/images/story-portrait.webp';
-const ctaImage = wed?.data.wedAboutCtaImage ?? '/images/portfolio-closing.webp';
+// All text + images are CMS-editable via settings/about.json (collection id
+// "about"). Every field falls back to the original hardcoded copy/image so the
+// page renders identically when a field is left blank in the CMS.
+const a = (await getEntry('settings', 'about'))?.data ?? {};
+
+const seoTitle = a.aboutSeoTitle ?? 'About Luis — Luis Quintana Studio';
+const seoDescription = a.aboutSeoDescription ?? 'A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully.';
+
+const heroImage = a.aboutHeroImage ?? '/images/Wportrait.jpg';
+const heroImageMobile = a.aboutHeroImageMobile ?? '';
+const heroKicker = a.aboutHeroKicker ?? 'About';
+const heroTitle = a.aboutHeroTitle ?? 'Luis Quintana';
+const heroLede = a.aboutHeroLede ?? 'A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully.';
+
+const lifeImage = a.aboutLifeImage ?? '/images/ms-muse-2.webp';
+const lifeEyebrow = a.aboutLifeEyebrow ?? 'More than a photographer';
+const lifeTitle = a.aboutLifeTitle ?? 'A life inspired by people, beauty and <em>everyday moments.</em>';
+const lifePara1 = a.aboutLifePara1 ?? 'I’m Luis Quintana Ticona, a photographer, artist, and storyteller born in Lima, Peru. Since I was a kid, I’ve been drawn to art — drawing, and finding beauty in the little things.';
+const lifePara2 = a.aboutLifePara2 ?? 'Life has always inspired me: meaningful connections, new places, good food, and the joy of being present. Photography allows me to combine everything I love — people, emotion, art, and real moments — and turn them into something timeless.';
+
+const philoImage = a.aboutPhiloImage ?? '/images/portfolio-banner.webp';
+const philoEyebrow = a.aboutPhiloEyebrow ?? 'My philosophy';
+const philoTitle = a.aboutPhiloTitle ?? 'Not just how it looked. How it felt.';
+const philoPara = a.aboutPhiloPara ?? 'I believe the most meaningful photographs do more than show what happened. They bring you back to the emotion, the atmosphere, and the people who mattered. My approach blends thoughtful artistry and genuine connection — so you can remember not only the moment, but exactly how it felt.';
+
+const videoImage = a.aboutVideoImage ?? '/images/story-portrait.webp';
+const videoEyebrow = a.aboutVideoEyebrow ?? 'A few words';
+const videoTitle = a.aboutVideoTitle ?? 'A few words from me.';
+const videoPara = a.aboutVideoPara ?? 'In this short video, I share a bit about who I am, what inspires me, and what you can expect when we work together. It’s a more personal look into my approach, my values, and my passion for telling your story.';
+
+const ctaImage = a.aboutCtaImage ?? '/images/portfolio-closing.webp';
+const ctaEyebrow = a.aboutCtaEyebrow ?? 'Beyond the photos';
+const ctaTitle = a.aboutCtaTitle ?? 'Your story starts here.';
+const ctaPara = a.aboutCtaPara ?? 'Every meaningful chapter begins with a conversation. I would love to hear about your wedding, your vision, and the moments you cannot wait to remember.';
+const ctaButtonLabel = a.aboutCtaButtonLabel ?? 'Book your consultation';
+const ctaButtonHref = a.aboutCtaButtonHref ?? '/weddings/inquire';
 
 const traits = [
   { h: 'Travel & Discovery', p: 'New places, new perspectives, endless inspiration.', icon: 'mountain' },
@@ -23,24 +53,26 @@ const traits = [
   { h: 'Nature', p: 'I love being outdoors, walking and exploring.', icon: 'leaf' },
 ];
 ---
-<Base
-  title="About Luis — Luis Quintana Studio"
-  description="A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully."
->
+<Base title={seoTitle} description={seoDescription}>
   <main class="wd wd-page" id="main-content">
-    <!-- HERO (full-bleed portrait of Luis with overlaid copy — mirrors the
-         portfolio / engagements subhero so every page opens with the same
-         top-of-page hero treatment). -->
+    <!-- HERO (full-bleed portrait of Luis with overlaid copy). -->
     <section class="wd-hero wd-subhero">
       <WeddingsHeader />
-      <div class="wd-hero__image" data-parallax>
-        <Pic src={heroImage} alt="A portrait of Luis holding a camera." priority sizes="100vw" />
+      <div class:list={["wd-hero__image", heroImageMobile && "has-mobile-hero"]} data-parallax>
+        {heroImageMobile ? (
+          <picture>
+            <source media="(max-width: 768px)" srcset={heroImageMobile} />
+            <img src={heroImage} alt="A portrait of Luis holding a camera." loading="eager" fetchpriority="high" decoding="async" />
+          </picture>
+        ) : (
+          <Pic src={heroImage} alt="A portrait of Luis holding a camera." priority sizes="100vw" />
+        )}
       </div>
       <div class="wd-hero__veil" aria-hidden="true"></div>
       <div class="wd-container wd-hero__content">
-        <p class="wd-subhero__kicker" data-hero-item>About</p>
-        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>Luis Quintana</h1>
-        <p class="wd-hero__lede" data-hero-item>A little about the photographer, the storyteller, and the person who believes every love story deserves to be remembered beautifully.</p>
+        <p class="wd-subhero__kicker" data-hero-item>{heroKicker}</p>
+        <h1 class="wd-display wd-subhero__title wd-subhero__title--stack" data-hero-item>{heroTitle}</h1>
+        <p class="wd-hero__lede" data-hero-item>{heroLede}</p>
       </div>
     </section>
 
@@ -48,10 +80,10 @@ const traits = [
     <section class="wd-ease" id="wd-life" aria-labelledby="wd-life-title" style="padding-top: 20px;">
       <div class="wd-container wd-ease__row">
         <div class="wd-ease__copy" data-reveal>
-          <p class="wd-eyebrow">More than a photographer</p>
-          <h2 id="wd-life-title" class="wd-display wd-ease__title">A life inspired by people, beauty and <em>everyday moments.</em></h2>
-          <p class="wd-ease__para">I’m Luis Quintana Ticona, a photographer, artist, and storyteller born in Lima, Peru. Since I was a kid, I’ve been drawn to art — drawing, and finding beauty in the little things.</p>
-          <p class="wd-ease__para">Life has always inspired me: meaningful connections, new places, good food, and the joy of being present. Photography allows me to combine everything I love — people, emotion, art, and real moments — and turn them into something timeless.</p>
+          <p class="wd-eyebrow">{lifeEyebrow}</p>
+          <h2 id="wd-life-title" class="wd-display wd-ease__title" set:html={lifeTitle}></h2>
+          <p class="wd-ease__para">{lifePara1}</p>
+          <p class="wd-ease__para">{lifePara2}</p>
           <div class="wd-traits">
             {traits.map((t) => (
               <div class="wd-trait">
@@ -84,9 +116,9 @@ const traits = [
       </div>
       <div class="wd-philoband__veil" aria-hidden="true"></div>
       <div class="wd-container wd-philoband__inner" data-reveal>
-        <p class="wd-eyebrow wd-philoband__eyebrow">My philosophy</p>
-        <h2 id="wd-phil-title" class="wd-display wd-philoband__title">Not just how it looked. How it felt.</h2>
-        <p class="wd-philoband__para">I believe the most meaningful photographs do more than show what happened. They bring you back to the emotion, the atmosphere, and the people who mattered. My approach blends thoughtful artistry and genuine connection — so you can remember not only the moment, but exactly how it felt.</p>
+        <p class="wd-eyebrow wd-philoband__eyebrow">{philoEyebrow}</p>
+        <h2 id="wd-phil-title" class="wd-display wd-philoband__title">{philoTitle}</h2>
+        <p class="wd-philoband__para">{philoPara}</p>
       </div>
     </section>
 
@@ -97,9 +129,9 @@ const traits = [
         <span class="wd-videoquote__play" aria-hidden="true"></span>
       </div>
       <div class="wd-videoquote__copy" data-reveal>
-        <p class="wd-eyebrow">A few words</p>
-        <h2 id="wd-few-title" class="wd-display" style="font-size: clamp(32px, 3.4vw, 48px); text-transform: uppercase; margin-top: 14px;">A few words from me.</h2>
-        <p class="wd-videoquote__para" style="font-style: normal;">In this short video, I share a bit about who I am, what inspires me, and what you can expect when we work together. It’s a more personal look into my approach, my values, and my passion for telling your story.</p>
+        <p class="wd-eyebrow">{videoEyebrow}</p>
+        <h2 id="wd-few-title" class="wd-display" style="font-size: clamp(32px, 3.4vw, 48px); text-transform: uppercase; margin-top: 14px;">{videoTitle}</h2>
+        <p class="wd-videoquote__para" style="font-style: normal;">{videoPara}</p>
       </div>
     </section>
 
@@ -110,10 +142,10 @@ const traits = [
       </div>
       <div class="wd-cta__veil" aria-hidden="true"></div>
       <div class="wd-container wd-cta__content" data-reveal>
-        <p class="wd-eyebrow wd-cta__eyebrow">Beyond the photos</p>
-        <h2 id="wd-cta-title" class="wd-display wd-cta__title">Your story starts here.</h2>
-        <p class="wd-cta__para">Every meaningful chapter begins with a conversation. I would love to hear about your wedding, your vision, and the moments you cannot wait to remember.</p>
-        <a class="wd-btn" href="/weddings/inquire">Book your consultation <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+        <p class="wd-eyebrow wd-cta__eyebrow">{ctaEyebrow}</p>
+        <h2 id="wd-cta-title" class="wd-display wd-cta__title">{ctaTitle}</h2>
+        <p class="wd-cta__para">{ctaPara}</p>
+        <a class="wd-btn" href={ctaButtonHref}>{ctaButtonLabel} <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
       </div>
     </section>
   </main>
