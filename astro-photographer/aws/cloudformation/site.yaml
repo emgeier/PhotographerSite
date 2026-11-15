@@ -75,6 +75,34 @@ Parameters:
     Type: String
     Default: ''
     Description: Optional AC custom-field id for the weddings 'vision' field.
+  LoveStoryToEmail:
+    Type: String
+    Default: ''
+    Description: >-
+      Human reviewer address that receives Love Story form submissions. Leave
+      empty to skip the Love Story Lambda entirely.
+  LoveStoryFromEmail:
+    Type: String
+    Default: ''
+    Description: >-
+      SES-verified sender (address or domain identity) for Love Story emails.
+      Required whenever LoveStoryToEmail is set. In the SES sandbox the
+      recipient must be verified too.
+  LoveStoryLlmEnabled:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: >-
+      When 'true' the Lambda asks Anthropic to draft the love-story page text
+      and appends it to the review email. Never published automatically.
+  LoveStoryLlmModel:
+    Type: String
+    Default: 'claude-sonnet-4-5'
+    Description: Anthropic model id used when LoveStoryLlmEnabled is 'true'.
+  LoveStoryLambdaS3Key:
+    Type: String
+    Default: 'lovestory-lambda.zip'
+    Description: S3 key of the Love Story Lambda zip in the muse-photographer-site bucket.
   AllowedOrigin:
     Type: String
     Default: '*'
@@ -186,6 +214,8 @@ Conditions:
     - !Not [!Equals [!Ref AcmCertificateArn, '']]
   # CI/CD: create the deploy role only when a GitHub repo is supplied.
   HasGitHubRepo: !Not [!Equals [!Ref GitHubRepo, '']]
+  # Love Story forms: create the Lambda only when a reviewer address is supplied.
+  HasLoveStory: !Not [!Equals [!Ref LoveStoryToEmail, '']]
   # CMS login: create the OAuth relay only when a client id is supplied.
   HasOAuth: !Not [!Equals [!Ref OAuthClientId, '']]
   # Create the OIDC provider only when both: a repo is set AND the toggle is on.
@@ -481,6 +511,109 @@ Resources:
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/ac/subscribe'
 
   # -------------------------------------------------------------------------
+  # Love Story Q&A forms — POST /lovestory emails the answers to a human via SES
+  # (optionally with an Anthropic-drafted page text). Created only when
+  # LoveStoryToEmail is set. The Anthropic key lives in Secrets Manager (set
+  # out-of-band), never in the template or an env var.
+  # -------------------------------------------------------------------------
+  LoveStoryAnthropicSecret:
+    Type: AWS::SecretsManager::Secret
+    Condition: HasLoveStory
+    Properties:
+      Name: !Sub '${AWS::StackName}-anthropic-api-key'
+      Description: Anthropic API key for Love Story drafts (set out-of-band; only read when LoveStoryLlmEnabled=true).
+      SecretString: REPLACE_ME
+  LoveStoryLambdaRole:
+    Type: AWS::IAM::Role
+    Condition: HasLoveStory
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: send-lovestory-email
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              # SES only, restricted to this account's identities and to the
+              # configured From address.
+              - Effect: Allow
+                Action: ses:SendEmail
+                Resource: !Sub 'arn:aws:ses:${AWS::Region}:${AWS::AccountId}:identity/*'
+                Condition:
+                  StringEquals:
+                    ses:FromAddress: !Ref LoveStoryFromEmail
+        - PolicyName: read-anthropic-secret
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref LoveStoryAnthropicSecret
+  LoveStoryFunction:
+    Type: AWS::Lambda::Function
+    Condition: HasLoveStory
+    Properties:
+      # nodejs18.x bundles the AWS SDK v3 clients (SES v2, Secrets Manager).
+      Runtime: nodejs18.x
+      Handler: index.handler
+      Timeout: 30
+      MemorySize: 256
+      Role: !GetAtt LoveStoryLambdaRole.Arn
+      Code:
+        S3Bucket: muse-photographer-site
+        S3Key: !Ref LoveStoryLambdaS3Key
+      Environment:
+        Variables:
+          LOVESTORY_TO_EMAIL: !Ref LoveStoryToEmail
+          LOVESTORY_FROM_EMAIL: !Ref LoveStoryFromEmail
+          LLM_ENABLED: !Ref LoveStoryLlmEnabled
+          LLM_MODEL: !Ref LoveStoryLlmModel
+          ANTHROPIC_SECRET_ARN: !Ref LoveStoryAnthropicSecret
+          CORS_ALLOW_ORIGIN: !Ref AllowedOrigin
+  LoveStoryLogGroup:
+    Type: AWS::Logs::LogGroup
+    Condition: HasLoveStory
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${LoveStoryFunction}'
+      RetentionInDays: 7
+  LoveStoryIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Condition: HasLoveStory
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt LoveStoryFunction.Arn
+      PayloadFormatVersion: '2.0'
+  LoveStoryRoutePost:
+    Type: AWS::ApiGatewayV2::Route
+    Condition: HasLoveStory
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'POST /lovestory'
+      Target: !Sub 'integrations/${LoveStoryIntegration}'
+  LoveStoryRouteOptions:
+    Type: AWS::ApiGatewayV2::Route
+    Condition: HasLoveStory
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'OPTIONS /lovestory'
+      Target: !Sub 'integrations/${LoveStoryIntegration}'
+  LoveStoryInvokePermission:
+    Type: AWS::Lambda::Permission
+    Condition: HasLoveStory
+    Properties:
+      FunctionName: !Ref LoveStoryFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/lovestory'
+  # -------------------------------------------------------------------------
   # CMS admin login — GitHub OAuth relay (Lambda + /auth and /callback routes
   # on the existing HTTP API). Created only when OAuthClientId is set. The
   # GitHub OAuth App client SECRET is held in Secrets Manager (set out-of-band),
@@ -663,6 +796,14 @@ Outputs:
   ApiEndpoint:
     Description: The /ac/subscribe URL to paste into PUBLIC_AC_FORM_ENDPOINT.
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/ac/subscribe'
+  LoveStoryEndpoint:
+    Condition: HasLoveStory
+    Description: The /lovestory URL to paste into PUBLIC_LOVESTORY_ENDPOINT.
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/lovestory'
+  LoveStoryAnthropicSecretArn:
+    Condition: HasLoveStory
+    Description: ARN of the Anthropic API key secret (set the real value out-of-band).
+    Value: !Ref LoveStoryAnthropicSecret
   OAuthBaseUrl:
     Condition: HasOAuth
     Description: >-

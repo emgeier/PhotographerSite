@@ -1,0 +1,178 @@
+---
+// Love Story Q&A form band — shared by the engagement and wedding pages.
+// POSTs JSON to PUBLIC_LOVESTORY_ENDPOINT (see aws/lambda/lovestory). Field
+// names q01..q10 map to the server-side question allowlist; `type` selects it.
+import Pic from './Pic.astro';
+import { mailtoHref, STUDIO_EMAIL } from '../lib/contact';
+interface Chapter {
+  label: string;
+  title: string;
+  image: string;
+  alt: string;
+  questions: { text: string; tall?: boolean }[];
+}
+interface Props {
+  type: 'engagement' | 'wedding';
+  chapters: Chapter[];
+  submitLabel: string;
+  permissionText: string;
+  thanksTitle: string;
+  thanksText: string;
+}
+const { type, chapters, submitLabel, permissionText, thanksTitle, thanksText } = Astro.props;
+let n = 0;
+const endpoint = import.meta.env.PUBLIC_LOVESTORY_ENDPOINT ?? '';
+---
+<section class="wd-ls" id="ls-form" aria-labelledby="ls-form-title" data-endpoint={endpoint} data-email={STUDIO_EMAIL} data-type={type}>
+  <h2 id="ls-form-title" class="wd-ls__sr">Share your story</h2>
+  <form class="wd-ls__form" method="POST" novalidate data-ls-form>
+    <input type="hidden" name="type" value={type} />
+    <div class="wd-ls__hp" aria-hidden="true">
+      <label for="ls-website">Leave this field empty</label>
+      <input id="ls-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    {chapters.map((c, ci) => (
+      <fieldset class="wd-ls__chapter">
+        <legend class="wd-ls__legend wd-ls__sr">{c.label}: {c.title}</legend>
+        <div class="wd-ls__aside" aria-hidden="false">
+          <p class="wd-ls__label">{c.label}</p>
+          <p class="wd-display wd-ls__title">{c.title}</p>
+          <div class="wd-ls__photo"><Pic src={c.image} alt={c.alt} sizes="(max-width: 860px) 100vw, 34vw" /></div>
+        </div>
+        <div class="wd-ls__qs">
+          {c.questions.map((q) => {
+            n += 1;
+            const num = String(n).padStart(2, '0');
+            return (
+              <div class="wd-ls__q">
+                <label for={`ls-q${num}`}><span class="wd-ls__num">{num}.</span> {q.text}</label>
+                <textarea id={`ls-q${num}`} name={`q${num}`} rows={ci === 0 ? 2 : 1} maxlength="2000" placeholder={n === 1 ? 'Share your story here…' : 'Your answer…'}></textarea>
+              </div>
+            );
+          })}
+        </div>
+      </fieldset>
+    ))}
+    <div class="wd-ls__foot">
+      <div class="wd-ls__contact">
+        <div class="wd-ls__field">
+          <label for="ls-names">Your names <span aria-hidden="true">*</span></label>
+          <input id="ls-names" name="names" type="text" maxlength="200" autocomplete="name" placeholder="e.g. Alex & Jordan" required aria-required="true" />
+        </div>
+        <div class="wd-ls__field">
+          <label for="ls-email">Email address <span aria-hidden="true">*</span></label>
+          <input id="ls-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="e.g. alexandjordan@email.com" required aria-required="true" />
+        </div>
+      </div>
+      <label class="wd-ls__perm" for="ls-permission">
+        <input id="ls-permission" name="permission" type="checkbox" value="yes" />
+        <span>{permissionText}</span>
+      </label>
+      <button class="wd-btn wd-ls__submit" type="submit">{submitLabel} <span class="wd-btn__arrow" aria-hidden="true">→</span></button>
+      <p class="wd-ls__status" role="alert" aria-live="assertive" hidden></p>
+      <p class="wd-ls__fallback">Prefer email? Write to <a href={mailtoHref('Love Story')}>{STUDIO_EMAIL}</a>.</p>
+    </div>
+  </form>
+  <div class="wd-ls__thanks" role="status" tabindex="-1" hidden data-ls-thanks>
+    <p class="wd-eyebrow">Thank you</p>
+    <h3 class="wd-display wd-ls__thanks-title">{thanksTitle}</h3>
+    <p class="wd-ls__thanks-text">{thanksText}</p>
+  </div>
+</section>
+<script is:inline>
+  (function () {
+    var root = document.querySelector('.wd-ls');
+    var form = root && root.querySelector('[data-ls-form]');
+    if (!form) return;
+    var status = form.querySelector('.wd-ls__status');
+    var thanks = root.querySelector('[data-ls-thanks]');
+    var button = form.querySelector('.wd-ls__submit');
+    var studioEmail = root.getAttribute('data-email');
+    var storyType = root.getAttribute('data-type');
+    // Build a mailto: href holding the visitor's answers. Mail apps and browsers
+    // cap URL length, so the body is trimmed to stay under ~1800 encoded chars.
+    function buildMailto(payload) {
+      var lines = [];
+      form.querySelectorAll('.wd-ls__q').forEach(function (q) {
+        var field = q.querySelector('textarea');
+        var answer = field && field.value.trim();
+        if (!answer) return;
+        lines.push(q.querySelector('label').textContent.trim() + '\n' + answer);
+      });
+      var head = 'Names: ' + (payload.names || '') + '\nEmail: ' + (payload.email || '') +
+        '\nPermission to share: ' + (payload.permission ? 'yes' : 'no') + '\n\n';
+      var body = head + lines.join('\n\n');
+      var suffix = '\n\n[Answers shortened to fit an email link.]';
+      var limit = 1800;
+      if (encodeURIComponent(body).length > limit) {
+        while (body.length > 0 && encodeURIComponent(body + suffix).length > limit) {
+          body = body.slice(0, body.length - 50);
+        }
+        body += suffix;
+      }
+      var subject = (storyType === 'wedding' ? 'Wedding' : 'Engagement') + ' love story';
+      return 'mailto:' + studioEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    }
+    function showError(message, payload) {
+      status.hidden = false;
+      status.setAttribute('data-state', 'error');
+      status.textContent = message;
+      if (payload && studioEmail) {
+        var link = document.createElement('a');
+        link.href = buildMailto(payload);
+        link.textContent = 'Email your answers instead';
+        status.appendChild(document.createTextNode(' '));
+        status.appendChild(link);
+      }
+    }
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      status.hidden = true;
+      if (!form.reportValidity()) return;
+      var payload = {};
+      new FormData(form).forEach(function (value, key) { payload[key] = value; });
+      var answered = false;
+      for (var i = 1; i <= 10; i++) {
+        var k = 'q' + (i < 10 ? '0' + i : i);
+        if (payload[k] && String(payload[k]).trim()) answered = true;
+      }
+      if (!answered) {
+        showError('Please answer at least one question before submitting.');
+        return;
+      }
+      var endpoint = root.getAttribute('data-endpoint');
+      if (!endpoint) {
+        showError('This form is not connected yet.', payload);
+        return;
+      }
+      var label = button.firstChild.textContent;
+      button.disabled = true;
+      button.firstChild.textContent = 'Sending… ';
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { ok: false }; });
+        })
+        .then(function (data) {
+          if (data && data.ok) {
+            form.hidden = true;
+            thanks.hidden = false;
+            thanks.focus();
+            thanks.scrollIntoView({ block: 'center' });
+          } else {
+            showError('Something went wrong sending your story. Please try again, or:', payload);
+          }
+        })
+        .catch(function () {
+          showError('Something went wrong sending your story. Please check your connection and try again, or:', payload);
+        })
+        .then(function () {
+          button.disabled = false;
+          button.firstChild.textContent = label;
+        });
+    });
+  })();
+</script>

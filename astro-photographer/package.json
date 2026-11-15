@@ -11,7 +11,7 @@
     "optimize:images": "node scripts/optimize-images.mjs",
     "visual:capture": "node visual/capture.mjs",
     "visual:report": "node visual/report.mjs",
-    "test:lambda": "node --test \"aws/lambda/activecampaign/**/*.test.mjs\"",
+    "test:lambda": "node --test \"aws/lambda/activecampaign/**/*.test.mjs\" \"aws/lambda/lovestory/**/*.test.mjs\"",
     "check:guards": "node scripts/check-forbidden.mjs",
     "test": "vitest run && npm run check:guards",
     "test:watch": "vitest",

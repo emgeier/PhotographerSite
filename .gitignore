@@ -22,3 +22,4 @@ export/
 # Env & OS
 .env
 .DS_Store
+.kiro

@@ -644,3 +644,47 @@ body.dialog-open { overflow: hidden; }
 .thanks-dialog .wd-rule { margin: 20px auto; }
 .thanks-dialog__text { max-width: 320px; color: var(--wd-body, #5a5247); font-size: 15px; line-height: 1.7; margin: 0 0 28px; }
 .thanks-dialog__cta { min-width: 240px; justify-content: center; }
+/* --------------------------------------------------------------- *
+ * Love Story Q&A forms (LoveStoryForm.astro)
+ * --------------------------------------------------------------- */
+.wd-ls { width: min(1180px, calc(100% - 120px)); margin-inline: auto; padding-block: 56px 80px; }
+.wd-ls__sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.wd-ls__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.wd-ls__chapter { display: grid; grid-template-columns: minmax(0, 36%) minmax(0, 1fr); gap: 20px clamp(36px, 5vw, 64px); margin: 0; padding: 40px 0; border: 0; border-top: 1px solid rgba(33,28,21,0.14); min-width: 0; }
+.wd-ls__chapter:first-of-type { border-top: 0; padding-top: 0; }
+.wd-ls__label { display: flex; align-items: center; gap: 14px; margin: 0; font: 600 10px/1 var(--sans); letter-spacing: 2.6px; text-transform: uppercase; color: var(--wd-ink, #211c15); }
+.wd-ls__label::after { content: ""; flex: 1; height: 1px; background: rgba(33,28,21,0.3); }
+.wd-ls__title { margin: 8px 0 18px; font-style: italic; font-size: clamp(30px, 3vw, 42px); line-height: 1.05; letter-spacing: -0.5px; }
+.wd-ls__photo { aspect-ratio: 1.7; overflow: hidden; background: #ddd6c9; }
+.wd-ls__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wd-ls__qs { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.wd-ls__q label { display: block; margin-bottom: 7px; font: 500 14.5px/1.35 var(--serif); color: var(--wd-ink, #211c15); }
+.wd-ls__num { margin-right: 4px; }
+.wd-ls textarea, .wd-ls input[type="text"], .wd-ls input[type="email"] { width: 100%; box-sizing: border-box; padding: 10px 14px; border: 1px solid rgba(33,28,21,0.28); border-radius: 0; background: rgba(255,255,255,0.35); font: 400 14px/1.45 var(--serif); color: var(--wd-ink, #211c15); }
+.wd-ls textarea { resize: vertical; min-height: 44px; display: block; }
+.wd-ls textarea::placeholder, .wd-ls input::placeholder { color: #8a8174; }
+.wd-ls textarea:focus-visible, .wd-ls input:focus-visible { outline: 2px solid var(--wd-gold, #b08d57); outline-offset: 1px; }
+.wd-ls__foot { display: flex; flex-direction: column; align-items: center; gap: 22px; padding-top: 34px; border-top: 1px solid rgba(33,28,21,0.14); }
+.wd-ls__contact { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: min(720px, 100%); }
+.wd-ls__field label { display: block; margin-bottom: 8px; font: 600 10px/1 var(--sans); letter-spacing: 1.8px; text-transform: uppercase; color: var(--wd-ink, #211c15); }
+.wd-ls__perm { display: flex; align-items: flex-start; gap: 12px; width: min(720px, 100%); font: 400 14px/1.45 var(--serif); color: var(--wd-ink, #211c15); cursor: pointer; }
+.wd-ls__perm input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--wd-ink, #211c15); }
+.wd-ls__submit { justify-content: center; min-width: 300px; border: none; cursor: pointer; background: var(--wd-ink, #211c15); }
+.wd-ls__submit:hover { background: #3a3128; }
+.wd-ls__submit:disabled { opacity: 0.6; cursor: progress; }
+.wd-ls__status { margin: 0; font-size: 14px; text-align: center; }
+.wd-ls__status[data-state="error"] { color: #b23b00; }
+.wd-ls__fallback { margin: 0; font-size: 13px; color: var(--wd-body, #5a5247); }
+.wd-ls__fallback a { color: var(--wd-gold, #b08d57); text-decoration: underline; }
+.wd-ls__thanks { max-width: 560px; margin: 40px auto; padding: 60px 20px; text-align: center; }
+.wd-ls__thanks:focus { outline: none; }
+.wd-ls__thanks .wd-eyebrow { justify-content: center; }
+.wd-ls__thanks-title { margin-top: 14px; font-size: clamp(34px, 4vw, 52px); font-style: italic; }
+.wd-ls__thanks-text { margin-top: 18px; color: var(--wd-body, #5a5247); font-size: 16px; line-height: 1.7; }
+@media (max-width: 860px) {
+  .wd-ls { width: calc(100% - 40px); padding-block: 36px 56px; }
+  .wd-ls__chapter { grid-template-columns: minmax(0, 1fr); padding: 32px 0; }
+  .wd-ls__photo { aspect-ratio: 1.6; }
+  .wd-ls__contact { grid-template-columns: minmax(0, 1fr); }
+  .wd-ls__submit { min-width: 0; width: 100%; }
+}

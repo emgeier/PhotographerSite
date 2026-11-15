@@ -11,6 +11,7 @@ name: Deploy site
 #   SITE_BUCKET           SiteBucketName output
 #   DISTRIBUTION_ID       DistributionId output
 #   PUBLIC_AC_FORM_ENDPOINT  ApiEndpoint output (baked into the build; it is a URL, not a secret)
+#   PUBLIC_LOVESTORY_ENDPOINT  LoveStoryEndpoint output (Love Story forms; URL, not a secret)
 #
 # Nothing here is a secret: the endpoint is public, and OIDC means no AWS keys.
 
@@ -59,6 +60,7 @@ jobs:
           # Baked into the static output at build time. Empty is tolerated (the
           # inquire form stays inert) but a real value wires up submissions.
           PUBLIC_AC_FORM_ENDPOINT: ${{ vars.PUBLIC_AC_FORM_ENDPOINT }}
+          PUBLIC_LOVESTORY_ENDPOINT: ${{ vars.PUBLIC_LOVESTORY_ENDPOINT }}
           # Adobe Typekit kit id for ivypresto-display (the serif used by all
           # hero/display titles). Baked in at build time: without it Base.astro
           # omits the Typekit <link>, the font falls back to Georgia, and

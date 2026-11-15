@@ -245,6 +245,7 @@ the endpoint is a public URL):
 | `SITE_BUCKET` | `SiteBucketName` |
 | `DISTRIBUTION_ID` | `DistributionId` |
 | `PUBLIC_AC_FORM_ENDPOINT` | `ApiEndpoint` (leave unset until the stack exists; the form stays inert until it is set and a build runs) |
+| `PUBLIC_LOVESTORY_ENDPOINT` | `LoveStoryEndpoint` (Love Story forms; see §15) |
 
 ### 11c. How it runs
 
@@ -571,3 +572,34 @@ contact custom fields in Active Campaign
 | 26 | Feel | text |
 
 So the non-Sakari/messaging field IDs are: **8, 18, 19, 20, 21, 22, 23, 24, 25, 26**.
+
+## 15. Love Story Q&A forms (`/weddings/engagement-love-story`, `/weddings/wedding-love-story`)
+
+The forms POST JSON to `POST /lovestory` on the existing HTTP API. The Lambda
+(`aws/lambda/lovestory/index.mjs`) validates and sanitizes the input (30 KB body cap, 2000
+chars per answer, honeypot field `website`), then emails the raw answers to a human reviewer
+through Amazon SES. With `LoveStoryLlmEnabled=true` it also asks Anthropic for a draft of the
+page text and appends it to the same email. The draft is only ever emailed, never published.
+
+Prerequisites (not created by the template):
+1. **SES verified sender.** Verify `LoveStoryFromEmail` (address or domain) in SES in the stack
+   region. While the account is in the SES sandbox the recipient must be verified as well.
+2. **Anthropic key** (only if the LLM is enabled). The stack creates the secret
+   `<stack>-anthropic-api-key` with a `REPLACE_ME` placeholder; set the real key out-of-band:
+   ```bash
+   aws secretsmanager put-secret-value --secret-id <LoveStoryAnthropicSecretArn> \
+     --secret-string '<anthropic key>' --region us-east-2 --profile muse
+   ```
+
+Deploy:
+```bash
+(cd aws/lambda/lovestory && zip -j ../../lovestory-lambda.zip index.mjs)
+aws s3 cp aws/lovestory-lambda.zip s3://muse-photographer-site/lovestory-lambda.zip --profile muse
+# then redeploy (see §14) adding:
+#   LoveStoryToEmail=<reviewer@...>  LoveStoryFromEmail=<verified sender>
+#   LoveStoryLlmEnabled=false|true   LoveStoryLlmModel=claude-sonnet-4-5
+```
+Copy the `LoveStoryEndpoint` Output into `PUBLIC_LOVESTORY_ENDPOINT` (`.env` and the GitHub
+Actions variable of the same name) and rebuild. The Lambda role is limited to `ses:SendEmail`
+(this account's identities, only for the configured From address) and `secretsmanager:GetSecretValue`
+on the Anthropic secret. Leaving `LoveStoryToEmail` empty skips every Love Story resource.

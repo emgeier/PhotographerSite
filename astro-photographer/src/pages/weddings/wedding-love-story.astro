@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import LoveStoryForm from '../../components/LoveStoryForm.astro';
+import '../../styles/wedding.css';
+const heroImage = '/images/WPortfolio27.jpg';
+const chapters = [
+  { label: 'Chapter one', title: 'The beginning of your story.', image: '/images/WPortfolio46.jpg', alt: 'A couple walking hand in hand along a garden path.', questions: [
+    { text: 'How did you first meet, and what do you remember most about that moment?' },
+    { text: 'What has helped your relationship grow into the kind of love you celebrated on your wedding day?' },
+    { text: 'What’s one quality or moment that makes you feel most grateful for your partner?' } ] },
+  { label: 'Chapter two', title: 'The wedding day.', image: '/images/WPortfolio50.jpg', alt: 'A bride and groom holding hands.', questions: [
+    { text: 'What was the most meaningful moment of your wedding day, and why?' },
+    { text: 'Were there any special details, traditions, or personal touches that were important to you?' },
+    { text: 'How did you feel during the ceremony, and what stands out most from that time?' },
+    { text: 'What was your favorite part of the celebration (reception)?' } ] },
+  { label: 'Chapter three', title: 'The memories.', image: '/images/WPortfolio32.jpg', alt: 'Candlelit wedding table with white flowers.', questions: [
+    { text: 'What are you most looking forward to as you begin this new chapter together?' },
+    { text: 'If you could relive one moment from your wedding day, which one would it be?' },
+    { text: 'Is there anything else you’d like to share about your love story or your wedding day?' } ] },
+];
+---
+<Base
+  title="Wedding Love Story — Luis Quintana Studio"
+  description="Share your wedding love story with Luis Quintana Studio."
+>
+  <main class="wd wd-page" id="main-content">
+    <section class="wd-hero wd-subhero wd-hero--inquire wd-hero--lovestory">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A newly married couple sharing a quiet moment." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item>Love stories</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item>Your love.<br />Your story.</h1>
+        <p class="wd-hero__lede" data-hero-item style="max-width: 440px;">Your wedding day was filled with beautiful moments, heartfelt emotions, and memories worth remembering. I’d love to hear the stories behind those moments, in your own words, so we can celebrate what made your day uniquely yours.</p>
+        <a class="wd-btn" href="#ls-form" data-hero-item>Begin your story <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+    <LoveStoryForm
+      type="wedding"
+      chapters={chapters}
+      submitLabel="Submit your love story"
+      permissionText="I give permission for Luis Quintana Studio to use my story (in part or in full) for website, blog, and social media features. (Optional)"
+      thanksTitle="Your love story is on its way."
+      thanksText="We read every story personally. Thank you for sharing yours with us."
+    />
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>

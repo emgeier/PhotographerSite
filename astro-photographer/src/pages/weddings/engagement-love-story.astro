@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeddingsHeader from '../../components/WeddingsHeader.astro';
+import WeddingsFooter from '../../components/WeddingsFooter.astro';
+import SiteMotion from '../../components/SiteMotion.astro';
+import Pic from '../../components/Pic.astro';
+import LoveStoryForm from '../../components/LoveStoryForm.astro';
+import '../../styles/wedding.css';
+const heroImage = '/images/Engagementportfoliohero.jpg';
+const chapters = [
+  { label: 'Chapter one', title: 'How it all began.', image: '/images/EPortfolio70.jpg', alt: 'A couple walking together among olive trees.', questions: [
+    { text: 'How did you first meet, and what stood out to you most at the beginning?' },
+    { text: 'What helped your relationship grow into what it is today?' },
+    { text: 'What do you admire most about your partner?' } ] },
+  { label: 'Chapter two', title: 'The proposal.', image: '/images/EPortfolio80.jpg', alt: 'Two hands joined, showing an engagement ring.', questions: [
+    { text: 'How did the proposal happen, and what do you remember most about it?' },
+    { text: 'Were there any personal details, surprises, or meaningful touches that made it special?' },
+    { text: 'How did you feel in that moment, and what made it unforgettable?' },
+    { text: 'What has this engagement season meant to you so far?' } ] },
+  { label: 'Chapter three', title: 'Looking ahead.', image: '/images/EPortfolio90.jpg', alt: 'A soft evening scene with flowers and champagne.', questions: [
+    { text: 'What are you most excited about as you look ahead to marriage?' },
+    { text: 'What kind of engagement session experience or memories matter most to you?' },
+    { text: 'Is there anything else you’d love to share about your story or this season of life?' } ] },
+];
+---
+<Base
+  title="Engagement Love Story — Luis Quintana Studio"
+  description="Share your engagement story with Luis Quintana Studio."
+>
+  <main class="wd wd-page" id="main-content">
+    <section class="wd-hero wd-subhero wd-hero--inquire wd-hero--lovestory">
+      <WeddingsHeader />
+      <div class="wd-hero__image" data-parallax>
+        <Pic src={heroImage} alt="A couple sharing a tender moment at golden hour." priority sizes="100vw" />
+      </div>
+      <div class="wd-hero__veil" aria-hidden="true"></div>
+      <div class="wd-container wd-hero__content">
+        <p class="wd-eyebrow wd-hero__eyebrow" data-hero-item>Engagement stories</p>
+        <h1 class="wd-display wd-hero__title" data-hero-item>Before the vows.<br />Your story.</h1>
+        <p class="wd-hero__lede" data-hero-item style="max-width: 440px;">Your engagement season is filled with anticipation, connection, and moments that deserve to be remembered. I’d love to hear more about your story, your relationship, and the season you’re stepping into together.</p>
+        <a class="wd-btn" href="#ls-form" data-hero-item>Begin your story <span class="wd-btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+    <LoveStoryForm
+      type="engagement"
+      chapters={chapters}
+      submitLabel="Submit your engagement story"
+      permissionText="I give permission for Luis Quintana Studio to use our story (in part or in full) for website, blog, and social media features. (Optional)"
+      thanksTitle="Your story is on its way."
+      thanksText="We read every story personally. Thank you for trusting us with yours, and congratulations on this season."
+    />
+  </main>
+  <WeddingsFooter />
+  <SiteMotion />
+</Base>
