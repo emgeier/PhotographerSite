@@ -85,6 +85,27 @@ test('unknown extra fields are ignored; questions come from the server allowlist
   assert.doesNotMatch(JSON.stringify(v.data), /injected/);
 });
 
+test('CMS-edited question text is used, sanitized, capped, and extra questions are kept', () => {
+  const v = validate({
+    ...VALID,
+    q01_text: 'A new first question?\r\nBcc: x@y.z\u0000',
+    q12: 'answer to an added question',
+    q12_text: 'Added in the CMS?',
+    q13_text: 'q'.repeat(900),
+    q99_text: 'ignored',
+  });
+  assert.equal(v.ok, true);
+  const a = v.data.answers;
+  assert.equal(a[0].question, 'A new first question? Bcc: x@y.z');
+  assert.doesNotMatch(a[0].question, /[\r\n\u0000]/);
+  // q11 has neither text nor answer and is past the defaults, so it is skipped.
+  assert.equal(a[10].question, 'Added in the CMS?');
+  assert.equal(a[10].answer, 'answer to an added question');
+  assert.equal(a[11].question.length, 300);
+  assert.equal(a.length, 12);
+  assert.doesNotMatch(JSON.stringify(a), /ignored/);
+});
+
 test('oversized body is 413 and bad JSON is 400', async () => {
   const sendEmail = mailer();
   const big = await handler(ev(JSON.stringify({ ...VALID, q02: 'x'.repeat(40000) })), {}, { sendEmail, log: silentLog });

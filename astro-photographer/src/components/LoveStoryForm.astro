@@ -47,6 +47,7 @@ const endpoint = import.meta.env.PUBLIC_LOVESTORY_ENDPOINT ?? '';
               <div class="wd-ls__q">
                 <label for={`ls-q${num}`}><span class="wd-ls__num">{num}.</span> {q.text}</label>
                 <textarea id={`ls-q${num}`} name={`q${num}`} rows={ci === 0 ? 2 : 1} maxlength="2000" placeholder={n === 1 ? 'Share your story here…' : 'Your answer…'}></textarea>
+                <input type="hidden" name={`q${num}_text`} value={q.text} />
               </div>
             );
           })}
@@ -97,21 +98,37 @@ const endpoint = import.meta.env.PUBLIC_LOVESTORY_ENDPOINT ?? '';
         var field = q.querySelector('textarea');
         var answer = field && field.value.trim();
         if (!answer) return;
-        lines.push(q.querySelector('label').textContent.trim() + '\n' + answer);
+        lines.push(q.querySelector('label').textContent.replace(/\s+/g, ' ').trim() + '\n' + answer);
       });
       var head = 'Names: ' + (payload.names || '') + '\nEmail: ' + (payload.email || '') +
         '\nPermission to share: ' + (payload.permission ? 'yes' : 'no') + '\n\n';
-      var body = head + lines.join('\n\n');
+      var body = head + (lines.length ? lines.join('\n\n') : '(Type your answers here.)');
       var suffix = '\n\n[Answers shortened to fit an email link.]';
+      // Mail clients take CRLF line breaks in mailto bodies; encode after converting.
+      var enc = function (s) { return encodeURIComponent(s.replace(/\n/g, '\r\n')); };
       var limit = 1800;
-      if (encodeURIComponent(body).length > limit) {
-        while (body.length > 0 && encodeURIComponent(body + suffix).length > limit) {
+      if (enc(body).length > limit) {
+        while (body.length > 0 && enc(body + suffix).length > limit) {
           body = body.slice(0, body.length - 50);
         }
         body += suffix;
       }
       var subject = (storyType === 'wedding' ? 'Wedding' : 'Engagement') + ' love story';
-      return 'mailto:' + studioEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      return 'mailto:' + studioEmail + '?subject=' + encodeURIComponent(subject) + '&body=' + enc(body);
+    }
+    function collectPayload() {
+      var payload = {};
+      new FormData(form).forEach(function (value, key) { payload[key] = value; });
+      return payload;
+    }
+    // The always-visible "Prefer email?" link: fill in the body from whatever
+    // has been typed so far at the moment it is used (click, tap or keyboard).
+    var fallbackLink = form.querySelector('.wd-ls__fallback a');
+    if (fallbackLink && studioEmail) {
+      var fillMailto = function () { fallbackLink.href = buildMailto(collectPayload()); };
+      ['mouseenter', 'focus', 'touchstart', 'click'].forEach(function (evt) {
+        fallbackLink.addEventListener(evt, fillMailto);
+      });
     }
     function showError(message, payload) {
       status.hidden = false;
@@ -129,13 +146,11 @@ const endpoint = import.meta.env.PUBLIC_LOVESTORY_ENDPOINT ?? '';
       ev.preventDefault();
       status.hidden = true;
       if (!form.reportValidity()) return;
-      var payload = {};
-      new FormData(form).forEach(function (value, key) { payload[key] = value; });
+      var payload = collectPayload();
       var answered = false;
-      for (var i = 1; i <= 10; i++) {
-        var k = 'q' + (i < 10 ? '0' + i : i);
-        if (payload[k] && String(payload[k]).trim()) answered = true;
-      }
+      form.querySelectorAll('.wd-ls__q textarea').forEach(function (t) {
+        if (t.value.trim()) answered = true;
+      });
       if (!answered) {
         showError('Please answer at least one question before submitting.');
         return;

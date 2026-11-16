@@ -280,6 +280,56 @@ collections:
           - { name: wedStoriesCtaImage, label: Listing closing CTA background, widget: image, required: false }
           - { name: wedStoryDetailCtaImage, label: Story detail closing CTA background, widget: image, required: false }
 
+      - name: engagement-love-story
+        label: 'Weddings — Engagement Love Story form (photos & questions)'
+        file: astro-photographer/src/content/settings/engagement-love-story.json
+        fields:
+          - { name: engagementLoveStoryHeroImage, label: Hero image, widget: image, required: false }
+          - name: engagementLoveStoryChapters
+            label: 'Chapters (each has a photo and its questions)'
+            widget: list
+            required: false
+            label_singular: Chapter
+            summary: '{{fields.label}}: {{fields.title}}'
+            hint: 'Up to 20 questions in total across all chapters; any beyond 20 are not shown. Changing a question changes the wording in the email you receive. Leave the list empty to use the built-in version.'
+            fields:
+              - { name: label, label: 'Label (e.g. Chapter one)', widget: string }
+              - { name: title, label: 'Title (e.g. The proposal.)', widget: string }
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Photo description (for screen readers)', widget: string, required: false }
+              - name: questions
+                label: Questions
+                widget: list
+                label_singular: Question
+                summary: '{{fields.text}}'
+                fields:
+                  - { name: text, label: Question, widget: text }
+
+      - name: wedding-love-story
+        label: 'Weddings — Wedding Love Story form (photos & questions)'
+        file: astro-photographer/src/content/settings/wedding-love-story.json
+        fields:
+          - { name: weddingLoveStoryHeroImage, label: Hero image, widget: image, required: false }
+          - name: weddingLoveStoryChapters
+            label: 'Chapters (each has a photo and its questions)'
+            widget: list
+            required: false
+            label_singular: Chapter
+            summary: '{{fields.label}}: {{fields.title}}'
+            hint: 'Up to 20 questions in total across all chapters; any beyond 20 are not shown. Changing a question changes the wording in the email you receive. Leave the list empty to use the built-in version.'
+            fields:
+              - { name: label, label: 'Label (e.g. Chapter one)', widget: string }
+              - { name: title, label: 'Title (e.g. The wedding day.)', widget: string }
+              - { name: image, label: Photo, widget: image }
+              - { name: alt, label: 'Photo description (for screen readers)', widget: string, required: false }
+              - name: questions
+                label: Questions
+                widget: list
+                label_singular: Question
+                summary: '{{fields.text}}'
+                fields:
+                  - { name: text, label: Question, widget: text }
+
       - name: enter-to-win-a-free-engagement-session
         label: 'Weddings — Engagement Giveaway images'
         file: astro-photographer/src/content/settings/enter-to-win-a-free-engagement-session.json

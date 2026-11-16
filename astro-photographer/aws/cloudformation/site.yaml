@@ -97,12 +97,25 @@ Parameters:
       and appends it to the review email. Never published automatically.
   LoveStoryLlmModel:
     Type: String
-    Default: 'claude-sonnet-4-5'
+    Default: 'claude-sonnet-5-5'
     Description: Anthropic model id used when LoveStoryLlmEnabled is 'true'.
   LoveStoryLambdaS3Key:
     Type: String
     Default: 'lovestory-lambda.zip'
     Description: S3 key of the Love Story Lambda zip in the muse-photographer-site bucket.
+  LoveStoryThrottleRate:
+    Type: Number
+    Default: 2
+    MinValue: 1
+    Description: >-
+      Steady-state requests per second allowed on POST /lovestory (API Gateway
+      route throttle, shared by ALL callers, not per IP). Excess requests get
+      HTTP 429 before the Lambda runs, which caps SES and Anthropic spend.
+  LoveStoryThrottleBurst:
+    Type: Number
+    Default: 5
+    MinValue: 1
+    Description: Burst ceiling (requests) for the POST /lovestory route throttle.
   AllowedOrigin:
     Type: String
     Default: '*'
@@ -501,6 +514,15 @@ Resources:
       ApiId: !Ref HttpApi
       StageName: $default
       AutoDeploy: true
+      # Per-route throttle for the Love Story form only; the AC and OAuth
+      # routes keep the account defaults. Only present when the feature is on,
+      # because the route does not exist otherwise.
+      RouteSettings: !If
+        - HasLoveStory
+        - 'POST /lovestory':
+            ThrottlingRateLimit: !Ref LoveStoryThrottleRate
+            ThrottlingBurstLimit: !Ref LoveStoryThrottleBurst
+        - !Ref AWS::NoValue
 
   LambdaInvokePermission:
     Type: AWS::Lambda::Permission

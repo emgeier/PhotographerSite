@@ -95,6 +95,24 @@ const portfolioItemList = z.preprocess((v) => {
   )
   .optional());
 
+// CMS-managed Love Story form chapters. Items that are not objects are dropped;
+// an empty/absent list becomes undefined so the page's built-in chapters apply.
+const loveStoryChapterList = z.preprocess((v) => {
+  if (!Array.isArray(v)) return undefined;
+  const cleaned = v.filter((x) => x && typeof x === 'object');
+  return cleaned.length ? cleaned : undefined;
+}, z
+  .array(
+    z.object({
+      label: z.string().optional(),
+      title: z.string().optional(),
+      image: z.string().optional(),
+      alt: z.string().optional(),
+      questions: z.array(z.object({ text: z.string().optional() })).optional(),
+    }),
+  )
+  .optional());
+
 const muses = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/muses' }),
   schema: z.object({
@@ -373,6 +391,15 @@ const settings = defineCollection({
     wedStoriesHeroImage: optionalText,
     wedStoriesCtaImage: optionalText,
     wedStoryDetailCtaImage: optionalText,
+
+    // engagement-love-story.json / wedding-love-story.json — the Love Story Q&A
+    // forms (/weddings/engagement-love-story, /weddings/wedding-love-story):
+    // hero photo plus chapters (label, title, photo, questions). Blank/absent
+    // falls back to the page's built-in chapters (see src/lib/loveStory.ts).
+    engagementLoveStoryHeroImage: optionalText,
+    engagementLoveStoryChapters: loveStoryChapterList,
+    weddingLoveStoryHeroImage: optionalText,
+    weddingLoveStoryChapters: loveStoryChapterList,
   }),
 });
 

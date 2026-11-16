@@ -15,10 +15,13 @@
 const MAX_BODY_BYTES = 30 * 1024; // whole request body
 const MAX_ANSWER = 2000; // per answer
 const MAX_NAMES = 200;
+const MAX_QUESTIONS = 20; // keep in sync with MAX_QUESTIONS in src/lib/loveStory.ts
+const MAX_QUESTION = 300; // per question text
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const PLACEHOLDER_SECRET = 'REPLACE_ME';
 
-// Question text lives here (allowlist). The client only sends type + q01..q10.
+// Default question text (used when the client sends no qNN_text). The client
+// sends type + qNN answers + qNN_text question text (CMS-editable).
 export const QUESTIONS = {
   engagement: [
     'How did you first meet, and what stood out to you most at the beginning?',
@@ -86,10 +89,18 @@ export function validate(fields) {
   if (!names) return { ok: false, error: 'missing_names' };
   const email = clean(fields.email, 254, { singleLine: true });
   if (!email || !EMAIL_RE.test(email)) return { ok: false, error: 'invalid_email' };
-  const answers = QUESTIONS[type].map((question, i) => ({
-    question,
-    answer: clean(fields[`q${String(i + 1).padStart(2, '0')}`], MAX_ANSWER),
-  }));
+  // Questions are CMS-editable, so the form sends each question's text as
+  // `qNN_text` next to its answer `qNN`. Text is sanitized, single-line and
+  // length-capped. A missing text falls back to the default allowlist above.
+  const defaults = QUESTIONS[type];
+  const answers = [];
+  for (let i = 0; i < MAX_QUESTIONS; i++) {
+    const key = `q${String(i + 1).padStart(2, '0')}`;
+    const text = clean(fields[`${key}_text`], MAX_QUESTION, { singleLine: true });
+    const answer = clean(fields[key], MAX_ANSWER);
+    if (!text && !answer && i >= defaults.length) continue;
+    answers.push({ question: text || defaults[i] || `Question ${i + 1}`, answer });
+  }
   if (!answers.some((a) => a.answer)) return { ok: false, error: 'missing_answers' };
   const permission = fields.permission === true || fields.permission === 'on' || fields.permission === 'yes';
   return { ok: true, data: { type, names, email, answers, permission } };
@@ -167,7 +178,7 @@ async function draftWithLlm(data, { fetchImpl, getSecret }) {
     headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     signal: AbortSignal.timeout(20000),
     body: JSON.stringify({
-      model: process.env.LLM_MODEL || 'claude-sonnet-4-5',
+      model: process.env.LLM_MODEL || 'claude-sonnet-5-5',
       max_tokens: 1200,
       system:
         `You write warm, editorial, first-person-plural love story page copy for a wedding photographer's website. ` +

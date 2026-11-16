@@ -1,0 +1,39 @@
+{
+  "engagementLoveStoryHeroImage": "/images/Engagementportfoliohero.jpg",
+  "engagementLoveStoryChapters": [
+    {
+      "label": "Chapter one",
+      "title": "How it all began.",
+      "image": "/images/EPortfolio70.jpg",
+      "alt": "A couple walking together among olive trees.",
+      "questions": [
+        { "text": "How did you first meet, and what stood out to you most at the beginning?" },
+        { "text": "What helped your relationship grow into what it is today?" },
+        { "text": "What do you admire most about your partner?" }
+      ]
+    },
+    {
+      "label": "Chapter two",
+      "title": "The proposal.",
+      "image": "/images/EPortfolio80.jpg",
+      "alt": "Two hands joined, showing an engagement ring.",
+      "questions": [
+        { "text": "How did the proposal happen, and what do you remember most about it?" },
+        { "text": "Were there any personal details, surprises, or meaningful touches that made it special?" },
+        { "text": "How did you feel in that moment, and what made it unforgettable?" },
+        { "text": "What has this engagement season meant to you so far?" }
+      ]
+    },
+    {
+      "label": "Chapter three",
+      "title": "Looking ahead.",
+      "image": "/images/EPortfolio90.jpg",
+      "alt": "A soft evening scene with flowers and champagne.",
+      "questions": [
+        { "text": "What are you most excited about as you look ahead to marriage?" },
+        { "text": "What kind of engagement session experience or memories matter most to you?" },
+        { "text": "Is there anything else you’d love to share about your story or this season of life?" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "weddingLoveStoryHeroImage": "/images/WPortfolio27.jpg",
+  "weddingLoveStoryChapters": [
+    {
+      "label": "Chapter one",
+      "title": "The beginning of your story.",
+      "image": "/images/WPortfolio46.jpg",
+      "alt": "A couple walking hand in hand along a garden path.",
+      "questions": [
+        { "text": "How did you first meet, and what do you remember most about that moment?" },
+        { "text": "What has helped your relationship grow into the kind of love you celebrated on your wedding day?" },
+        { "text": "What’s one quality or moment that makes you feel most grateful for your partner?" }
+      ]
+    },
+    {
+      "label": "Chapter two",
+      "title": "The wedding day.",
+      "image": "/images/WPortfolio50.jpg",
+      "alt": "A bride and groom holding hands.",
+      "questions": [
+        { "text": "What was the most meaningful moment of your wedding day, and why?" },
+        { "text": "Were there any special details, traditions, or personal touches that were important to you?" },
+        { "text": "How did you feel during the ceremony, and what stands out most from that time?" },
+        { "text": "What was your favorite part of the celebration (reception)?" }
+      ]
+    },
+    {
+      "label": "Chapter three",
+      "title": "The memories.",
+      "image": "/images/WPortfolio32.jpg",
+      "alt": "Candlelit wedding table with white flowers.",
+      "questions": [
+        { "text": "What are you most looking forward to as you begin this new chapter together?" },
+        { "text": "If you could relive one moment from your wedding day, which one would it be?" },
+        { "text": "Is there anything else you’d like to share about your love story or your wedding day?" }
+      ]
+    }
+  ]
+}

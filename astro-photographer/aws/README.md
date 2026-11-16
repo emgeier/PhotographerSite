@@ -52,7 +52,7 @@ no-JS form fallback returns a minimal inline HTML page until the CloudFront doma
 ```bash
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse \
+  --stack-name photographer-site\
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
     AcApiUrl='https://luisquintanastudio.api-us1.com' \
@@ -84,7 +84,7 @@ aws cloudformation deploy \
 Read the Outputs after deploy:
 
 ```bash
-aws cloudformation describe-stacks --stack-name glam-muse \
+aws cloudformation describe-stacks --stack-name photographer-site\
   --query 'Stacks[0].Outputs' --output table
 ```
 
@@ -166,7 +166,7 @@ Once the CloudFront (or custom) domain is known, redeploy to resolve both TODOs:
 ```bash
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse \
+  --stack-name photographer-site\
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
     AllowedOrigin='https://<cloudfront-or-custom-domain>' \
@@ -208,7 +208,7 @@ distribution.
 ```bash
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse \
+  --stack-name photographer-site\
   --capabilities CAPABILITY_IAM \
   --region us-east-2 \
   --parameter-overrides \
@@ -226,7 +226,7 @@ aws cloudformation deploy \
 Read the new Outputs:
 
 ```bash
-aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+aws cloudformation describe-stacks --stack-name photographer-site--region us-east-2 \
   --query 'Stacks[0].Outputs' --output table
 ```
 
@@ -306,7 +306,7 @@ aws s3 cp aws/oauth-lambda.zip s3://muse-photographer-site/oauth-lambda.zip --pr
 
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse --region us-east-2 \
+  --stack-name photographer-site--region us-east-2 \
   --capabilities CAPABILITY_IAM \
   --parameter-overrides \
     OAuthClientId='<GitHub OAuth App client id>' \
@@ -386,7 +386,7 @@ every redeploy you must pass **all** params you want kept.
 So you don't drop anything, print the stack's current parameters and reuse them:
 
 ```bash
-aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+aws cloudformation describe-stacks --stack-name photographer-site --region us-east-2 \
   --query 'Stacks[0].Parameters' --output table
 ```
 
@@ -410,7 +410,7 @@ diffs before applying:
 ```bash
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse --region us-east-2 \
+  --stack-name photographer-site--region us-east-2 \
   --capabilities CAPABILITY_IAM \
   --no-execute-changeset \
   --parameter-overrides \
@@ -477,7 +477,7 @@ workflow.
 So you don't drop anything, print the stack's current parameters and reuse them:
 
 ```bash
-aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+aws cloudformation describe-stacks --stack-name photographer-site--region us-east-2 \
   --query 'Stacks[0].Parameters' --output table
 ```
 
@@ -488,7 +488,7 @@ Generate but DON'T execute the change set, review the diff, then apply:
 ```bash
 aws cloudformation deploy \
   --template-file aws/cloudformation/site.yaml \
-  --stack-name glam-muse --region us-east-2 \
+  --stack-name photographer-site--region us-east-2 \
   --capabilities CAPABILITY_IAM \
   --no-execute-changeset \
   --parameter-overrides \
@@ -543,7 +543,7 @@ The engagement-giveaway page (`/enter-to-win-a-free-engagement-session`) posts
 ### 14e. Verify after any redeploy
 
 ```bash
-aws cloudformation describe-stacks --stack-name glam-muse --region us-east-2 \
+aws cloudformation describe-stacks --stack-name photographer-site--region us-east-2 \
   --query 'Stacks[0].Parameters' --output table   # confirm params are as intended
 ```
 
@@ -551,6 +551,10 @@ Then smoke-test the affected behavior (submit a form, load the domains, etc.). I
 redeploy accidentally dropped a parameter, re-run §14c passing the full set.
 
 aws s3 cp ac-lambda.zip s3://muse-photographer-site/ac-lambda.zip --profile muse
+
+
+cd astro-photograher/aws
+aws lambda update-function-code  --function-name photographer-site-LoveStoryFunction-Ou9AJxYNswUW --zip-file fileb://lovestory-lambda.zip --profile muse
 
 aws lambda update-function-code  --function-name photographer-site-AcFunction-uktbwuN6Gf2h --zip-file fileb://ac-lambda.zip --profile muse
 aws logs tail "/aws/lambda/photographer-site-AcFunction-uktbwuN6Gf2h" --since 5m --profile muse --format short | grep -Ei 'contact/sync|validation'
@@ -603,3 +607,18 @@ Copy the `LoveStoryEndpoint` Output into `PUBLIC_LOVESTORY_ENDPOINT` (`.env` and
 Actions variable of the same name) and rebuild. The Lambda role is limited to `ses:SendEmail`
 (this account's identities, only for the configured From address) and `secretsmanager:GetSecretValue`
 on the Anthropic secret. Leaving `LoveStoryToEmail` empty skips every Love Story resource.
+
+**Editing the questions and photos.** In `/admin`, Settings → "Weddings — Engagement Love Story
+form" / "Wedding Love Story form" edit the hero photo and the chapters (label, title, photo,
+questions). The form sends each question's text with the answers (`qNN_text`), so the review
+email shows the edited wording. Up to 20 questions per form (`MAX_QUESTIONS` in
+`src/lib/loveStory.ts` and `aws/lambda/lovestory/index.mjs`). The Lambda zip must be rebuilt and
+re-uploaded once for this to apply to submissions, because the Lambda previously used fixed text.
+
+**Rate limiting.** The `$default` stage throttles `POST /lovestory` at `LoveStoryThrottleRate`
+(default 2 req/s) with a burst of `LoveStoryThrottleBurst` (default 5). Excess requests get HTTP
+429 before the Lambda runs, so a flood cannot run up SES or Anthropic usage. The limit is shared
+by all callers, not per IP: one abuser can use the whole budget and briefly block real visitors
+(the form then shows its error and mailto fallback). A per-IP limit needs AWS WAF, which cannot
+attach to an HTTP API; it would require putting CloudFront or a REST API in front of the route.
+The AC and OAuth routes are not throttled by this setting.

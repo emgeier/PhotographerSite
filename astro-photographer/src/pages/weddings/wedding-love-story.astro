@@ -5,9 +5,14 @@ import WeddingsFooter from '../../components/WeddingsFooter.astro';
 import SiteMotion from '../../components/SiteMotion.astro';
 import Pic from '../../components/Pic.astro';
 import LoveStoryForm from '../../components/LoveStoryForm.astro';
+import { getEntry } from 'astro:content';
+import { resolveChapters, type Chapter } from '../../lib/loveStory';
 import '../../styles/wedding.css';
-const heroImage = '/images/WPortfolio27.jpg';
-const chapters = [
+// Hero photo + chapters (photos and questions) are CMS-editable via
+// settings/wedding-love-story.json; the built-in values below are the fallback.
+const cms = await getEntry('settings', 'wedding-love-story');
+const heroImage = cms?.data.weddingLoveStoryHeroImage ?? '/images/WPortfolio27.jpg';
+const defaultChapters: Chapter[] = [
   { label: 'Chapter one', title: 'The beginning of your story.', image: '/images/WPortfolio46.jpg', alt: 'A couple walking hand in hand along a garden path.', questions: [
     { text: 'How did you first meet, and what do you remember most about that moment?' },
     { text: 'What has helped your relationship grow into the kind of love you celebrated on your wedding day?' },
@@ -22,6 +27,7 @@ const chapters = [
     { text: 'If you could relive one moment from your wedding day, which one would it be?' },
     { text: 'Is there anything else you’d like to share about your love story or your wedding day?' } ] },
 ];
+const chapters = resolveChapters(cms?.data.weddingLoveStoryChapters, defaultChapters);
 ---
 <Base
   title="Wedding Love Story — Luis Quintana Studio"
